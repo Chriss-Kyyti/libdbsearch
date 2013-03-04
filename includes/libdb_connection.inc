@@ -32,56 +32,125 @@ class LibdbConnection {
       }
     }
 
+    $this->cookie = NULL;
+    
     $this->type = $type . '.asp';
 
-    $this->keys = '?' . str_replace(array(' ', '#'), array('+', "%23"), $keys);
+    $this->keys = str_replace(array(' ', '#'), array('+', "%23"), $keys);
     $this->error = NULL;
   }
 
-  function getPage() {
+  function askPage() {
     if (empty($this->server)) {
       return 'No Server';
     }
-    $page = 'No Data';
+    $data = $this->getMovedPage($this->server, $this->type, $this->keys, $this->cookie);
 
-    
-    
-    
-    
-
-    if (isset($this->cookie)) {
+    if (isset($data['cookie'])) {
+      $this->cookie = $data['cookie'];
       $_SESSION['atpconn'] = array(time(), $this->cookie);
     }
-    return $page;
+
+
+
+    return $data['page'];
   }
 
-  private function askPage() {
-
-    return 'No socket';
-  }
-
-  function extractHeader(&$homepage) {
-    $header = '';
-    $res = explode('<!DOCTYPE', $homepage);
-    if (count($res) == 1) {
-      $res = explode('<html', $homepage);
-      if (count($res) == 1) {
-        $res = explode('<head', $homepage);
-        if (count($res) != 1) {
-          $homepage = '<head' . $res[1];
-          $header = $res[0];
-        }
-      }
-      else {
-        $homepage = '<html' . $res[1];
-        $header = $res[0];
+  /**
+   * Send request to origo database, handle redirection and
+   * receives the wanted result page and connectio cookie.
+   *
+   * @param string $server address of origo database
+   * @param string $page name of the page which handle's the query
+   * @param string $criteria  query criteria
+   * @param string $cookie cookie for current session
+   * @return array webpage and cookie in array
+   */
+  private function getMovedPage($server, $page, $criteria, $cookie = NULL) {
+    $webpage = $server . "/" . $page . '?vapaasana=' . $criteria;
+    // Search word break up character (#) change to code %23.
+//    $webpage = str_replace("#", "%23", $webpage);
+//    $webpage = str_replace(" ", "+", $webpage);
+    if (isset($cookie)) {
+      $fp = $this->createHeaderAndGet($cookie, $webpage);
+      if ($fp != '' && $fp !== FALSE) { // No moved page
+        return array('page' => $fp, 'cookie' => $cookie);
       }
     }
     else {
-      $homepage = '<!DOCTYPE' . $res[1];
-      $header = $res[0];
+      $fp = file_get_contents($webpage, FILE_TEXT);
     }
-    return $header;
+    $homepage = '';
+    if (isset($http_response_header)) {
+      $findme = "HTTP/1.1";
+      foreach ($http_response_header as $resp) {
+        $pos = strpos($resp, $findme);
+        if ($pos !== FALSE) {
+          if (strpos($resp, "302") !== FALSE) { // status code 302 found from a different URI
+            $findme = "Location:";
+          }
+          elseif (strpos($resp, "200") !== FALSE) { // OK
+            if ($fp === FALSE) {
+              return FALSE;
+            }
+            $homepage = $fp;
+            $findme = "Set-Cookie:";
+          }
+          elseif (($pos = strpos($resp, "Location:")) !== FALSE) {
+            $newpage = substr($resp, $pos + 10);
+            $findme = "Set-Cookie:";
+          }
+          elseif (($pos = strpos($resp, "Set-Cookie:")) !== FALSE) {
+            $pos = $pos + 12;
+            $pos2 = strpos($resp, ";") - $pos;
+            $cookie = substr($resp, $pos, $pos2);
+            $findme = "äöå";
+            if ($homepage != '') { // No moved page
+              return array('page' => $homepage, 'cookie' => $cookie);
+            }
+            break;
+          }
+        }
+        if ($findme == "äöå") {
+          break;
+        }
+      }
+      if (isset($newpage)) {
+        $homepage = $this->createHeaderAndGet($cookie, $server . "/" . $newpage);
+        if ($homepage === FALSE) {
+          return FALSE;
+        }
+
+        return array('page' => $homepage, 'cookie' => $cookie);
+      }
+      else {
+        return FALSE;
+      }
+    }
+    else {
+      return FALSE;
+    }
+  }
+
+  /**
+   * Creates hesder info to search request and
+   * sends request and return the result webpage.
+   *
+   * @param string $cookie current session id
+   * @param string $path URL
+   * @return string result webpage
+   */
+  private function createHeaderAndGet($cookie, $path) {
+    $opts = array(
+      'http' => array(
+        'method' => "GET",
+        'header' => "Accept-language: en\r\n" .
+        "Cookie:" . $cookie
+      )
+    );
+    $context = stream_context_create($opts);
+    $homepage = file_get_contents($path, FILE_TEXT, $context);
+    return $homepage;
   }
 
 }

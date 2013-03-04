@@ -62,7 +62,7 @@ function libdbsearch_view($action = 'haku', $keys = '') {
   
   $origo = new LibdbConnection();
   $origo->init($action, $keys);
-  $result = $origo->getPage();
+  $result = $origo->askPage();
   
   if(empty($result)) {
     $output = 'Internal Function Error.';
