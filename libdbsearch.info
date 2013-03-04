@@ -1,0 +1,8 @@
+;$Id$
+
+name = Libdbsearch
+description = Search module for Origo library databases.
+package = Libdb
+core = 7.x
+files[] = libdbsearch.module
+files[] = includes/libdb_connection.inc

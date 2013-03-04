@@ -1,0 +1,610 @@
+<?php
+/**
+ * @file
+ * Module to make search to library database
+ * and showing the result in Drupal page.
+ *
+ * Last modified: 04.03.2013 Mika Hatakka
+ */
+
+/**
+ * Implements hook_help().
+ */
+function libdbsearch_help($path, $arg) {
+  if ($path == 'admin/help#libdbsearch') {
+    return check_markup(file_get_contents(dirname(__FILE__) . "/README.txt"));
+  }
+}
+
+/**
+ * Implemtents hook_menu().
+ */
+function libdbsearch_menu() {
+  $items = array();
+  $items['admin/config/search/libdbsearch'] = array(
+    'title' => 'Library database',
+    'description' => 'Description',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('libdbsearch_admin'),
+    'access arguments' => array('administer library search'),
+    'file' => 'libdbsearch.admin.inc',
+  );
+  $items['admin/config/search/libdbsearch/general'] = array(
+    'title' => 'General settings',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -10,
+  );
+  $items['libdbsearch'] = array(
+    'title' => 'Library database search',
+    'page callback' => 'libdbsearch_view',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK
+  );
+  return $items;
+}
+
+/**
+ * Implementation of hook_perm().
+ */
+function libdbsearch_permission() {
+  return array(
+    'administer library search' => array(
+      'title' => t('Administer library database search'),
+    ),
+//    'use PHP on search settings' => array(
+//      'title' => t('Use PHP in the setting form\'s extra information field'),
+//    ),
+  );
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function libdbsearch_block_info() {
+  $blocks = array();
+
+  $blocks['libdbsearch'] = array(
+    'info' => t('Library datasystem search'),
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function libdbsearch_block_view($block_name = '') {
+  if ($block_name == 'libdbsearch') {
+    $engine = variable_get('libdbsearch_engine', '0');
+    if ($engine == '0') {
+      $block['subject'] = t('Libdbsearch');
+      $block['content'] = t('No database to search.');
+    }
+    else {
+      $block['content'] = drupal_get_form('libdbsearch_box');
+      // Add extra information to the end of block.
+      $ext_par = variable_get('libdbsearch_extra_info', '');
+      if (!empty($ext_par)) {
+        $par = variable_get('libdbsearch_format', 0);
+        $block['content'] .= check_markup($ext_par, $par, FALSE);
+      }
+    }
+
+    return $block;
+  }
+}
+
+/**
+ * Output a search form for the search block and the theme's search box.
+ *
+ * @see search_box_form_submit()
+ * @see theme_search_box_form()
+ */
+function libdbsearch_box($form_state/* , $form_id */) {
+  drupal_add_css(drupal_get_path('module', 'libdbsearch') . '/libdbsearch.css', 'module', 'all', FALSE);
+  $swords = _libdbsearch_extract_pars();
+  $oma_parametri = variable_get('libdbsearch_engine', '0');
+  include drupal_get_path('module', $oma_parametri) . '/include/searchform.inc';
+  // Order must be this, when hit Enter, first submit button is selected.
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Search')
+  );
+  $form['clear'] = array(
+    '#type' => 'submit',
+    '#value' => t('Clear')
+  );
+  $form['#submit'][] = 'libdbsearch_form_submit';
+
+  return $form;
+}
+
+
+// TODO avaimien käsittely ei kuulu tähän moduuliin,
+// vaan origo moduuliin!!!
+// 
+// Tämä on yleinen moduuli, joka saa järjestelmä kohtaisen 
+// avun järjestelmäkohtaislta moduuleilta.  MHa 8.8.2011
+//
+
+function libdbsearch_form_submit($form, &$form_state) {
+  //$word = $form_state['values']['search_words'];
+//  dsm($form_state['values']);
+
+  if ($form_state['values']['op'] == $form_state['values']['submit']) {
+    $type = empty($form_state['values']['module']) ? 'haku' : $form_state['values']['module'];
+    $params = _libdbsearch_parse_keys($form_state['values']);
+//    dsm($params);
+    $form_state['redirect'] = 'libdbsearch/' . $type . '/' . $params;
+  }
+  else { // Clear
+    $form_state['redirect'] = 'libdbsearch/advanced';
+  }
+
+//  $form_state['redirect'] = 'libdbsearch/haku/vapaasana=' . $form_state['values']['vapaasana'];
+
+  return;
+}
+
+function libdbsearch_view($action = 'haku', $keys = '') {
+//  dpm($cond, 'cond');
+//  dpm($action, 'action');
+//  dpm($_GET, 'GET');
+  
+  $origo = new LibdbConnection();
+  $origo->init($action, $keys);
+  $result = $origo->askPage();
+  
+//  $result = 'Jep';
+  //$result = _libdbsearch_ask('visual');
+//  dpm($result);
+  if(empty($result)) {
+    $output = 'Internal Function Error.';
+  }
+  else {
+    $output = 'Got something';
+    $output .= $result;
+  }
+  
+  
+//  $cookie = NULL;
+//  if (isset($_SESSION['atpconn'])) {
+//    if (($_SESSION['atpconn'][0] + (900)) > time()) {
+//      $cookie = $_SESSION['atpconn'][1];
+//    }
+//    else {
+//      unset($_SESSION['atpconn']);
+//    }
+//  }
+//
+//  
+//  $results = module_invoke('libdbengine_origo', 'libsearch', $cond, $action, $cookie);
+////  dsm($results);
+//
+//  if (empty($results)) {
+//    drupal_set_title('Search');
+//    return 'No results!';
+//  }
+//  if (isset($results['error'])) {
+//    drupal_set_title(check_plain($results['error']['title']));
+//    return $results['error']['text'];
+//  }
+//
+//  if (isset($results['search']['cookie'])) {
+//    $_SESSION['atpconn'] = array(time(), $results['search']['cookie']);
+//  }
+//
+//  drupal_set_title(check_plain($results['search']['title']));
+//
+//  $func = 'libdbsearch_handler_' . $results['search']['source'];
+//  if (function_exists($func)) {
+//    $output = $func($results['search']);
+//  }
+//  else {
+////    dsm('Unknown function: ' . $func);
+//    $output = 'Unknown function: ' . $func;
+//  }
+//
+////  if (!isset($_POST['form_id'])) { // Form submitted
+////    $output .= '<br />Form submitted<br />'. print_r($_POST, TRUE);
+////  }
+
+  return $output;
+}
+
+// If need themeable links:
+//      $vars = array(
+//        'text' => $h['link']['description'],
+//        'path' => $h['link']['address'],
+//        'options' => array('attributes' => array()),
+//      );
+//      $header[] = theme('link', $vars);
+function _libdbsearch_format_row($row) {
+  $ret = array();
+//  dsm($row);
+  foreach ($row as $key => $value) {
+//    dsm($value);
+    if ($key === 'attrib') {
+      continue;
+    }
+    if (is_array($value)) {
+      $my_ret = '';
+      foreach ($value as $val) {
+        if (is_array($val) && array_key_exists('link', $val)) {
+          $my_ret .= _libdbsearch_get_link($val['link']['description'], $val['link']['address']);
+        }
+        else {
+          if (!is_array($val)) {
+            $my_ret .= $val;
+          }
+        }
+      }
+      $ret[] = $my_ret;
+    }
+    else {
+      $ret[] = $value;
+    }
+    if (is_array($value) && array_key_exists('attrib', $value)) {
+      if (array_key_exists('colspan', $value['attrib'])) {
+//        dsm($ret);
+        $ret = array(array('data' => $ret[0], 'colspan' => $value['attrib']['colspan']));
+//        dsm($ret);
+      }
+    }
+  }
+  return $ret;
+}
+
+function _libdbsearch_format_rows($rows) {
+//  dsm($rows);
+  $ret = array();
+  $my_attr = NULL;
+  foreach ($rows as $value) {
+
+//    if (key_exists('attrib', $value)) {
+//      $my_attr = $value['attrib'];
+//      dsm($value);
+//    }
+
+    $ret[] = _libdbsearch_format_row($value);
+  }
+  return $ret;
+}
+
+function _libdbsearch_get_info($info, $plain = FALSE) {
+//  dsm($info);
+  $output = '';
+  if (is_array($info)) {
+    foreach ($info as $value) {
+      if (!empty($output)) {
+        $output .= '<br />';
+      }
+      if (is_array($value)) {
+        $par = array();
+        foreach ($value as $k2 => $v2) {
+          if ($k2 != 'value') {
+            $par['!' . $k2] = $v2;
+          }
+        }
+        $output .= t(check_plain($value['value']), $par);
+      }
+      else {
+        $output .= check_plain($value);
+      }
+    }
+  }
+  else {
+    $output = $info;
+  }
+  if ($plain === FALSE) {
+    return '<div class="libdb-info">' . $output . '</div>';
+  }
+  return $output;
+}
+
+// TODO link part
+function _libdbsearch_get_notice($notice) {
+  $output = '';
+
+  foreach ($notice as $value) {
+    if (is_array($value) && array_key_exists('link', $value)) {
+      $output .= _libdbsearch_get_link($value['link']['description'], $value['link']['address']);
+    }
+    else {
+      $output .= _libdbsearch_get_info($value, TRUE);
+    }
+  }
+  return '<div class="libdb-notice">' . $output . '</div>';
+}
+
+function _libdbsearch_get_navigation($navi) {
+  $output = '';
+  if (is_array($navi)) {
+    foreach ($navi as $key => $value) {
+      if (is_array($value)) {
+        if (isset($value['selected'])) {
+          $output .= '<strong>' . check_plain($value['selected']) . '</strong>';
+        }
+        elseif (isset($value['link'])) {
+          if($value['link']['description'] == 'Tarkenna hakua') {
+            continue;
+          }
+          $output .= _libdbsearch_get_link($value['link']['description'], $value['link']['address']);
+        }
+      }
+      else {
+        //$output .= check_plain($value);
+        $output .= $value;
+      }
+      $output .= ' ';
+    }
+  }
+  else {
+    $output = check_plain($navi);
+  }
+  return '<div class="libdb-navi">' . $output . '</div>';
+}
+
+function _libdbsearch_get_link($desc, $addr, $attr = '') {
+//  dsm($desc);
+//  dsm($addr);
+  $my_desc = '';
+  if (is_array($desc)) {
+    $my_desc = _libdbsearch_get_special($desc);
+    $desc = '-*PicTure*-#';
+  }
+  if (strpos($addr, '.asp?') !== FALSE) {
+    // TODO Nyt vielä suora tarkastus osoitteeseen, joku fiksumpi tapa
+    // kun saadaan oma varaus käyttöön.
+    if (strpos($addr, 'varaus.asp?') !== FALSE) {
+      $server = variable_get('libdbsearch_db_server', NULL);
+      return '<a href="http://' . $server . '/index.asp?url=' . $addr .
+      '" target="_blank">' . $desc . '</a>';
+    }
+    else {
+      $addr = 'libdbsearch/' . str_replace('.asp?', '/', $addr);
+    }
+  }
+  $link = l($desc, $addr);
+
+  if (!empty($my_desc)) {
+    $link = str_replace('-*PicTure*-#', $my_desc, $link);
+  }
+  return $link;
+}
+
+function libdbsearch_handler_result_list($var) {
+  if (isset($var['info'])) {
+    $output = _libdbsearch_get_info($var['info']);
+  }
+  if (isset($var['navigation'])) {
+    $output .= _libdbsearch_get_navigation($var['navigation']);
+  }
+
+  if (isset($var['result'])) {
+    $vars = array(
+      'header' => _libdbsearch_format_row($var['result'][0]['header']),
+      'rows' => _libdbsearch_format_rows($var['result'][0]['rows']),
+    );
+    $output .= theme($var['template'], $vars);
+  }
+  else {
+    $output = 'No results!';
+  }
+
+  if (isset($var['notice'])) {
+    $output .= _libdbsearch_get_notice($var['notice']);
+  }
+  return $output;
+}
+
+function libdbsearch_handler_by_material($var) {
+  $output = $var['source'];
+
+  return $output;
+}
+
+function libdbsearch_handler_work($var) {
+  $output = '';
+  if(isset($var['navigation'])) {
+    $output = _libdbsearch_get_navigation($var['navigation']);
+  }
+
+  if (isset($var['result'])) {
+    foreach ($var['result'] as $t) {
+      $output .= _libdbsearch_parse_table($t);
+    }
+
+    // In 'Detailed information' view don't want to show navigation in the
+    // bottom side, so we hide it. In 'Result list' view we also have one
+    // table, but there is no notico or navigation to show.
+    if (count($var['result']) > 1) {
+      if (isset($var['notice'])) {
+        $output .= _libdbsearch_get_notice($var['notice']);
+      }
+    }
+  }
+  else {
+    $output = 'No results!';
+  }
+
+  return $output;
+}
+
+function libdbsearch_handler_work_parts($var) {
+  $output = '';
+
+  foreach ($var['result'] as $t) {
+    $output .= _libdbsearch_parse_table($t);
+  }
+
+  if (isset($var['notice'])) {
+    $output .= _libdbsearch_get_notice($var['notice']);
+  }
+
+  return $output;
+}
+
+function _libdbsearch_get_special($spec) {
+  $ret = '';
+  if (array_key_exists('img', $spec)) {
+    $ret = '<img src="';
+    $ret .= $spec['img']['src'];
+    if (array_key_exists('alt', $spec['img'])) {
+      $ret .= '" alt="' . $spec['img']['alt'] . '"';
+    }
+    if (array_key_exists('border', $spec['img'])) {
+      $ret .= ' border="' . $spec['img']['border'] . '"';
+    }
+    if (array_key_exists('width', $spec['img'])) {
+      $ret .= ' width="' . $spec['img']['width'] . '"';
+    }
+    $ret .= ' />';
+  }
+  return $ret;
+}
+
+function _libdbsearch_parse_table($table) {
+  $output = '';
+  if (isset($table['title'])) {
+    $output .= '<h2>' . $table['title'] . '</h2>';
+  }
+  if (isset($table['info'])) {
+    $output .= _libdbsearch_get_info($table['info']);
+  }
+  if (isset($table['rows'])) {
+    $vars['rows'] = _libdbsearch_format_rows($table['rows']);
+    if (isset($table['header'])) {
+//      dsm($table['header']);
+      $vars['header'] = _libdbsearch_format_row($table['header']);
+    }
+    $output .= theme('table', $vars);
+  }
+
+  if (isset($table['notice'])) {
+    $output .= _libdbsearch_get_notice($table['notice']);
+  }
+  return $output;
+}
+
+function _libdbsearch_extract_pars() {
+  $swords = array();
+//  dsm(arg());
+  $args = arg();
+  if (isset($args[2])) {
+    $params = explode('&', $args[2]);
+    foreach ($params as $val) {
+      $param = explode('=', $val);
+      if (count($param) == 2) {
+        $swords[$param[0]] = $param[1];
+      }
+    }
+  }
+  return $swords;
+}
+
+/**
+ * Converts key array to key pairs that can be added to address line.
+ *
+ * @param array $list searchkey array
+ * @return string used search key pairs in parameter string
+ */
+function _libdbsearch_parse_keys($list) {
+
+  $tags = array(
+    'vapaasana', 'piste', 'aineistoittain', 'uutuudet', 'tekija', 'nimeke',
+    'asiasana', 'tunnus', 'sarja', 'kustantaja', 'luokkaryhma', 'julkaisuaika',
+    'kieliryhma', 'materiaaliryhma', 'osastoryhma',
+  );
+
+  if ($list == NULL) {
+    return NULL;
+  }
+  $ret_list = '';
+  foreach ($list as $key => $val) {
+    if (empty($val) || !in_array($key, $tags)) {
+      continue;
+    }
+    if (!empty($ret_list)) {
+      $ret_list .= '&';
+    }
+    $ret_list .= $key . '=' . $val;
+    if (strtolower($key) == 'op') {
+      break;
+    }
+  }
+  return $ret_list;
+}
+
+/**
+ * Send query to VuFind.
+ * 
+ * @param string $keys search keys or record id.
+ * @param string $filter filter component of query
+ * @return mixed error in string or result array
+ */
+function _libdbsearch_ask($keys/* , $filter = '' */) {
+  $result = '';
+//  $request_url = "http://www.vufind.lib/vufind/DSearch/";
+//  $request_url = variable_get('conn_vufind_server', '');
+  
+  $request_url = "http://kyyti.verkkokirjasto.fi/haku.asp?vapaasana=visual+studio";
+//  $cookie = NULL;
+  
+  dpm($request_url);
+  
+  if(empty($request_url)) {
+    return t('Server address not set.');
+  }
+//  $request_url .= "/DSearch/";
+//  $keys = str_replace(' ', '+', $keys);
+//  $request_url .= $keys;
+// create a new cURL resource
+  $ch = curl_init();
+//  if($ch === FALSE) {
+//    dpm('False');
+//  }
+// set URL and other appropriate options
+  curl_setopt($ch, CURLOPT_URL, $request_url);
+//curl_setopt($ch, CURLOPT_HEADER, 0);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+  curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: text/html'));
+  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+//  curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie);
+//  curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie);
+  curl_setopt($ch, CURLOPT_HEADER, TRUE);
+// grab URL and pass it to the browser
+  $response = curl_exec($ch);
+//  dpm($response);
+//  if($response === FALSE) {
+//    dpm('False');
+//  }
+
+  $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+  $header_length = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+  
+  if ($http_code == 200) {
+    $result = $response;
+  }
+  else {
+    $result = curl_error($ch);
+  }
+// close cURL resource, and free up system resources
+  curl_close($ch);
+  
+//  dpm($result);
+//  dpm($cookie);
+//  dpm($header_length);
+  $page1 = str_split($result, $header_length);
+  $res_header = substr($result, 0, $header_length);
+  $page = substr($result, $header_length);
+  
+  dpm($page, 'Page');
+//  dpm($res_header, 'Cookie');
+  
+  preg_match_all('/^Set-Cookie:\s*([^;]*)/mi', $res_header, $m);
+  dpm($m[1][count($m) - 1], 'Cookie');
+  
+  
+  return $result;
+}

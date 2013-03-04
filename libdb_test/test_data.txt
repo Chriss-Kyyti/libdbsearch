@@ -1,0 +1,174 @@
+HTTP/1.0 302 Moved Temporarily
+Date: Tue, 26 Feb 2013 14:23:14 GMT
+Server: Microsoft-IIS/6.0
+Cache-Control: no-store, must-revalidate, private
+Pragma: no-cache
+Location: selauslista.asp?ht=1&monihaku=0&edhaku=1&lajittelu=1&edlajittelu=1
+Content-Length: 203
+Content-Type: text/html
+Expires: Fri, 31 Dec 1999 22:00:00 GMT
+Set-Cookie: ASPSESSIONIDSSADQRSQ=KMCHCGPBOHODOJBFABGPDIKM; path=/
+Cache-Control: private
+X-Cache: MISS from vr-ic-28309-axp1.localdomain
+X-Cache-Lookup: MISS from vr-ic-28309-axp1.localdomain:3128
+Via: 1.1 vr-ic-28309-axp1.localdomain:3128 (squid/2.7.STABLE9)
+Connection: close
+
+HTTP/1.0 302 Moved Temporarily
+Date: Tue, 26 Feb 2013 14:23:16 GMT
+Server: Microsoft-IIS/6.0
+Cache-Control: no-store, must-revalidate, private
+Pragma: no-cache
+Location: sanahaku.asp
+Content-Length: 133
+Content-Type: text/html
+Expires: Fri, 31 Dec 1999 22:00:00 GMT
+Set-Cookie: ASPSESSIONIDSSADQRSQ=LMCHCGPBGLBMBABAHDPMKADE; path=/
+Cache-Control: private
+X-Cache: MISS from vr-ic-28309-axp1.localdomain
+X-Cache-Lookup: MISS from vr-ic-28309-axp1.localdomain:3128
+Via: 1.1 vr-ic-28309-axp1.localdomain:3128 (squid/2.7.STABLE9)
+Connection: close
+
+HTTP/1.0 200 OK
+Date: Tue, 26 Feb 2013 14:23:16 GMT
+Server: Microsoft-IIS/6.0
+Cache-Control: no-store, must-revalidate, private
+Pragma: no-cache
+Content-Length: 4714
+Content-Type: text/html
+Expires: Fri, 31 Dec 1999 22:00:00 GMT
+Set-Cookie: ASPSESSIONIDSSADQRSQ=MMCHCGPBFPDIBHOKNHKMDJIL; path=/
+Cache-Control: private
+X-Cache: MISS from vr-ic-28309-axp1.localdomain
+X-Cache-Lookup: MISS from vr-ic-28309-axp1.localdomain:3128
+Via: 1.1 vr-ic-28309-axp1.localdomain:3128 (squid/2.7.STABLE9)
+Connection: close
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Web-Origo - Sanahaku</title>
+<link rel="StyleSheet" href="styles/general_css.asp" type="text/css" media="screen">
+</head>
+<body>
+<div class='otsikko'><h1>Sanahaku</h1>&nbsp;<a href='ohjeet.asp#18'><img src='kuvat/ohje.gif' alt='Ohje'></a></div>
+
+<form method="get" action="haku.asp" name="sanahaku">
+<table width="100%" border="0" id="sanahaku">
+  <tr>
+    <td>Hakusanat</td>
+    <td>
+      <input type="text" name="vapaasana" size="42" value=''>
+      <input type="submit" name="Hae" value='Hae'>
+    </td>
+  </tr>
+
+  <tr>
+    <td>Kirjastot</td>
+    <td><select name="piste"><option value="">Kaikki</option>
+<option value='3'>Haminan kaupunginkirjasto</option>
+<option value='27'>- Haminan kirjasto</option>
+<option value='28'>- Ruissalon kirjasto</option>
+<option value='29'>- Haminan kirjastoauto</option>
+<option value='5'>Iitin kunnankirjasto</option>
+<option value='37'>- Iitin pääkirjasto</option>
+<option value='38'>- Iitin kirjastoauto</option>
+<option value='6'>Kotkan kaupunginkirjasto</option>
+<option value='18'>- Kotkan pääkirjasto</option>
+<option value='21'>- Karhulan kirjasto</option>
+<option value='20'>- Karhuvuoren kirjasto</option>
+<option value='22'>- Otsolan kirjasto</option>
+<option value='23'>- Tavastilan kirjasto</option>
+<option value='19'>- Kotkan kirjastoauto</option>
+<option value='7'>Kouvolan kaupunginkirjasto</option>
+<option value='15'>- Kouvolan pääkirjasto</option>
+<option value='32'>- Elimäen kirjasto</option>
+<option value='17'>- Haanojan kirjasto</option>
+<option value='25'>- Inkeroisten kirjasto</option>
+<option value='39'>- Jaalan kirjasto</option>
+<option value='26'>- Kirjastoauto Regina</option>
+<option value='31'>- Kirjastoauto Oravan Matti</option>
+<option value='33'>- Korian kirjasto</option>
+<option value='79'>- Kuusankosken kirjasto</option>
+<option value='80'>- Kääpälän kirjasto</option>
+<option value='16'>- Lehdokin kirjasto</option>
+<option value='24'>- Myllykosken kirjasto</option>
+<option value='49'>- Pilkanmaan kirjasto</option>
+<option value='81'>- Utin kirjasto</option>
+<option value='30'>- Valkealan kirjasto</option>
+<option value='82'>- Voikkaan kirjasto</option>
+<option value='14'>Pyhtään kunnankirjasto</option>
+<option value='35'>- Pyhtään pääkirjasto</option>
+<option value='36'>- Pyhtään kirjastoauto</option>
+<option value='10'>Virolahden kunnankirjasto</option>
+<option value='40'>- Virolahden kirjasto</option>
+<option value='34'>- Miehikkälän kirjasto</option>
+
+      </select>
+      <a href="ohjeet.asp#19"><img src="kuvat/ohje.gif" alt='Ohje'></a>
+    </td>
+  </tr>
+
+  <tr>
+    <td>Rajaus</td>
+    <td>
+      <label for="luokka0"><input type="radio" name="luokkaryhma" id="luokka0" value="" checked>Kaikki</label><br>
+      <label for="luokka1"><input type="radio" name="luokkaryhma" id="luokka1" value="100001">Tietokirjallisuus</label><br>
+      <label for="luokka2"><input type="radio" name="luokkaryhma" id="luokka2" value="100002">Kaunokirjallisuus</label><br>
+      <label for="luokka3"><input type="radio" name="luokkaryhma" id="luokka3" value="100019">Musiikki</label>
+      <a href="ohjeet.asp#20"><img src="kuvat/ohje.gif" alt='Ohje'></a>
+    </td>
+  </tr>
+
+  <tr>
+    <td>Näytetään </td>
+    <td>
+      <label for="h20"><input type="radio" name="hakujoukko" id="h20" value="20" checked>20</label><br>
+      <label for="h50"><input type="radio" name="hakujoukko" id="h50" value="50">50</label><br>
+      <label for="h100"><input type="radio" name="hakujoukko" id="h100" value="100">100</label>
+       teosta sivulla
+      <a href="ohjeet.asp#14"><img src="kuvat/ohje.gif" alt='Ohje'></a>
+    </td>
+  </tr>
+
+  <tr>
+    <td>&nbsp;</td>
+    <td>
+      <label for="aineistoittain"><input type="checkbox" name="aineistoittain" id="aineistoittain" value="1" checked>
+      Ryhmittele aineistolajeittain</label>
+      <a href="ohjeet.asp#13"><img src="kuvat/ohje.gif" alt='Ohje'></a>
+    </td>
+  </tr>
+
+  <tr>
+    <td>&nbsp;</td>
+    <td><label for="cbUutuudet">
+      <input type="checkbox" name="uutuudet" id="cbUutuudet" value="1">
+      Vain uutuudet</label>
+    </td>
+  </tr>
+
+  <tr>
+    <td>&nbsp;</td>
+    <td><label for="cbOsakohteet">
+      <input type="checkbox" name="osakohteet" id="cbOsakohteet" value="1">
+      Näytä sisältö/artikkelit/kappaleet</label>
+    </td>
+  </tr>
+
+</table>
+</form>
+
+
+<script type="text/javascript">
+<!--
+document.sanahaku.vapaasana.focus();
+//-->
+</script>
+</body>
+</html>
+1699

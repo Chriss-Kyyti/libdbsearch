@@ -1,0 +1,1 @@
+Readme file for libdbsearch version 3 for Drupal 7.

@@ -1,0 +1,20 @@
+/* 
+    Document   : libdbsearch
+    Created on : 4.8.2011, 9:17:24
+    Author     : Mika.Hatakka
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+#libdbsearch-box .form-text { 
+  width: 100%;
+}
+
+#libdbsearch-box .form-select { 
+  width: 100%;
+}
