@@ -36,6 +36,9 @@ class LibdbConnection {
     
     $this->type = $type . '.asp';
 
+    if($type == 'haku') {
+      $keys = 'vapaasana=' . $keys;
+    }
     $this->keys = str_replace(array(' ', '#'), array('+', "%23"), $keys);
     $this->error = NULL;
   }
@@ -67,7 +70,8 @@ class LibdbConnection {
    * @return array webpage and cookie in array
    */
   private function getMovedPage($server, $page, $criteria, $cookie = NULL) {
-    $webpage = $server . "/" . $page . '?vapaasana=' . $criteria;
+    $webpage = $server . "/" . $page . '?' . $criteria;
+dpm($webpage);
     // Search word break up character (#) change to code %23.
 //    $webpage = str_replace("#", "%23", $webpage);
 //    $webpage = str_replace(" ", "+", $webpage);

@@ -6,3 +6,5 @@ package = Libdb
 core = 7.x
 files[] = libdbsearch.module
 files[] = includes/libdb_connection.inc
+files[] = includes/origo_parser.inc
+files[] = libdbsearch.pages.inc

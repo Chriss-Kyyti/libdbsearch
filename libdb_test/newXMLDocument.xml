@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Teoksen_tiedot>
+  <Otsikko>Teoksen tiedot</Otsikko>
+  <Navigointi>
+    <Valinta separator="no" >Edellinen teos</Valinta>
+    <Valinta />
+    <Valinta>Seuraava teos</Valinta>
+  </Navigointi>
+  <Teostiedot>
+    <Rivi>
+      <Selite>Aineistolaji</Selite>
+      <Tieto>
+        <Teksti>Kirja</Teksti>
+      </Tieto>
+    </Rivi>
+    <Rivi>
+      <Selite>Tekijä / esittäjä</Selite>
+      <Tieto>
+        <Linkki>
+          <Losoite>haku.asp?tekija=%22J%C3%A4rvinen%2C+Jani%22&amp;hakujoukko=undefined&amp;haku=lajittelu</Losoite>
+          <Lteksti>Järvinen, Jani</Lteksti>
+        </Linkki>
+      </Tieto>
+    </Rivi>
+    <Rivi>
+      <Selite>Teoksen nimi</Selite>
+      <Tieto>
+        <Teksti>Visual Studio 2008 -käsikirja</Teksti>
+      </Tieto>
+    </Rivi>
+    <Rivi>
+      <Selite>Julkaisutiedot</Selite>
+      <Tieto>
+        <Teksti>Jyväskylä : WSOYpro : Docendo, 2008 (Porvoo : WS Bookwell)</Teksti>
+      </Tieto>
+    </Rivi>
+    <Rivi>
+      <Selite>Sarja</Selite>
+      <Tieto>
+        <Linkki>
+          <Losoite>haku.asp?sarja=Quality&amp;hakujoukko=undefined&amp;haku=lajittelu</Losoite>
+          <Lteksti>Quality</Lteksti>
+        </Linkki>
+      </Tieto>
+    </Rivi>
+    <Rivi>
+      <Selite>ISBN</Selite>
+      <Tieto>
+        <Teksti>978-951-0-34164-3 (sid.)</Teksti>
+      </Tieto>
+    </Rivi>
+    <Rivi>
+      <Selite>Pääkielet</Selite>
+      <Tieto>
+        <Teksti>suomi</Teksti>
+      </Tieto>
+    </Rivi>
+    <Rivi>
+      <Selite>Asiasanat / Aihe</Selite>
+      <Tieto>
+        <Linkki>
+          <Losoite>haku.asp?asiasana=sovelluskehittimet+%3A+Visual+Studio&amp;hakujoukko=undefined&amp;haku=lajittelu</Losoite>
+          <Lteksti>sovelluskehittimet : Visual Studio</Lteksti>
+        </Linkki>
+      </Tieto>
+      <Tieto>
+        <Linkki>
+          <Losoite>haku.asp?asiasana=Visual+Studio&amp;hakujoukko=undefined&amp;haku=lajittelu</Losoite>
+          <Lteksti>Visual Studio</Lteksti>
+        </Linkki>
+      </Tieto>
+      <Tieto>
+        <Linkki>
+          <Losoite>haku.asp?asiasana=ohjelmointi&amp;hakujoukko=undefined&amp;haku=lajittelu</Losoite>
+          <Lteksti>ohjelmointi</Lteksti>
+        </Linkki>
+      </Tieto>
+      <Tieto>
+        <Linkki>
+          <Losoite>haku.asp?asiasana=atk%2Dohjelmat&amp;hakujoukko=undefined&amp;haku=lajittelu</Losoite>
+          <Lteksti>atk-ohjelmat</Lteksti>
+        </Linkki>
+      </Tieto>
+      <Tieto>
+        <Linkki>
+          <Losoite>haku.asp?asiasana=ohjelmointikielet+%3A+C&amp;hakujoukko=undefined&amp;haku=lajittelu</Losoite>
+          <Lteksti>ohjelmointikielet : C</Lteksti>
+        </Linkki>
+      </Tieto>
+      <Tieto>
+        <Linkki>
+          <Losoite>haku.asp?asiasana=ohjelmointiymp%C3%A4rist%C3%B6+%3A+Microsoft+%2ENET&amp;hakujoukko=undefined&amp;haku=lajittelu</Losoite>
+          <Lteksti>ohjelmointiympäristö : Microsoft .NET</Lteksti>
+        </Linkki>
+      </Tieto>
+    </Rivi>
+  </Teostiedot>
+  <Saatavuus>
+    <Teos>
+      <Kokoelma>
+        <Linkki>
+          <Losoite>teos.asp?teosid=6CE426E1-ECE6-4039-A180-B7F50BF6E3C1&amp;kirjasto=1&amp;listalta=1&amp;lkm=2&amp;lajittelu=1&amp;edhaku=1</Losoite>
+          <Lteksti>Kotkan kaupunginkirjasto</Lteksti>
+        </Linkki>
+      </Kokoelma>
+      <Niteita>1</Niteita>
+      <Lainattavissa>-</Lainattavissa>
+      <Tilattu>-</Tilattu>
+      <Erapaiva>02.04.2013</Erapaiva>
+    </Teos>
+    <Teos>
+      <Kokoelma>
+        <Linkki>
+          <Losoite>teos.asp?teosid=6CE426E1-ECE6-4039-A180-B7F50BF6E3C1&amp;kirjasto=3&amp;listalta=1&amp;lkm=2&amp;lajittelu=1&amp;edhaku=1</Losoite>
+          <Lteksti>Kouvolan kaupunginkirjasto</Lteksti>
+        </Linkki>
+      </Kokoelma>
+      <Niteita>1</Niteita>
+      <Lainattavissa>1</Lainattavissa>
+      <Tilattu>-</Tilattu>
+      <Erapaiva>-</Erapaiva>
+    </Teos>
+    <Valiotsikko>Saatavuustiedot</Valiotsikko>
+    <Teksti>Huom! Tarkista miss&auml; kirjastopisteess&auml; teos on hyllyss&auml; klikkaamalla kaupunginkirjaston / kunnankirjaston nime&auml;.</Teksti>
+  </Saatavuus>
+  <Lohko>
+    <Linkki>
+      <Losoite>varaus.asp?teosid=6CE426E1%2DECE6%2D4039%2DA180%2DB7F50BF6E3C1&amp;listalta=1&amp;lkm=2&amp;lajittelu=1&amp;edhaku=1</Losoite>
+      <Lteksti>Varaa teos</Lteksti>
+      <Lnewwnd>TRUE</Lnewwnd>
+    </Linkki>
+  </Lohko>
+  <Lohko>
+    <Linkki>
+      <Losoite>teos.asp?teosid=6CE426E1%2DECE6%2D4039%2DA180%2DB7F50BF6E3C1&amp;listalta=1&amp;lkm=2&amp;lajittelu=1&amp;edhaku=1&amp;st=2</Losoite>
+      <Lteksti>Tarkat tiedot</Lteksti>
+    </Linkki>
+  </Lohko>
+  <Lohko>
+    <Linkki>
+      <Losoite>http://www.btj.com/btjcgi/arvo/get_add_info.cgi?type=PRES&amp;key=6874283128488538</Losoite>
+      <Lteksti>Esittelyteksti</Lteksti>
+      <Lnewwnd>TRUE</Lnewwnd>
+    </Linkki>
+  </Lohko>
+  <Navigointi>
+    <Valinta separator="no" >Edellinen teos</Valinta>
+    <Valinta />
+    <Valinta>Seuraava teos</Valinta>
+  </Navigointi>
+</Teoksen_tiedot>
