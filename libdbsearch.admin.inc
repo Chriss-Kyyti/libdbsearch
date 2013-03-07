@@ -6,7 +6,7 @@
  * @file
  * Libdbsearch settings form.
  *
- * Last modified: 04.03.2013 Mika Hatakka
+ * Last modified: 07.03.2013 Mika Hatakka
  */
 
 /**
@@ -36,16 +36,16 @@ function libdbsearch_admin() {
 }
 
 function libdbsearch_admin_validate($form, &$form_state) {
-//  if(isset($form_state['values']['libdb_server'])) {
-//    $srv = $form_state['values']['libdb_server'];
-//    if( preg_match('/^http:\/\/\s*([^;]*)/mi', $srv) ||
-//        preg_match('/^https:\/\/\s*([^;]*)/mi', $srv) ) {
-//      if (substr($srv, -1) != '/') {
-//        $form_state['values']['libdb_server'] = $srv . '/';
-//      }
-//    }
-//    else {
-//      form_set_error('URL', t('Give full URL address.'));
-//    }
-//  }
+  if(isset($form_state['values']['libdb_server'])) {
+    $srv = $form_state['values']['libdb_server'];
+    if( preg_match('/^http:\/\/\s*([^;]*)/mi', $srv) ||
+        preg_match('/^https:\/\/\s*([^;]*)/mi', $srv) ) {
+      if (substr($srv, -1) != '/') {
+        $form_state['values']['libdb_server'] = $srv . '/';
+      }
+    }
+    else {
+      form_set_error('URL', t('Give full URL address.'));
+    }
+  }
 }

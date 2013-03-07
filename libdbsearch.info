@@ -1,10 +1,8 @@
-;$Id$
-
 name = Libdbsearch
 description = Search module for Origo library databases.
 package = Libdb
 core = 7.x
 files[] = libdbsearch.module
+;files[] = libdbsearch.pages.inc
 files[] = includes/libdb_connection.inc
 files[] = includes/origo_parser.inc
-files[] = libdbsearch.pages.inc

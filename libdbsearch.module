@@ -5,8 +5,12 @@
  * Module to make search to library database
  * and showing the result in Drupal page.
  *
- * Last modified: 06.03.2013 Mika Hatakka
+ * Last modified: 07.03.2013 Mika Hatakka
  */
+
+
+// TODO libdbsearch sivujen alta tehty sivustohaku aiheuttaa WSOD:n.    7.3.2013 MHa
+
 
 /**
  * Implements hook_help().
@@ -69,7 +73,7 @@ function libdbsearch_view($action = 'haku', $keys = '') {
     $origo->init($action, $keys);
     $result = $origo->askPage();
 
-//    $result = 'Not empty';
+//    dpm($result, 'result');
 
     if (empty($result)) {
       $output = 'Internal Function Error.';
@@ -78,21 +82,12 @@ function libdbsearch_view($action = 'haku', $keys = '') {
       $output = '';
       $parser = new OrigoParser($result, $action);
       $something = $parser->constructXML();
-//      dpm($something);
-
-
-//      $something = '<Selauslista_tulos><Otsikko>Haun tulos</Otsikko><Hakuinfo><Teksti>Teoksia löytyi yhteensä 54 kappaletta.</Teksti><Teksti>Teokset 1 - 20</Teksti></Hakuinfo><Lohko /><Navigointi><Teksti ncr="TRUE" >Sivu:&nbsp;</Teksti><Valinta separator="no" >Edellinen</Valinta><Valinta separator="no" ><Haettu>1</Haettu></Valinta><Valinta separator="no" ><Linkki><Losoite>selauslista.asp?edhaku=1&amp;lkm=54&amp;sivu=2&amp;lajittelu=1&amp;edlajittelu=1</Losoite><Lteksti>2</Lteksti></Linkki></Valinta><Valinta separator="no" ><Linkki><Losoite>selauslista.asp?edhaku=1&amp;lkm=54&amp;sivu=3&amp;lajittelu=1&amp;edlajittelu=1</Losoite><Lteksti>3</Lteksti></Linkki></Valinta><Valinta separator="no" ><Linkki><Losoite>selauslista.asp?edhaku=1&amp;lkm=54&amp;sivu=2&amp;lajittelu=1&amp;edlajittelu=1</Losoite><Lteksti>Seuraava</Lteksti></Linkki></Valinta></Navigointi><Hakutulos><Selausotsikot><Totsikko><Teksti>Tekijä</Teksti><Paikka>1</Paikka></Totsikko><Totsikko><Linkki><Losoite>selauslista.asp?edhaku=1&amp;lkm=54&amp;lajittelu=2&amp;edlajittelu=1&amp;sivu=1</Losoite><Lteksti>Teoksen nimi</Lteksti></Linkki><Paikka>2</Paikka></Totsikko><Totsikko><Linkki><Losoite>selauslista.asp?edhaku=1&amp;lkm=54&amp;lajittelu=6&amp;edlajittelu=1&amp;sivu=1</Losoite><Lteksti>Aineistolaji</Lteksti></Linkki><Paikka>3</Paikka></Totsikko><Totsikko><Linkki><Losoite>selauslista.asp?edhaku=1&amp;lkm=54&amp;lajittelu=5&amp;edlajittelu=1&amp;sivu=1</Losoite><Lteksti>Vuosi</Lteksti></Linkki><Paikka>4</Paikka></Totsikko><Totsikko><Linkki><Losoite>selauslista.asp?edhaku=1&amp;lkm=54&amp;lajittelu=4&amp;edlajittelu=1&amp;sivu=1</Losoite><Lteksti>Luokka</Lteksti></Linkki><Paikka>5</Paikka></Totsikko></Selausotsikot><Selauslista><Teos><Tekija>Ball, Bill</Tekija><Teoksen_nimi><Linkki><Losoite>teos.asp?teosid=E3EBD947%2DF8A3%2D4106%2DA943%2D56DEF198160E&amp;listalta=1&amp;lkm=54&amp;lajittelu=1&amp;edhaku=1</Losoite><Lteksti>Red Hat Linux trainer</Lteksti></Linkki></Teoksen_nimi><Teoksen_aineistolaji>Kirja</Teoksen_aineistolaji><Julkaisuvuosi>1999</Julkaisuvuosi><Luokka>61.4</Luokka></Teos><Teos><Tekija>Ball, Bill</Tekija><Teoksen_nimi><Linkki><Losoite>teos.asp?teosid=0309D166%2D39FA%2D47FD%2DA379%2DDEF022E73867&amp;listalta=1&amp;lkm=54&amp;lajittelu=1&amp;edhaku=1</Losoite><Lteksti>Red Hat Linux trainer</Lteksti></Linkki></Teoksen_nimi><Teoksen_aineistolaji>Kirja</Teoksen_aineistolaji><Julkaisuvuosi>1998</Julkaisuvuosi><Luokka>61.4</Luokka></Teos><Teos><Tekija>Barkakati, Naba</Tekija><Teoksen_nimi><Linkki><Losoite>teos.asp?teosid=5DD051BC%2D5122%2D4067%2DAD3D%2DE9DB8742011A&amp;listalta=1&amp;lkm=54&amp;lajittelu=1&amp;edhaku=1</Losoite><Lteksti>Red Hat Linux</Lteksti></Linkki></Teoksen_nimi><Teoksen_aineistolaji>Kirja</Teoksen_aineistolaji><Julkaisuvuosi>2000</Julkaisuvuosi><Luokka>61.4</Luokka></Teos><Teos><Tekija>&nbsp;</Tekija><Teoksen_nimi><Linkki><Losoite>teos.asp?teosid=609881A1%2D89B6%2D453F%2D95D8%2D61D493588961&amp;listalta=1&amp;lkm=54&amp;lajittelu=1&amp;edhaku=1</Losoite><Lteksti>The code : story of Linux</Lteksti></Linkki></Teoksen_nimi><Teoksen_aineistolaji>DVD-levy</Teoksen_aineistolaji><Julkaisuvuosi>[2005]</Julkaisuvuosi><Luokka>61.4</Luokka></Teos><Teos><Tekija>Durham, Jeff</Tekija><Teoksen_nimi><Linkki><Losoite>teos.asp?teosid=E3F308C3%2D6738%2D49D5%2D9079%2D9736964DCF12&amp;listalta=1&amp;lkm=54&amp;lajittelu=1&amp;edhaku=1</Losoite><Lteksti>Linux+ -sertifikaatti</Lteksti></Linkki></Teoksen_nimi><Teoksen_aineistolaji>Kirja</Teoksen_aineistolaji><Julkaisuvuosi>2002</Julkaisuvuosi><Luokka>61.4</Luokka></Teos><Teos><Tekija>&nbsp;</Tekija><Teoksen_nimi><Linkki><Losoite>teos.asp?teosid=1AF77289%2D0F60%2D4723%2DA290%2DDFC746F7B057&amp;listalta=1&amp;lkm=54&amp;lajittelu=1&amp;edhaku=1</Losoite><Lteksti>Edubuntu 7.10 for your PC &amp; server</Lteksti></Linkki></Teoksen_nimi><Teoksen_aineistolaji>CD-ROM</Teoksen_aineistolaji><Julkaisuvuosi>2007</Julkaisuvuosi><Luokka>61.4</Luokka></Teos><Teos><Tekija>Ek, Jesper</Tekija><Teoksen_nimi><Linkki><Losoite>teos.asp?teosid=97302CA3%2D26BC%2D4554%2DA4F9%2D4727673D057C&amp;listalta=1&amp;lkm=54&amp;lajittelu=1&amp;edhaku=1</Losoite><Lteksti>Linux internet-palvelimena</Lteksti></Linkki></Teoksen_nimi><Teoksen_aineistolaji>Kirja</Teoksen_aineistolaji><Julkaisuvuosi>2001</Julkaisuvuosi><Luokka>61.72</Luokka></Teos><Teos><Tekija>Gagne, Marcel</Tekija><Teoksen_nimi><Linkki><Losoite>teos.asp?teosid=9BC0C8AC%2D2354%2D40A3%2D8C13%2D83337B4E513F&amp;listalta=1&amp;lkm=54&amp;lajittelu=1&amp;edhaku=1</Losoite><Lteksti>Linux : järjestelmänhaltijan käsikirja</Lteksti></Linkki></Teoksen_nimi><Teoksen_aineistolaji>Kirja</Teoksen_aineistolaji><Julkaisuvuosi>2003</Julkaisuvuosi><Luokka>61.4</Luokka></Teos><Teos><Tekija>Gay, Warren W.</Tekija><Teoksen_nimi><Linkki><Losoite>teos.asp?teosid=EADE44C4%2D111F%2D4E70%2DA937%2D8364D6F65413&amp;listalta=1&amp;lkm=54&amp;lajittelu=1&amp;edhaku=1</Losoite><Lteksti>Linux-ohjelmointi trainer</Lteksti></Linkki></Teoksen_nimi><Teoksen_aineistolaji>Kirja</Teoksen_aineistolaji><Julkaisuvuosi>1999</Julkaisuvuosi><Luokka>61.3</Luokka></Teos><Teos><Tekija>Hakala, Viljo</Tekija><Teoksen_nimi><Linkki><Losoite>teos.asp?teosid=4CC273DE%2D4B46%2D4A6B%2D8BBC%2D356ACF2891A6&amp;listalta=1&amp;lkm=54&amp;lajittelu=1&amp;edhaku=1</Losoite><Lteksti>Linux, yrityksen avoin vaihtoehto</Lteksti></Linkki></Teoksen_nimi><Teoksen_aineistolaji>Kirja</Teoksen_aineistolaji><Julkaisuvuosi>1999</Julkaisuvuosi><Luokka>61.4</Luokka></Teos><Teos><Tekija>Hakkarainen, Anssi</Tekija><Teoksen_nimi><Linkki><Losoite>teos.asp?teosid=195A7852%2DF61E%2D40FA%2D88A5%2D01DE130D375C&amp;listalta=1&amp;lkm=54&amp;lajittelu=1&amp;edhaku=1</Losoite><Lteksti>Oracle-tietokannan tehokas hallinta</Lteksti></Linkki></Teoksen_nimi><Teoksen_aineistolaji>Kirja</Teoksen_aineistolaji><Julkaisuvuosi>2011</Julkaisuvuosi><Luokka>61.2</Luokka></Teos><Teos><Tekija>Hall, Jon</Tekija><Teoksen_nimi><Linkki><Losoite>teos.asp?teosid=035C8362%2D168D%2D45C5%2D8283%2DBE9A0E8C098B&amp;listalta=1&amp;lkm=54&amp;lajittelu=1&amp;edhaku=1</Losoite><Lteksti>Red Hat Linux keltanokille</Lteksti></Linkki></Teoksen_nimi><Teoksen_aineistolaji>Kirja</Teoksen_aineistolaji><Julkaisuvuosi>2000</Julkaisuvuosi><Luokka>61.4</Luokka></Teos><Teos><Tekija>Hedemalm, Gunvald</Tekija><Teoksen_nimi><Linkki><Losoite>teos.asp?teosid=5D47EE67%2D2390%2D4F9B%2DA41B%2D0D7AB0F1E97D&amp;listalta=1&amp;lkm=54&amp;lajittelu=1&amp;edhaku=1</Losoite><Lteksti>Linux-käsikirja</Lteksti></Linkki></Teoksen_nimi><Teoksen_aineistolaji>Kirja</Teoksen_aineistolaji><Julkaisuvuosi>2000</Julkaisuvuosi><Luokka>61.4</Luokka></Teos><Teos><Tekija>Hedemalm, Gunvald</Tekija><Teoksen_nimi><Linkki><Losoite>teos.asp?teosid=EE4CAB67%2DD620%2D4AAB%2D84D6%2D0EEAD43F3DB6&amp;listalta=1&amp;lkm=54&amp;lajittelu=1&amp;edhaku=1</Losoite><Lteksti>Linux-käsikirja</Lteksti></Linkki></Teoksen_nimi><Teoksen_aineistolaji>Kirja</Teoksen_aineistolaji><Julkaisuvuosi>1999</Julkaisuvuosi><Luokka>61.4</Luokka></Teos><Teos><Tekija>Hokkanen, Hannu</Tekija><Teoksen_nimi><Linkki><Losoite>teos.asp?teosid=1AFE81C1%2D2813%2D494C%2DB5D4%2DF3EDA7A74931&amp;listalta=1&amp;lkm=54&amp;lajittelu=1&amp;edhaku=1</Losoite><Lteksti>Linux ja Samba</Lteksti></Linkki></Teoksen_nimi><Teoksen_aineistolaji>Kirja</Teoksen_aineistolaji><Julkaisuvuosi>2000</Julkaisuvuosi><Luokka>61.4</Luokka></Teos><Teos><Tekija>Ingo, Henrik</Tekija><Teoksen_nimi><Linkki><Losoite>teos.asp?teosid=19D1DCB1%2DA804%2D407A%2D9D88%2D07AB2013835A&amp;listalta=1&amp;lkm=54&amp;lajittelu=1&amp;edhaku=1</Losoite><Lteksti>Avoin elämä : näin toimii Open Source</Lteksti></Linkki></Teoksen_nimi><Teoksen_aineistolaji>Kirja</Teoksen_aineistolaji><Julkaisuvuosi>2005</Julkaisuvuosi><Luokka>61</Luokka></Teos><Teos><Tekija>Jokinen, Ismo</Tekija><Teoksen_nimi><Linkki><Losoite>teos.asp?teosid=09016B53%2D2ABC%2D42B1%2D91D7%2DD20F9FEBFD89&amp;listalta=1&amp;lkm=54&amp;lajittelu=1&amp;edhaku=1</Losoite><Lteksti>Linux : peruskäyttäjän opas</Lteksti></Linkki></Teoksen_nimi><Teoksen_aineistolaji>Kirja</Teoksen_aineistolaji><Julkaisuvuosi>1999</Julkaisuvuosi><Luokka>61.4</Luokka></Teos><Teos><Tekija>Kannisto, Päivi</Tekija><Teoksen_nimi><Linkki><Losoite>teos.asp?teosid=69436249%2D70F0%2D4B6E%2DA538%2DE7942E2B1C2F&amp;listalta=1&amp;lkm=54&amp;lajittelu=1&amp;edhaku=1</Losoite><Lteksti>Platinainen pilvenreuna : Santeri Kanniston erokirja tietoyhteiskunnasta, yrittäjyydestä ja GNU/Linuxista</Lteksti></Linkki></Teoksen_nimi><Teoksen_aineistolaji>Kirja</Teoksen_aineistolaji><Julkaisuvuosi>2007</Julkaisuvuosi><Luokka>99.16</Luokka></Teos><Teos><Tekija>Kapanen, Timo</Tekija><Teoksen_nimi><Linkki><Losoite>teos.asp?teosid=36A50A29%2DF008%2D4343%2D92E1%2DF3900E37BD23&amp;listalta=1&amp;lkm=54&amp;lajittelu=1&amp;edhaku=1</Losoite><Lteksti>Linux-koulutuspaketti</Lteksti></Linkki></Teoksen_nimi><Teoksen_aineistolaji>Kirja</Teoksen_aineistolaji><Julkaisuvuosi>2004</Julkaisuvuosi><Luokka>61.4</Luokka></Teos><Teos><Tekija>Kautto, Tapio</Tekija><Teoksen_nimi><Linkki><Losoite>teos.asp?teosid=7CE6EC35%2D7203%2D46B6%2DBC14%2D45C028E287D4&amp;listalta=1&amp;lkm=54&amp;lajittelu=1&amp;edhaku=1</Losoite><Lteksti>KDE</Lteksti></Linkki></Teoksen_nimi><Teoksen_aineistolaji>Kirja</Teoksen_aineistolaji><Julkaisuvuosi>2001</Julkaisuvuosi><Luokka>61.4</Luokka></Teos></Selauslista></Hakutulos><Lohko><Teksti ncr="TRUE" >Teokset 1 - 20</Teksti></Lohko><Navigointi><Teksti ncr="TRUE" >Sivu:&nbsp;</Teksti><Valinta separator="no" >Edellinen</Valinta><Valinta separator="no" ><Haettu>1</Haettu></Valinta><Valinta separator="no" ><Linkki><Losoite>selauslista.asp?edhaku=1&amp;lkm=54&amp;sivu=2&amp;lajittelu=1&amp;edlajittelu=1</Losoite><Lteksti>2</Lteksti></Linkki></Valinta><Valinta separator="no" ><Linkki><Losoite>selauslista.asp?edhaku=1&amp;lkm=54&amp;sivu=3&amp;lajittelu=1&amp;edlajittelu=1</Losoite><Lteksti>3</Lteksti></Linkki></Valinta><Valinta separator="no" ><Linkki><Losoite>selauslista.asp?edhaku=1&amp;lkm=54&amp;sivu=2&amp;lajittelu=1&amp;edlajittelu=1</Losoite><Lteksti>Seuraava</Lteksti></Linkki></Valinta></Navigointi></Selauslista_tulos>';
-
 
       $xml = str_replace(
-          array('&nbsp;', '&auml;'), 
-          array(' ', 'ä'), 
-          $something);
-
-
+          array('&nbsp;', '&auml;'), array(' ', 'ä'), $something);
 
       $ret = json_decode(json_encode((array) simplexml_load_string($xml)), 1);
-      dpm($ret, 'result array');
+//      dpm($ret, 'result array');
 
       if (isset($ret['Otsikko'])) {
         drupal_set_title($ret['Otsikko']);
@@ -105,14 +100,7 @@ function libdbsearch_view($action = 'haku', $keys = '') {
           $output .= 'Unknown function ' . $f . '<br />';
         }
       }
-
-
-      $output .= '<br />Got something';
-//      $output .= $result;
     }
-
-
-
 
     return $output;
   }
@@ -120,4 +108,372 @@ function libdbsearch_view($action = 'haku', $keys = '') {
 //  dpm($_POST, 'POST');
   watchdog(7, 'The other');
   return; //drupal_get_form('libdbsearch_form', empty($keys) ? '' : $keys);
+}
+
+//-----------------------------------------------
+// Libdbsearch Origo page wrappers.
+
+/**
+ * Page for search result list.
+ * 
+ * @param type $data
+ * @return type
+ */
+function libdbsearch_set_haku_data($data) {
+  $output = '';
+  if (isset($data['Hakuinfo']['Teksti'])) {
+    foreach ($data['Hakuinfo']['Teksti'] as $val) {
+      $output .= check_plain($val) . '<br />';
+    }
+  }
+
+  $info = _libdbsearch_add_info($data);
+  if (count($info) > 0) {
+    $output .= $info[0];
+  }
+
+  $navigation = _libdbsearch_add_navi($data);
+  if (count($navigation) > 0) {
+    $output .= $navigation[0];
+  }
+
+  $header = array();
+  $rows = array();
+  if (isset($data['Hakutulos'])) {
+    if (isset($data['Hakutulos']['Selausotsikot']['Totsikko'])) {
+      foreach ($data['Hakutulos']['Selausotsikot']['Totsikko'] as $value) {
+        $header[] = _libdbsearch_extract_text($value);
+      }
+    }
+    if (isset($data['Hakutulos']['Selauslista']['Teos'])) {
+      foreach ($data['Hakutulos']['Selauslista']['Teos'] as $value) {
+        $row = array();
+        foreach ($value as $val) {
+          $row[] = _libdbsearch_extract_value($val);
+        }
+        $rows[] = $row;
+      }
+    }
+  }
+
+  $output .= theme('table', array('header' => $header, 'rows' => $rows));
+
+  if (count($info) > 1) {
+    $output .= $info[1];
+  }
+
+  if (count($navigation) > 1) {
+    $output .= $navigation[1];
+  }
+
+  return $output;
+}
+
+function libdbsearch_set_selauslista_data($data) {
+  return libdbsearch_set_haku_data($data);
+}
+
+function libdbsearch_set_teos_data($data) {
+  $output = '';
+
+  $info = _libdbsearch_add_info($data);
+//  dpm($info);
+
+  $navigation = _libdbsearch_add_navi($data);
+  if (count($navigation) > 0) {
+    $output .= $navigation[0];
+  }
+
+
+  if (isset($data['Teostiedot']['Rivi'])) {
+    $output .= _libdbsearch_create_work_table($data['Teostiedot']['Rivi']);
+  }
+
+  if (isset($data['Kuva'])) {
+    $image = array(
+      'path' => $data['Kuva'],
+      'width' => 100,
+//      'height' => 50,
+      'alt' => 'Teoksen kansikuva',
+//      'title' => '',
+      'attributes' => array('class' => 'work_pic'),
+    );
+    $output .= theme('image', $image);
+  }
+
+  if (isset($info['Tarkat tiedot'])) {
+    $output .= $info['Tarkat tiedot'];
+    unset($info['Tarkat tiedot']);
+  }
+
+  if (isset($info['Esittelyteksti'])) {
+    $output .= $info['Esittelyteksti'];
+    unset($info['Esittelyteksti']);
+  }
+
+  if (isset($data['Valitun_saatavuus'])) {
+    $output .= _libdbsearch_availability_table($data['Valitun_saatavuus']);
+  }
+
+  if (isset($data['Saatavuus'])) {
+    $output .= _libdbsearch_availability_table($data['Saatavuus']);
+  }
+
+  foreach ($info as $value) {
+    if (empty($value)) {
+      continue;
+    }
+    $output .= $value;
+  }
+
+
+
+
+  return $output;
+}
+
+//-----------------------------------------------
+// Libdbsearch common helper functions.
+
+/**
+ * Prints out text or link from section.
+ * 
+ * @param type $value
+ * @return type
+ */
+function _libdbsearch_extract_text($value) {
+  $output = '';
+  if (isset($value['Teksti'])) {
+
+    if (is_array($value['Teksti'])) {
+      foreach ($value['Teksti'] as $str) {
+        $output .= $str . '<br />';
+      }
+    }
+    else {
+      $output = $value['Teksti'];
+    }
+  }
+  elseif (isset($value['Linkki'])) {
+    $output = _libdbsearch_extract_link($value['Linkki']);
+  }
+
+  return $output;
+}
+
+function _libdbsearch_extract_link($link) {
+  if (isset($link['Lnewwnd']) && strtoupper($link['Lnewwnd']) == 'TRUE') {
+    if (strpos($link['Losoite'], 'http://') === FALSE) {
+      $linkki = variable_get('libdb_server', '') . $link['Losoite'];
+    }
+    else {
+      $linkki = $link['Losoite'];
+    }
+  }
+  else {
+    $linkki = str_replace('.asp?', '/', $link['Losoite']);
+    $linkki = 'libdbsearch/' . $linkki;
+  }
+  return l($link['Lteksti'], $linkki);
+}
+
+/**
+ * Prints out text or link from two level section.
+ * 
+ * @param type $value
+ * @return type
+ */
+function _libdbsearch_extract_value($value) {
+  if (is_array($value)) {
+    return _libdbsearch_extract_text($value);
+  }
+  else {
+    return $value;
+  }
+}
+
+/**
+ * Create's page navigation .
+ * 
+ * @param type $data
+ * @return type
+ */
+function _libdbsearch_add_navi($data) {
+  $output = array();
+  ;
+  if (isset($data['Navigointi'])) {
+    foreach ($data['Navigointi'] as $val) {
+      $out_navi = '';
+      if (isset($val['Teksti'])) {
+        $out_navi .= $val['Teksti'];
+      }
+      if (isset($val['Valinta'])) {
+        foreach ($val['Valinta'] as $value) {
+          $out_navi .= _libdbsearch_extract_navi_text($value);
+        }
+      }
+      $output[] = $out_navi;
+    }
+  }
+  return $output;
+}
+
+/**
+ * Extracts one navigation component.
+ * 
+ * @param type $data
+ * @return string
+ */
+function _libdbsearch_extract_navi_text($data) {
+  $output = '';
+  if (is_array($data)) {
+    if (isset($data['@attributes']['separator'])) {
+      if ($data['@attributes']['separator'] == 'yes') {
+        $output .= ' | ';
+      }
+    }
+    if (isset($data['Haettu'])) {
+      $output .= $data['Haettu'] . ' ';
+    }
+    if (isset($data['Linkki'])) {
+      $output .= _libdbsearch_extract_text($data) . ' ';
+    }
+  }
+  else {
+    $output .= $data . ' ';
+  }
+  return $output;
+}
+
+/**
+ * Create's section info data
+ * 
+ * @param type $data
+ * @return string
+ */
+function _libdbsearch_add_info($data) {
+  $output = array();
+  $cnt = 0;
+
+  if (isset($data['Lohko'])) {
+    foreach ($data['Lohko'] as $val) {
+      $out_info = '';
+      $idx = $cnt;
+      if (isset($val['Teksti'])) {
+        $out_info .= _libdbsearch_extract_text($val);
+      }
+
+      if (isset($val['Linkki'])) {
+        $out_info .= _libdbsearch_extract_text($val);
+        $idx = $val['Linkki']['Lteksti'];
+      }
+
+
+
+      if (!empty($out_info)) {
+        $out_info .= '<br />';
+      }
+      $output[$idx] = $out_info;
+      $cnt++;
+    }
+  }
+  return $output;
+}
+
+function _libdbsearch_create_work_table($data) {
+  $header = array();
+  $rows = array();
+
+  foreach ($data as $value) {
+    $row = array();
+    $row[] = isset($value['Selite']) ? $value['Selite'] : '';
+    
+    if(isset($value['Tieto'][0])) {
+      $str = '';
+      foreach ($value['Tieto'] as $val) {
+        $str .= _libdbsearch_extract_value($val) . '<br />';
+      }
+    }
+    else {
+      $str = isset($value['Tieto']) ? _libdbsearch_extract_value($value['Tieto']) : '';
+    }
+    $row[] = $str;
+    
+    $rows[] = $row;
+  }
+
+  return theme('table', array('header' => $header, 'rows' => $rows));
+}
+
+function _libdbsearch_availability_table($data) {
+  $output = '';
+  $header = array();
+  $rows = array();
+  $hdr = FALSE;
+
+  if (isset($data['Valiotsikko'])) {
+    $output .= '<h3>' . $data['Valiotsikko'] . '</h3>';
+  }
+
+  if (isset($data['Teksti'])) {
+    $output .= $data['Teksti'];
+  }
+
+  if (isset($data['Teos'])) {
+    foreach ($data['Teos'] as $val) {
+      $row = array();
+      foreach ($val as $key => $value) {
+        if ($hdr == FALSE) {
+          $header[] = $key;
+        }
+        if (is_array($value)) {
+          $row[] = _libdbsearch_extract_text($value);
+        }
+        else {
+          $row[] = $value;
+        }
+      }
+      $hdr = TRUE;
+      $rows[] = $row;
+    }
+    $output .= theme('table', array('header' => $header, 'rows' => $rows));
+  }
+
+
+  if (isset($data['Kirjasto'])) {
+    if (isset($data['Kirjasto'][0])) {
+      foreach ($data['Kirjasto'] as $lib) {
+        _libdbsearch_make_avail_tablerows($lib, $header, $rows, $hdr);
+        $hdr = TRUE;
+      }
+    }
+    else {
+      _libdbsearch_make_avail_tablerows($data['Kirjasto'], $header, $rows, $hdr);
+    }
+    $header[0] = t('Location');
+    $output .= theme('table', array('header' => $header, 'rows' => $rows));
+  }
+
+  return $output;
+}
+
+function _libdbsearch_make_avail_tablerows($lib, &$header, &$rows, $hdr) {
+  if (isset($lib['Kirjastonimi'])) {
+    $rows[] = array(array('data' => $lib['Kirjastonimi'], 'colspan' => 7));
+  }
+  if (isset($lib['Sijainti'])) {
+    $row = array();
+    foreach ($lib['Sijainti'] as $key => $value) {
+      if ($hdr == FALSE) {
+        $header[] = $key;
+      }
+      if (is_array($value)) {
+        $row[] = _libdbsearch_extract_text($value);
+      }
+      else {
+        $row[] = $value;
+      }
+    }
+    $rows[] = $row;
+  }
 }

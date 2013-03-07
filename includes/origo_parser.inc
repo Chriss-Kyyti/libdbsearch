@@ -7,7 +7,7 @@
  * extracting information from erceived web pages.
  * Result is in XML form.
  *
- * Last modified: 20.09.2011 Mika Hatakka
+ * Last modified: 07.03.2013 Mika Hatakka
  */
 class OrigoParser {
 //    private $palvelin;
@@ -249,8 +249,10 @@ class OrigoParser {
                     $level2xml = $this->muodosta_teos_tiedot($colums);
                     $level1xml .= $this->luo_tagi('Teostiedot', $level2xml);
                 }
-                if($tp[2]['loppu'] < $tp[0]['loppu']) { // Second inner table
-                    $level1xml .= $this->extract_inner2($tp, $homepage);
+                if(isset($tp[2])) {
+                  if($tp[2]['loppu'] < $tp[0]['loppu']) { // Second inner table
+                      $level1xml .= $this->extract_inner2($tp, $homepage);
+                  }
                 }
             } // End of Inner table(s)
             // Check picture
@@ -642,6 +644,7 @@ class OrigoParser {
         if($curPage == -1) { return ""; }
         $edSivu = 0;
         $sivu = 0;
+        $taso2xml = '';
         $haettu_asetettu = FALSE;
         $alinks = $this->pura_linkit($str);
         if(strpos($str, '...') != 0) { $poikki = TRUE; } else { $poikki = FALSE; }

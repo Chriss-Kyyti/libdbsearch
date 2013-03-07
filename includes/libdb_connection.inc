@@ -4,7 +4,7 @@
  * @file
  * Get connection and retrieve data from remote server.
  *
- * Last modified: 04.03.2013 Mika Hatakka
+ * Last modified: 07.03.2013 Mika Hatakka
  */
 
 /**
@@ -32,11 +32,9 @@ class LibdbConnection {
       }
     }
 
-    $this->cookie = NULL;
-    
     $this->type = $type . '.asp';
 
-    if($type == 'haku') {
+    if($type == 'haku' && strpos($keys, '=') === FALSE) {
       $keys = 'vapaasana=' . $keys;
     }
     $this->keys = str_replace(array(' ', '#'), array('+', "%23"), $keys);
@@ -70,8 +68,8 @@ class LibdbConnection {
    * @return array webpage and cookie in array
    */
   private function getMovedPage($server, $page, $criteria, $cookie = NULL) {
-    $webpage = $server . "/" . $page . '?' . $criteria;
-dpm($webpage);
+    $webpage = $server . $page . '?' . $criteria;
+//dpm($webpage);
     // Search word break up character (#) change to code %23.
 //    $webpage = str_replace("#", "%23", $webpage);
 //    $webpage = str_replace(" ", "+", $webpage);
