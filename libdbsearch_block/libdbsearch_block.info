@@ -1,0 +1,8 @@
+name = Libdbsearch block
+description = User interface block for Libdbsearch.
+package = Libdb
+core = 7.x
+
+dependencies[] = libdbsearch
+
+files[] = libdbsearch_block.module

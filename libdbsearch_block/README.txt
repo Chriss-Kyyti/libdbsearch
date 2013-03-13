@@ -1,0 +1,1 @@
+Readme file for Libdbsearch Block for Drupal 7.

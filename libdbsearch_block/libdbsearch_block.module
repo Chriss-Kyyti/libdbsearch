@@ -1,0 +1,252 @@
+<?php
+
+/**
+ * @file
+ * User interface block for Libdbsearch.
+ *
+ * Last modified: 13.03.2013 Mika Hatakka
+ */
+
+/**
+ * Implements hook_help().
+ */
+function libdbsearch_block_help($path, $arg) {
+  if ($path == 'admin/help#libdbsearch_block') {
+    return check_markup(file_get_contents(dirname(__FILE__) . "/README.txt"));
+  }
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function libdbsearch_block_block_info() {
+  $blocks = array();
+
+  $blocks['libdbsearch'] = array(
+    'info' => t('Library datasystem search'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function libdbsearch_block_block_view($block_name = '') {
+  if ($block_name == 'libdbsearch') {
+    $block['title'] = t('Search');
+    $block['content'] = drupal_get_form('libdbsearch_block_box');
+    // Add extra information to the end of block.
+//    $ext_par = variable_get('libdb_block_extra_info', '');
+//    if (!empty($ext_par)) {
+//      $par = variable_get('libdb_block_format', 0);
+//      $block['content'] .= check_markup($ext_par, $par, FALSE);
+//    }
+
+    return $block;
+  }
+}
+
+/**
+ * Output a search form for the search block and the theme's search box.
+ *
+ * @see search_box_form_submit()
+ * @see theme_search_box_form()
+ */
+function libdbsearch_block_box() {
+  drupal_add_css(drupal_get_path('module', 'libdbsearch_block') . '/libdbsearch_block.css', 'module', 'all', FALSE);
+  $swords = _libdbsearch_block_extract_pars();
+
+  $form['vapaasana'] = array(
+    '#title' => t('Search words'),
+    '#type' => 'textfield',
+    '#attributes' => array('title' => t("Give the word to search. " .
+          "You can use AND, OR and NOT limit the results. You can break " .
+          "the searchword with #-mark, to get all words that include given word.")),
+    '#default_value' => isset($swords['vapaasana']) ? $swords['vapaasana'] : '',
+  );
+
+  $libraries = libdbsearch_read_list(1);
+  $form['piste'] = array(
+    '#type' => 'select',
+    '#title' => t('Libraries'),
+    '#default_value' => isset($swords['piste']) ? $swords['piste'] : '-',
+    '#options' => $libraries,
+  );
+
+  $form['advanced'] = array(
+    '#title' => t('Advanced search'),
+    '#type' => 'fieldset',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
+  $form['advanced']['aineistoittain'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Group by category'),
+    '#default_value' => isset($swords['aineistoittain']) ? $swords['aineistoittain'] : 0,
+  );
+  $form['advanced']['uutuudet'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Novelties'),
+    '#default_value' => isset($swords['uutuudet']) ? $swords['uutuudet'] : 0,
+  );
+  // osakohteet
+  // hakujoukko
+  $form['advanced']['tekija'] = array(
+    '#title' => t('Author'),
+    '#type' => 'textfield',
+    '#default_value' => isset($swords['tekija']) ? $swords['tekija'] : '',
+  );
+  $form['advanced']['nimeke'] = array(
+    '#title' => t('Work title'),
+    '#type' => 'textfield',
+    '#default_value' => isset($swords['nimeke']) ? $swords['nimeke'] : '',
+  );
+  $form['advanced']['asiasana'] = array(
+    '#title' => t('Index terms / Subject'),
+    '#type' => 'textfield',
+    '#default_value' => isset($swords['asiasana']) ? $swords['asiasana'] : '',
+  );
+  $form['advanced']['tunnus'] = array(
+    '#title' => t('ISBN / Number'),
+    '#type' => 'textfield',
+    '#default_value' => isset($swords['tunnus']) ? $swords['tunnus'] : '',
+  );
+  $form['advanced']['sarja'] = array(
+    '#title' => t('Series'),
+    '#type' => 'textfield',
+    '#default_value' => isset($swords['sarja']) ? $swords['sarja'] : '',
+  );
+  $form['advanced']['kustantaja'] = array(
+    '#title' => t('Publisher'),
+    '#type' => 'textfield',
+    '#default_value' => isset($swords['kustantaja']) ? $swords['kustantaja'] : '',
+  );
+  $work_class = libdbsearch_read_list(2);
+  $form['advanced']['advanced']['luokkaryhma'] = array(
+    '#type' => 'select',
+    '#title' => t('Class'),
+    '#default_value' => !empty($swords['luokkaryhma']) ? $swords['luokkaryhma'] : '-',
+    '#options' => $work_class,
+  );
+  $form['advanced']['julkaisuaika'] = array(
+    '#title' => t('Year'),
+    '#type' => 'textfield',
+    '#default_value' => isset($swords['julkaisuaika']) ? $swords['julkaisuaika'] : '',
+    '#maxlength' => 11,
+    '#size' => 9,
+  );
+  $work_lang = libdbsearch_read_list(3);
+  $form['advanced']['kieliryhma'] = array(
+    '#type' => 'select',
+    '#title' => t('Language'),
+    '#default_value' => isset($swords['kieliryhma']) ? $swords['kieliryhma'] : '-',
+    '#options' => $work_lang,
+  );
+  $work_material = libdbsearch_read_list(4);
+  $form['advanced']['materiaaliryhma'] = array(
+    '#type' => 'select',
+    '#title' => t('Material'),
+    '#default_value' => isset($swords['materiaaliryhma']) ? $swords['materiaaliryhma'] : '-',
+    '#options' => $work_material,
+  );
+  $work_departments = libdbsearch_read_list(5);
+  $form['advanced']['osastoryhma'] = array(
+    '#type' => 'select',
+    '#title' => t('Departments'),
+    '#default_value' => isset($swords['osastoryhma']) ? $swords['osastoryhma'] : '-',
+    '#options' => $work_departments,
+  );
+  // arvostelut
+  // arvostelunteksti
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Search'),
+    '#submit' => array('libdbsearch_block_box_submit'),
+  );
+  $form['clear'] = array(
+    '#type' => 'submit',
+    '#value' => t('Clear'),
+    '#submit' => array('libdbsearch_block_box_submit'),
+  );
+//  $form['#submit'][] = 'libdbsearch_block_form_submit';
+
+  return $form;
+}
+
+// TODO avaimien käsittely ei kuulu tähän moduuliin,
+// vaan origo moduuliin!!!
+// 
+// Tämä on yleinen moduuli, joka saa järjestelmä kohtaisen 
+// avun järjestelmäkohtaislta moduuleilta.  MHa 8.8.2011
+//
+
+function libdbsearch_block_box_submit($form, &$form_state) {
+  if ($form_state['values']['op'] == $form_state['values']['submit']) {
+    $type = empty($form_state['values']['module']) ? 'haku' : $form_state['values']['module'];
+    $params = _libdbsearch_block_parse_keys($form_state['values']);
+//    dpm($params);
+    $form_state['redirect'] = 'libdbsearch/' . $type . '/' . $params;
+  }
+  else { // Clear
+    $form_state['redirect'] = 'libdbsearch';
+  }
+}
+
+/**
+ * Extract search words from URL address to textboxes.
+ * 
+ * @return type
+ */
+function _libdbsearch_block_extract_pars() {
+  $swords = array();
+  $args = arg();
+  if (isset($args[2])) {
+    $params = explode('&', $args[2]);
+    foreach ($params as $val) {
+      $param = explode('=', $val);
+      if (count($param) == 2) {
+        $swords[$param[0]] = $param[1];
+      }
+      elseif (count($params) == 1 && count($param) == 1) {
+        $swords['vapaasana'] = $param[0];
+      }
+    }
+  }
+  return $swords;
+}
+
+/**
+ * Converts key array to key pairs that can be added to address line.
+ *
+ * @param array $list searchkey array
+ * @return string used search key pairs in parameter string
+ */
+function _libdbsearch_block_parse_keys($list) {
+  $tags = array(
+    'vapaasana', 'piste', 'aineistoittain', 'uutuudet', 'tekija', 'nimeke',
+    'asiasana', 'tunnus', 'sarja', 'kustantaja', 'luokkaryhma', 'julkaisuaika',
+    'kieliryhma', 'materiaaliryhma', 'osastoryhma',
+  );
+
+  if ($list == NULL) {
+    return NULL;
+  }
+  $ret_list = '';
+  foreach ($list as $key => $val) {
+    if (empty($val) || !in_array($key, $tags)) {
+      continue;
+    }
+    if (!empty($ret_list)) {
+      $ret_list .= '&';
+    }
+    $ret_list .= $key . '=' . $val;
+    if (strtolower($key) == 'op') {
+      break;
+    }
+  }
+  return $ret_list;
+}

@@ -1,0 +1,17 @@
+/* 
+    Document   : libdbsearch_block
+    Created on : 13.3.2013, 12:24:53
+    Author     : Mika Hatakka
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+#libdbsearch-block-box .form-text { 
+  width: 100%;
+}
+
+#libdbsearch-block-box .form-select { 
+  width: 100%;
+}
+
+

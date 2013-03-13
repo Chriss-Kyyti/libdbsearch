@@ -1,1 +1,1 @@
-Readme file for libdbsearch version 3 for Drupal 7.
+Readme file for Libdbsearch for Drupal 7.
