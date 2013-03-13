@@ -24,6 +24,18 @@ function libdbsearch_admin() {
     '#required' => TRUE,
   );
 
+  $form['setup_select_list'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Update lists database table'),
+    '#description' => t('Dropdown lists in search form are based information in Web-Origo result page. After installation list must be updated manually. In normal use lists are checked by cron every Sunday morning at 3:00 am. If cron is not in use checking must be done also manually.'),
+  );
+
+  $form['setup_select_list']['update'] = array(
+    '#type' => 'submit',
+    '#value' => t('Update'),
+    '#submit' => array('libdbsearch_list_setup_submit'),
+  );
+
   $form['libdbsearch_extra_info'] = array(
     '#title' => t('Extra information'),
     '#type' => 'textarea',
@@ -36,10 +48,10 @@ function libdbsearch_admin() {
 }
 
 function libdbsearch_admin_validate($form, &$form_state) {
-  if(isset($form_state['values']['libdb_server'])) {
+  if (isset($form_state['values']['libdb_server'])) {
     $srv = $form_state['values']['libdb_server'];
-    if( preg_match('/^http:\/\/\s*([^;]*)/mi', $srv) ||
-        preg_match('/^https:\/\/\s*([^;]*)/mi', $srv) ) {
+    if (preg_match('/^http:\/\/\s*([^;]*)/mi', $srv) ||
+        preg_match('/^https:\/\/\s*([^;]*)/mi', $srv)) {
       if (substr($srv, -1) != '/') {
         $form_state['values']['libdb_server'] = $srv . '/';
       }
@@ -48,4 +60,16 @@ function libdbsearch_admin_validate($form, &$form_state) {
       form_set_error('URL', t('Give full URL address.'));
     }
   }
+}
+
+/**
+ * Submit callback; clear system caches.
+ *
+ * @ingroup forms
+ */
+function libdbsearch_list_setup_submit($form, &$form_state) {
+  include drupal_get_path('module', 'libdbsearch') . '/includes/libdb_update.inc';
+  $origo_upd = new LibdbUpdate();
+  $origo_upd->origoUpdateLists();
+  drupal_set_message(t('Select lists are updated.'));
 }

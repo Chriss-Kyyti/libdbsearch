@@ -4,7 +4,7 @@
  * @file
  * Get connection and retrieve data from remote server.
  *
- * Last modified: 07.03.2013 Mika Hatakka
+ * Last modified: 12.03.2013 Mika Hatakka
  */
 
 /**
@@ -33,8 +33,12 @@ class LibdbConnection {
     }
 
     $this->type = $type . '.asp';
+    
+    if(empty($keys)) {
+      $keys = $this->linkFromOld();
+    }
 
-    if($type == 'haku' && strpos($keys, '=') === FALSE) {
+    if($type == 'haku' && strpos($keys, 'vapaasana=') === FALSE) {
       $keys = 'vapaasana=' . $keys;
     }
     $this->keys = str_replace(array(' ', '#'), array('+', "%23"), $keys);
@@ -155,4 +159,12 @@ class LibdbConnection {
     return $homepage;
   }
 
+  private function linkFromOld() {
+   $result = '';
+    if(isset($_GET['teosid'])) {
+      $result = 'teosid=' . $_GET['teosid'];
+    }
+    return $result;
+  }
+  
 }

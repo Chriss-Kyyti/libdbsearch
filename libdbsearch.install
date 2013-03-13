@@ -1,0 +1,59 @@
+<?php
+/**
+ * @file
+ * Library database search installation rutines.
+ *
+ * Last modified: 12.03.2013 Mika Hatakka
+ */
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function libdbsearch_uninstall() {
+  // Remove tables.
+  drupal_uninstall_schema('libdbsearch');
+  variable_del('libdbsearch_lists_updated');
+  variable_del('libdb_server');
+}
+
+/**
+ * Database for the dropdown list options data.
+ */
+function libdbsearch_schema() {
+  $schema['libdbsearch_lists'] = array(
+    'description' => 'Dropdown list contents from Origo.',
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary key.',
+      ),
+      'nro' => array(
+        'type' => 'int',
+        'length' => 10,
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Place in list.',
+      ),
+      'tyyppi' => array(
+        'type' => 'int',
+        'length' => 10,
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Which list belongs.',
+      ),
+      'arvo' => array(
+        'type' => 'varchar',
+        'length' => 10,
+        'description' => 'Value for text.',
+      ),
+      'teksti' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => 'Shown text.',
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+  return $schema;
+}
