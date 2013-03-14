@@ -5,7 +5,7 @@
  * extracting information from erceived web pages.
  * Result is in XML form.
  *
- * Last modified: 12.03.2013 Mika Hatakka
+ * Last modified: 14.03.2013 Mika Hatakka
  */
 
 /**
@@ -774,6 +774,7 @@ class OrigoParser {
    * @return mixed table start and end points or FALSE if fails
    */
   private function maarita_rajat($homepage) {
+    $atulos = $btulos = NULL;
     if (preg_match_all("/<table/", $homepage, $atulos, PREG_OFFSET_CAPTURE) !== FALSE) {
       if (preg_match_all("/<\/table>/", $homepage, $btulos, PREG_OFFSET_CAPTURE) !== FALSE) {
         if (count($atulos[0]) <= count($btulos[0])) {
@@ -948,8 +949,8 @@ class OrigoParser {
           $apu = array();
           foreach ($tulos[0] as $key => $val) {
             $value = $this->pura_value($val);
-            $arvo = str_replace('"', '', $value[1][0]);
-            $arvo = str_replace("'", '', $arvo);
+            $arvoa = str_replace('"', '', $value[1][0]);
+            $arvo = str_replace("'", '', $arvoa);
             if (empty($arvo)) {
               $arvo = '-';
             }
@@ -1097,6 +1098,7 @@ class OrigoParser {
    */
   private function extract_inner2($tp, $homepage) {
     $taso2xml = '';
+    $taso1xml = '';
     $tulos = substr($homepage, $tp[1]['loppu'], $tp[2]['alku'] - $tp[1]['loppu'] + 8);
     $otsikko = $this->etsi_otsikko($tulos, 3);
     if ($otsikko == 'Osan tiedot') {
@@ -1105,6 +1107,13 @@ class OrigoParser {
         $taso2xml .= $this->muodosta_teos_tiedot($colums);
       }
       $taso1xml = $this->luo_tagi('Osantiedot', $taso2xml);
+    }
+    elseif ($otsikko == 'Sisältyy teokseen') {
+      $tulos = substr($homepage, $tp[2]['alku'], $tp[2]['loppu'] - $tp[2]['alku'] + 8);
+      if (($colums = $this->pura_sarakkeet($tulos)) !== FALSE) {
+        $taso2xml .= $this->muodosta_teos_tiedot($colums);
+      }
+      $taso1xml = $this->luo_tagi('Sisaltyy_teokseen', $taso2xml);
     }
     return $taso1xml;
   }

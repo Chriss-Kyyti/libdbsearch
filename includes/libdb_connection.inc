@@ -4,7 +4,7 @@
  * @file
  * Get connection and retrieve data from remote server.
  *
- * Last modified: 12.03.2013 Mika Hatakka
+ * Last modified: 14.03.2013 Mika Hatakka
  */
 
 /**
@@ -38,7 +38,7 @@ class LibdbConnection {
       $keys = $this->linkFromOld();
     }
 
-    if($type == 'haku' && strpos($keys, 'vapaasana=') === FALSE) {
+    if($type == 'haku' && strpos($keys, '=') === FALSE) {
       $keys = 'vapaasana=' . $keys;
     }
     $this->keys = str_replace(array(' ', '#'), array('+', "%23"), $keys);

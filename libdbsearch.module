@@ -5,7 +5,7 @@
  * Module to make search to library database
  * and showing the result in Drupal page.
  *
- * Last modified: 13.03.2013 Mika Hatakka
+ * Last modified: 14.03.2013 Mika Hatakka
  */
 
 /**
@@ -193,12 +193,18 @@ function libdbsearch_set_haku_data($data) {
       }
     }
     if (isset($data['Hakutulos']['Selauslista']['Teos'])) {
-      foreach ($data['Hakutulos']['Selauslista']['Teos'] as $value) {
-        $row = array();
-        foreach ($value as $val) {
-          $row[] = _libdbsearch_extract_value($val);
+      if (isset($data['Hakutulos']['Selauslista']['Teos'][0])) {
+        foreach ($data['Hakutulos']['Selauslista']['Teos'] as $value) {
+//        $row = array();
+//        foreach ($value as $val) {
+//          $row[] = _libdbsearch_extract_value($val);
+//        }
+//        $rows[] = $row;
+          $rows[] = _libdbsearch_work_row($value);
         }
-        $rows[] = $row;
+      }
+      else {
+        $rows[] = _libdbsearch_work_row($data['Hakutulos']['Selauslista']['Teos']);
       }
     }
     if (isset($data['Hakutulos']['Aineistolajittain']['Aineistolaji'])) {
@@ -248,6 +254,11 @@ function libdbsearch_set_teos_data($data) {
 
   if (isset($data['Teostiedot']['Rivi'])) {
     $output .= _libdbsearch_create_work_table($data['Teostiedot']['Rivi']);
+  }
+
+  if (isset($data['Sisaltyy_teokseen']['Rivi'])) {
+    $output .= '<h3>' . t('Part of') . '</h3>';
+    $output .= _libdbsearch_create_work_table($data['Sisaltyy_teokseen']['Rivi']);
   }
 
   if (isset($data['Kuva'])) {
@@ -509,22 +520,13 @@ function _libdbsearch_create_work_table($data) {
   $header = array();
   $rows = array();
 
+  if(isset($data[0])) {
   foreach ($data as $value) {
-    $row = array();
-    $row[] = isset($value['Selite']) ? $value['Selite'] : '';
-
-    if (isset($value['Tieto'][0])) {
-      $str = '';
-      foreach ($value['Tieto'] as $val) {
-        $str .= _libdbsearch_extract_value($val) . '<br />';
-      }
-    }
-    else {
-      $str = isset($value['Tieto']) ? _libdbsearch_extract_value($value['Tieto']) : '';
-    }
-    $row[] = $str;
-
-    $rows[] = $row;
+    $rows[] = _libdbsearch_work_table_row($value);
+  }
+  }
+  else {
+    $rows[] = _libdbsearch_work_table_row($data);
   }
 
   return theme('table', array('header' => $header, 'rows' => $rows));
@@ -601,6 +603,31 @@ function _libdbsearch_make_avail_tablerows($lib, &$header, &$rows, $hdr) {
     }
     $rows[] = $row;
   }
+}
+
+function _libdbsearch_work_row($value) {
+  $row = array();
+  foreach ($value as $val) {
+    $row[] = _libdbsearch_extract_value($val);
+  }
+  return $row;
+}
+
+function _libdbsearch_work_table_row($value) {
+  $row = array();
+  $row[] = isset($value['Selite']) ? $value['Selite'] : '';
+
+  if (isset($value['Tieto'][0])) {
+    $str = '';
+    foreach ($value['Tieto'] as $val) {
+      $str .= _libdbsearch_extract_value($val) . '<br />';
+    }
+  }
+  else {
+    $str = isset($value['Tieto']) ? _libdbsearch_extract_value($value['Tieto']) : '';
+  }
+  $row[] = $str;
+  return $row;
 }
 
 /**
