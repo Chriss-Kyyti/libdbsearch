@@ -4,6 +4,9 @@
  * @file
  * Module to make search to library database
  * and showing the result in Drupal page.
+ * 
+ * Drupal Search Interface can be enabled by including file 
+ * includes/libdbsearch_dsii.inc to project.
  *
  * Last modified: 14.03.2013 Mika Hatakka
  */

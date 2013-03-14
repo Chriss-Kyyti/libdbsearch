@@ -1,7 +1,0 @@
-;$Id$
-
-name = Libdbsearch Test Engine
-description = Test search engine for libdbsearch-module.
-package = Libdb
-core = 7.x
-files[] = libdb_test.module
