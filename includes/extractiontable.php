@@ -5,7 +5,7 @@
  * @file
  * Language extraction table for finnish to english base translation.
  *
- * Last modified: 20.08.2010 Mika Hatakka
+ * Last modified: 18.04.2013 Mika Hatakka
  */
 
     $lista = array(
@@ -64,5 +64,12 @@
         "Yhtenaistetty_nimeke" => "Uniform title",
         "YKL-luokka" => "YKL class",
         "Aanitys/kuvaus" => "Recording/filming",
+        "Kouvolan_kaupunginkirjasto" => "Kouvola libraries",
+        "Kotkan_kaupunginkirjasto" => "Kotka libraries",
+        "Haminan_kaupunginkirjasto" => "Hamina libraries",
+        "Pyhtaan_kunnankirjasto" => "Pyhtää library",
+        "Iitin_kunnankirjasto" => "Iitti library",
+        "Miehikkalan_kunnankirjasto" => "Miehikkälä library",
+        "Virolahden_kunnankirjasto" => "Virolahti library",
     );
 ?>

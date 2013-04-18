@@ -4,7 +4,7 @@
  * Module to make search to Origo library database
  * and showing the result in Drupal page.
  *
- * Last modified: 02.11.2012 Mika Hatakka
+ * Last modified: 18.04.2013 Mika Hatakka
  */
 // Origo librarysytem specific extractor class.
 require_once('includes/search_from_origo.php');
@@ -225,7 +225,7 @@ function libdbsearch_view($type = 'haku') {
         watchdog('libdbsearch', $apukoira . ' (' . $type . ')');
       }
       $results = libdbsearch_data($swords, $type, $keys, $val['qid']);
-
+      
       if (isset($results) && $results !== FALSE) {
         $results->addChild('sid', $keys);
         switch ($results->getName()) {
@@ -1021,6 +1021,12 @@ function is_vinkki($searchfor) {
   if (empty($searchfor)) {
     return FALSE;
   }
+  
+  $searchfor = str_replace(
+      array("&228;", "&196;", "&246;", "&214;", "&229;", "&197;"), 
+      array("ä", "Ä", "ö", "Ö", "å", "Å"), $searchfor);
+  
+  
   $tyypit = node_get_types('names');
   if (!isset($tyypit['suosittelut'])) {
     return FALSE;

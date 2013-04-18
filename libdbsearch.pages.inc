@@ -3,7 +3,7 @@
  * @file
  * Search result templates for Drupal page.
  *
- * Last modified: 06.11.2012 Mika Hatakka
+ * Last modified: 18.04.2013 Mika Hatakka
  */
 // Origo librarysytem specific extractor class.
 require_once('includes/search_from_origo.php');
@@ -450,7 +450,7 @@ function _get_value($str) {
  * @return string proper address for Drupal link
  */
 function _link_from_lobj($linkki, $sid = NULL) {
-  return _link_from_text($linkki->Losoite, $linkki->Lteksti, $sid);
+  return _link_from_text($linkki->Losoite, libdb_t((string)$linkki->Lteksti), $sid);
 }
 
 /**
@@ -463,7 +463,7 @@ function _link_from_lobj($linkki, $sid = NULL) {
  */
 function _add_link_or_text($text, $sid) {
   if (isset($text->Linkki)) {
-    return _link_from_lobj($text->Linkki, $sid);
+     return _link_from_lobj($text->Linkki, $sid);
   }
   else {
     return (string) $text;
@@ -507,13 +507,7 @@ function libdb_t($teksti) {
   include('includes/extractiontable.php');
   $my_teksti = str_replace(
       array("ä", "Ä", "ö", "Ö", "å", "Å", " "), 
-      array("a", "A", "o", "O", "o", "O", "_"), $my_teksti);
-//  $my_teksti = str_replace("Ä", "A", $my_teksti);
-//  $my_teksti = str_replace("ö", "o", $my_teksti);
-  //    $my_teksti = str_replace("Ö", "O", $my_teksti);
-  //    $my_teksti = str_replace("å", "o", $my_teksti);
-  //    $my_teksti = str_replace("Å", "O", $my_teksti);
-//  $my_teksti = str_replace(" ", "_", $my_teksti);
+      array("a", "A", "o", "O", "o", "O", "_"), $teksti);
   if (empty($lista[$my_teksti])) {
     return $teksti;
   }
