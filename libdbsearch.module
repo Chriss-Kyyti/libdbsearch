@@ -1023,7 +1023,7 @@ function is_vinkki($searchfor) {
   }
   
   $searchfor = str_replace(
-      array("&228;", "&196;", "&246;", "&214;", "&229;", "&197;"), 
+      array("&#228;", "&#196;", "&#246;", "&#214;", "&#229;", "&#197;"), 
       array("ä", "Ä", "ö", "Ö", "å", "Å"), $searchfor);
   
   
@@ -1031,7 +1031,7 @@ function is_vinkki($searchfor) {
   if (!isset($tyypit['suosittelut'])) {
     return FALSE;
   }
-    $ret = '';
+  $ret = '';
   $sql = 'SELECT * FROM {content_field_teoksen_nimi} WHERE field_teoksen_nimi_value = "%s"';
   $result = db_query($sql, $searchfor);
   if ($result === FALSE) {
