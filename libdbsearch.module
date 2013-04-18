@@ -1,0 +1,1161 @@
+<?php
+/**
+ * @file
+ * Module to make search to Origo library database
+ * and showing the result in Drupal page.
+ *
+ * Last modified: 02.11.2012 Mika Hatakka
+ */
+// Origo librarysytem specific extractor class.
+require_once('includes/search_from_origo.php');
+
+/**
+ * Determine menu hooks and permissions.
+ *
+ * @return array menus for use in Drupal
+ */
+function libdbsearch_menu() {
+  $items = array();
+  $items['admin/settings/libdbsearch'] = array(
+    'title' => 'Library database search',
+    'description' => 'Description',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('libdbsearch_admin'),
+    'access arguments' => array('access administration pages'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['libdbsearch'] = array(
+    'title' => 'Library database search',
+    'page callback' => 'libdbsearch_view',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK
+  );
+  return $items;
+}
+
+/**
+ * Set fields for module settings, shown to adminitrator.
+ *
+ * @return array field description for settings
+ */
+function libdbsearch_admin() {
+  $form = array();
+  $form['libdbsearch_db_server'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Address of Origo database'),
+    '#default_value' => variable_get('libdbsearch_db_server', ''),
+    '#description' => t("Address where all database querys must send."),
+    '#required' => TRUE,
+  );
+  $form['libdbsearch_subsite'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Sub site folder'),
+    '#default_value' => variable_get('libdbsearch_subsite', ''),
+    '#description' => t("If site is subfolder, the folder name. If in root level leave blank."),
+    '#required' => FALSE,
+  );
+  $sort_options = array('1' => t('Author'), '2' => t('Work title'),
+    '6' => t('Material'), '5' => t('Year'), '4' => t('Class'));
+  $form['libdbsearch_sort'] = array(
+    '#type' => 'select',
+    '#title' => t('Result list sort order'),
+    //'#description' => t(''),
+    '#options' => $sort_options,
+    '#default_value' => variable_get('libdbsearch_sort', '1'),
+  );
+  $form['libdbsearch_log'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Save search words to log.'),
+    '#description' => t('Select if search words are wanted to be saved in the log.'),
+    '#default_value' => variable_get('libdbsearch_log', '0'),
+  );
+  $form['libdbsearch_reserve'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Reserve link address'),
+    '#default_value' => variable_get('libdbsearch_reserve', ''),
+    '#description' => t("Address to the reserve site. If using basic Web-Origo leave empty. For other reserve sites, give reserve page address. If reserve page is outside current Drupal installation, include the whole address with 'http://' in the begining."),
+    '#required' => FALSE,
+  );
+  $form['setup_select_list'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Update lists database table'),
+    '#description' => t('Dropdown lists in search form are based information in Web-Origo result page. After installation list must be updated manually. In normal use lists are checked by cron every Sunday morning at 3:00 am. If cron is not in use checking must be done also manually.'),
+  );
+
+  $form['setup_select_list']['update'] = array(
+    '#type' => 'submit',
+    '#value' => t('Update'),
+    '#submit' => array('libdbsearch_list_setup_submit'),
+  );
+
+  return system_settings_form($form);
+}
+
+/**
+ * Submit callback; clear system caches.
+ *
+ * @ingroup forms
+ */
+function libdbsearch_list_setup_submit($form, &$form_state) {
+  libdbsearch_update_lists();
+  drupal_set_message(t('Select lists are updated.'));
+}
+
+/**
+ * Theme template definoitions and where they are located.
+ *
+ * @return array template information
+ */
+function libdbsearch_theme() {
+  return array(
+    'libdbsearch_material' => array(
+      'arguments' => array('result' => NULL, 'sid' => NULL),
+      'file' => 'libdbsearch.pages.inc',
+      'template' => 'libdbsearch-material',
+    ),
+    'libdbsearch_materials' => array(
+      'arguments' => array('results' => NULL, 'sid' => NULL),
+      'file' => 'libdbsearch.pages.inc',
+      'template' => 'libdbsearch-materials',
+    ),
+    'libdbsearch_browse' => array(
+      'arguments' => array('result' => NULL, 'sid' => NULL),
+      'file' => 'libdbsearch.pages.inc',
+      'template' => 'libdbsearch-browse',
+    ),
+    'libdbsearch_browses' => array(
+      'arguments' => array('results' => NULL, 'sid' => NULL),
+      'file' => 'libdbsearch.pages.inc',
+      'template' => 'libdbsearch-browses',
+    ),
+    'libdbsearch_work' => array(
+      'arguments' => array('result' => NULL, 'type' => NULL),
+      'file' => 'libdbsearch.pages.inc',
+      'template' => 'libdbsearch-work',
+    ),
+    'libdbsearch_works' => array(
+      'arguments' => array('results' => NULL, 'type' => NULL),
+      'file' => 'libdbsearch.pages.inc',
+      'template' => 'libdbsearch-works',
+    ),
+    'libdbsearch_avail' => array(
+      'arguments' => array('result' => NULL, 'type' => NULL),
+      'file' => 'libdbsearch.pages.inc',
+      'template' => 'libdbsearch-avail',
+    ),
+    'libdbsearch_library' => array(
+      'arguments' => array('result' => NULL, 'type' => NULL),
+      'file' => 'libdbsearch.pages.inc',
+      'template' => 'libdbsearch-library',
+    ),
+    'libdbsearch_partwork' => array(
+      'arguments' => array('result' => NULL, 'type' => NULL),
+      'file' => 'libdbsearch.pages.inc',
+      'template' => 'libdbsearch-partwork',
+    ),
+    'libdbsearch_partworks' => array(
+      'arguments' => array('results' => NULL, 'type' => NULL),
+      'file' => 'libdbsearch.pages.inc',
+      'template' => 'libdbsearch-partworks',
+    ),
+  );
+}
+
+/**
+ * Handle what will be shown in form. Start's the actual search
+ * process and guide the result to the right resultform to be shown.
+ *
+ * @param string $type type of search
+ * @return string html marked form definition
+ */
+function libdbsearch_view($type = 'haku') {
+  $keys = libdbsearch_get_keys();
+  if (!isset($_POST['form_id'])) { // Form submitted
+    if ($type == '') {
+      drupal_goto('libdbsearch/haku');
+    }
+    $val = _read_keys($keys);
+
+    if (empty($val) && !empty($keys)) {
+      $val = _params_to_array($keys);
+      $mysid = sha1('form_workid' . time());
+      _write_keys($val, $mysid);
+      $val = _read_keys($mysid);
+      // Tallettaa mutta ei luo linkkeihin viitettä tietokantaan
+      // Ei sid, vaan hakusanana ollut vapaasana=repo
+    }
+    $swords = _create_swords($val);
+    // Check if we have direct call to specific work.
+    if (empty($keys)) {
+      if ($type == 'teos' && (isset($_GET['tunnus']) || isset($_GET['teosid']))) {
+        if (empty($keys)) {
+          $keys = sha1('form_workid' . time());
+        }
+        if (isset($_GET['teosid'])) {
+          $swords = array('teosid' => $_GET['teosid']);
+        }
+        else {
+          $swords = array('tunnus' => $_GET['tunnus']);
+        }
+        $swords['hakujoukko'] = 20;
+      }
+      elseif ($type == 'haku' && isset($_GET['uutuudet'])) {
+        if (empty($keys)) {
+          $keys = sha1('form_novelties' . time());
+        }
+        $swords = array('uutuudet' => $_GET['uutuudet']);
+        if (isset($_GET['aineistoittain'])) {
+          $swords['aineistoittain'] = $_GET['aineistoittain'];
+        }
+        $swords['hakujoukko'] = 20;
+      }
+      elseif ($type == 'haku') {
+        //drupal_set_message($type, 'warning');
+      }
+    }
+    if (_is_sword_set($swords) === TRUE) {
+      if (variable_get('libdbsearch_log', '0') != '0') {
+        $apukoira = '';
+        foreach ($swords as $k => $v) {
+          if (!empty($apukoira)) {
+            $apukoira .= ', ';
+          }
+          $apukoira .= $k . '=' . $v;
+        }
+        watchdog('libdbsearch', $apukoira . ' (' . $type . ')');
+      }
+      $results = libdbsearch_data($swords, $type, $keys, $val['qid']);
+
+      if (isset($results) && $results !== FALSE) {
+        $results->addChild('sid', $keys);
+        switch ($results->getName()) {
+          case 'Aineistolajittain_tulos' :
+            $results = theme('libdbsearch_materials', $results, $type);
+            break;
+          case 'Selauslista_tulos' :
+            $results = theme('libdbsearch_browses', $results, $type);
+            break;
+          case 'Teoksen_tiedot' :
+            $results = theme('libdbsearch_works', $results, $type);
+            break;
+          case 'Osakohteen_tiedot' :
+            $results = theme('libdbsearch_partworks', $results, $type);
+            break;
+          case 'Libdbsearch' :
+            $results = theme('box', t('An internal error has happened in our server. Please try again or contact library attendand.'), search_help('libdbsearch#noresults', drupal_help_arg()));
+            break;
+          case 'Error' :
+            $results = theme('box', _liddbsearch_get_text($results->Teksti), search_help('libdbsearch#noresults', drupal_help_arg()));
+            break;
+          default :
+            break;
+        }
+      }
+      if ($results) {
+        $results = theme('box', '', $results);
+      }
+      else {
+        $results = theme('box', t('An internal error has happened in our server. Please try again or contact library attendand.'), search_help('libdbsearch#noresults', drupal_help_arg()));
+      }
+    }
+    else {
+      // No searchwords
+      //drupal_set_message('No searchwords', 'error');
+    }
+    $output = drupal_get_form('libdbsearch_form', $keys, $swords);
+    $output .= $results;
+
+    return $output;
+  }
+  return drupal_get_form('libdbsearch_form', empty($keys) ? '' : $keys);
+}
+
+/**
+ * Extract the first part of GET param, we use it
+ * to get the key for search database.
+ *
+ * Function is from Drupal search module.
+ *
+ * @staticvar string $return static memory for return value
+ * @return string first part of GET param
+ */
+function libdbsearch_get_keys() {
+  static $return;
+  if (!isset($return)) {
+    // Extract keys as remainder of path
+    // Note: support old GET format of searches for existing links.
+    $path = explode('/', $_GET['q'], 3);
+    $keys = empty($_REQUEST['keys']) ? '' : $_REQUEST['keys'];
+    $return = count($path) == 3 ? $path[2] : $keys;
+    $return = substr($return, 0, 40);
+    if (strpos($return, 'teosid') !== FALSE) {
+      $return = '';
+    }
+  }
+  return $return;
+}
+
+/**
+ * Create the searchword part of form.
+ *
+ * @param array $form_state varaible for form data
+ * @param string $keys id for searchkey database record
+ * @param string $swords searchwords cache
+ * @return array form definition for the search word pert
+ */
+function libdbsearch_form(&$form_state, $keys = '', $swords = NULL) {
+  drupal_add_css(drupal_get_path('module', 'libdbsearch') . '/libdbsearch.css', 'module', 'all', FALSE);
+  $form['basic']['vapaasana'] = array(
+    '#title' => t('Search words'),
+    '#type' => 'textfield',
+    //'#attributes' => array('title' => t("Give the word to search. You can use AND, OR and NOT limit the results. You can break the searchword with #-mark, to get all words that include given word.")),
+    '#default_value' => isset($swords['vapaasana']) ? $swords['vapaasana'] : '',
+  );
+  $form['form_search_index'] = array('#type' => 'value', '#value' => array());
+  $form['skey'] = array(
+    '#type' => 'hidden',
+    '#value' => $keys,
+  );
+  $libraries = _read_list(1);
+  $form['basic']['piste'] = array(
+    '#type' => 'select',
+    '#title' => t('Libraries'),
+    '#default_value' => isset($swords['piste']) ? $swords['piste'] : '-',
+    '#options' => $libraries,
+  );
+  if (_not_advanced_search($swords) === FALSE) {
+    $laajennettu = check_plain(' *');
+  }
+  $form['advanced'] = array(
+    '#title' => t('Advanced search') . $laajennettu,
+    '#type' => 'fieldset',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE, //_not_advanced_search($swords),
+  );
+  if (empty($keys)) {
+    $def_grouped = 0;
+  }
+  else {
+    $def_grouped = isset($swords['aineistoittain']) ? $swords['aineistoittain'] : 0;
+  }
+  $form['advanced']['aineistoittain'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Group by category'),
+    '#default_value' => $def_grouped,
+  );
+  //if (isset($swords['uutuudet'])) {
+  $form['advanced']['uutuudet'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Novelties'),
+    '#default_value' => isset($swords['uutuudet']) ? $swords['uutuudet'] : 0,
+  );
+  //}
+  $form['advanced']['tekija'] = array(
+    '#title' => t('Author'),
+    '#type' => 'textfield',
+    '#default_value' => isset($swords['tekija']) ? $swords['tekija'] : '',
+  );
+  $form['advanced']['nimeke'] = array(
+    '#title' => t('Work title'),
+    '#type' => 'textfield',
+    '#default_value' => isset($swords['nimeke']) ? $swords['nimeke'] : '',
+  );
+  $form['advanced']['asiasana'] = array(
+    '#title' => t('Index terms / Subject'),
+    '#type' => 'textfield',
+    '#default_value' => isset($swords['asiasana']) ? $swords['asiasana'] : '',
+  );
+  $form['advanced']['sarja'] = array(
+    '#title' => t('Series'),
+    '#type' => 'textfield',
+    '#default_value' => isset($swords['sarja']) ? $swords['sarja'] : '',
+  );
+  $form['advanced']['kustantaja'] = array(
+    '#title' => t('Publisher'),
+    '#type' => 'textfield',
+    '#default_value' => isset($swords['kustantaja']) ? $swords['kustantaja'] : '',
+  );
+  $work_class = _read_list(2);
+  $form['advanced']['luokkaryhma'] = array(
+    '#type' => 'select',
+    '#title' => t('Class'),
+    '#default_value' => isset($swords['luokkaryhma']) ? $swords['luokkaryhma'] : '-',
+    '#options' => $work_class,
+  );
+  $form['advanced']['julkaisuaika'] = array(
+    '#title' => t('Year'),
+    '#type' => 'textfield',
+    '#default_value' => isset($swords['julkaisuaika']) ? $swords['julkaisuaika'] : '',
+    '#maxlength' => 11,
+    '#size' => 9,
+  );
+  $work_lang = _read_list(3);
+  $form['advanced']['kieliryhma'] = array(
+    '#type' => 'select',
+    '#title' => t('Language'),
+    '#default_value' => isset($swords['kieliryhma']) ? $swords['kieliryhma'] : '-',
+    '#options' => $work_lang,
+  );
+  $work_material = _read_list(4);
+  $form['advanced']['materiaaliryhma'] = array(
+    '#type' => 'select',
+    '#title' => t('Material'),
+    '#default_value' => isset($swords['materiaaliryhma']) ? $swords['materiaaliryhma'] : '-',
+    '#options' => $work_material,
+  );
+  $work_departments = _read_list(5);
+  $form['advanced']['osastoryhma'] = array(
+    '#type' => 'select',
+    '#title' => t('Departments'),
+    '#default_value' => isset($swords['osastoryhma']) ? $swords['osastoryhma'] : '-',
+    '#options' => $work_departments,
+  );
+  //    $ohje_txt ="<h2>Keyword search</h2>
+  //    <p>Instruction to keyword search.</p>
+  //    <h2>Advanced search</h2>
+  //    <p>Instruction to advanced search.</p>";
+  //    $form['info'] = array(
+  //        '#title' => t('Keyword search help'),
+  //        '#type' => 'fieldset',
+  //        '#collapsible' => TRUE,
+  //        '#collapsed' => TRUE,
+  //    );
+  //    $form['info']['ohje'] = array(
+  //        '#prefix' => '<div class="origosearch_help_area">',
+  //        '#value' => t($ohje_txt),
+  //        '#suffix' => '</div>',
+  //    );
+  // Order must be this, when hit Enter, first submit button is selected.
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Search')
+  );
+  $form['clear'] = array(
+    '#type' => 'submit',
+    '#value' => t('Clear')
+  );
+  return $form;
+}
+
+/**
+ * In validation function we clear searchwords if needed
+ * and set result row count variable.
+ *
+ * @param string $form_id id of the form
+ * @param array $form_state form data variable
+ */
+function libdbsearch_form_validate($form_id, &$form_state) {
+  if ($form_state['values']['op'] == $form_state['values']['clear']) {
+    $form_state['values']['vapaasana'] = NULL;
+    $form_state['values']['piste'] = NULL;
+    $form_state['values']['uutuudet'] = NULL;
+    $form_state['values']['aineistoittain'] = NULL;
+    $form_state['values']['tekija'] = NULL;
+    $form_state['values']['nimeke'] = NULL;
+    $form_state['values']['asiasana'] = NULL;
+    $form_state['values']['sarja'] = NULL;
+    $form_state['values']['kustantaja'] = NULL;
+    $form_state['values']['luokkaryhma'] = NULL;
+    $form_state['values']['julkaisuaika'] = NULL;
+    $form_state['values']['kieliryhma'] = NULL;
+    $form_state['values']['materiaaliryhma'] = NULL;
+    $form_state['values']['osastoryhma'] = NULL;
+    drupal_set_message(t('Search conditions are cleared.'));
+  }
+  $form_state['values']['hakujoukko'] = 20;
+  if (isset($form_state['values']['teosid'])) {
+    $form_state['values']['teosid'] = NULL;
+  }
+}
+
+/**
+ * If search started, create id for the search if not yet defined
+ * and save it to the database, along with the searchwords.
+ *
+ * @param string $form_id id of the form
+ * @param array $form_state form data variable
+ */
+function libdbsearch_form_submit($form_id, &$form_state) {
+  if (!isset($form_state['values']['skey']) ||
+      empty($form_state['values']['skey'])) {
+    $keys = sha1($form_state['values']['form_build_id']);
+  }
+  else {
+    $keys = $form_state['values']['skey'];
+  }
+  _write_keys($form_state['values'], $keys);
+  if ($form_state['values']['op'] != $form_state['values']['clear']) {
+    if (_is_sword_set($form_state['values']) === FALSE) {
+      form_set_error('keys', t('Please enter some keywords.'));
+    }
+  }
+  $type = $form_state['values']['module'] ? $form_state['values']['module'] : 'haku';
+  $cache_breaker = _read_ext_key($keys);
+  $form_state['redirect'] = 'libdbsearch/' . $type . '/' . $keys . $cache_breaker;
+  return;
+}
+
+/**
+ * Create's the searchword array, create's the search object
+ * which get's the searchresult data as XML. XML data is
+ * then parsed by SimpleXML parser to object.
+ *
+ * @param string $words form searchwords
+ * @param string $type search type
+ * @param string $sid id to the database record
+ * @param string $cookie search session cookie
+ * @return object SimpleXML object parsed from result XML
+ */
+function libdbsearch_data(&$words, $type, $sid, $cookie = NULL) {
+  switch ($type) {
+    case 'haku' :
+      $hakuehdot = _read_searchwords_from_get();
+      if (empty($hakuehdot)) {
+        $hakuehdot = _make_searchword_string($words);
+      }
+      else {
+        $words = _write_get_words($hakuehdot, $sid);
+        _write_update_cookie($sid, $cookie);
+      }
+      break;
+    case 'osakohteet' :
+    case 'selauslista' :
+      $hakuehdot = _read_searchwords_from_get();
+      break;
+    case 'teos' :
+      $hakuehdot = _read_searchwords_from_get();
+      if (isset($words['teosid'])) {
+        _write_get_words($hakuehdot, $sid);
+        _write_update_cookie($sid, $cookie);
+      }
+      break;
+    default:
+      return FALSE;
+      break;
+  }
+  // Query part, here search from Origo library database
+  $palvelin = variable_get('libdbsearch_db_server', '');
+  // Change sort order to publishing year.
+  $sort_order = variable_get('libdbsearch_sort', '1');
+  if ($sort_order > '1' && $sort_order < '7') {
+    $hakuehdot .= '&lajittelu=' . $sort_order;
+  }
+  $search_server = new search_from_origo($palvelin, $type, $hakuehdot);
+  if ($search_server->do_search($cookie) === FALSE) {
+    return FALSE; // No search result.
+  }
+  if ($cookie === NULL) {
+    _write_cookie($sid, $search_server->get_cookie());
+  }
+  $tulosXML = $search_server->construct_XML();
+  // End of query part.
+  $result = _parse_XML2($tulosXML);
+  if ((!empty($result->Hakutulos) ) ||
+      (!empty($result->Osakohteet) ) ||
+      (!empty($result->Teostiedot) ) ||
+      (!empty($result->Libdbsearch) )) {
+    return $result;
+  }
+  else {
+    if (empty($result)) {
+      // No connection
+      $str = '<Error><Teksti>No answer.</Teksti></Error>';
+    }
+    else {
+      if (isset($result->Virhe) && (string) $result->Virhe == 'TRUE') {
+        if (isset($result->Teksti[1])) {
+          $str = $result->Teksti[1];
+        }
+        else {
+          $str = $result->Teksti;
+        }
+        $str = '<Error><Teksti>' . $str . '</Teksti></Error>';
+      }
+    }
+    try {
+      $ret = new SimpleXMLElement($str);
+    } catch (Exception $e) {
+      $ret = FALSE;
+    }
+    return $ret;
+  }
+  return $result;
+}
+
+/**
+ * Every cron period clears all old searchword data from
+ * database and once a week check if list is still up to date.
+ */
+function libdbsearch_cron() {
+// Remove search key data older than 30 minutes.
+  $time_break = time() - 30 * 60;
+  $sql = 'DELETE FROM {libdbdsearch_keys} WHERE last_modified < %d';
+  db_query($sql, $time_break);
+  // Check lists every Sunday at 3 in the morning.
+  if ((date('w') == 0) && (date('G') == 3)) {
+    libdbsearch_update_lists();
+  }
+}
+
+/**
+ * Check if list database and Origo lists are equal. Lists are used
+ * to keep library, class, language, marial and departments info.
+ */
+function libdbsearch_update_lists() {
+  $palvelin = variable_get('libdbsearch_db_server', '');
+  $search_server = new search_from_origo($palvelin, 'tarkkahaku', '');
+  $ret1 = $search_server->get_form_lists();
+  if ($ret1 !== FALSE) {
+    $ret2 = _read_list(1);
+    if ((array_diff($ret1['piste'], $ret2) == array_diff($ret2, $ret1['piste'])) !== TRUE) {
+      _write_list_to_db($ret1['piste'], 1);
+    }
+    $ret2 = _read_list(2);
+    if ((array_diff($ret1['luokkaryhma'], $ret2) == array_diff($ret2, $ret1['luokkaryhma'])) !== TRUE) {
+      _write_list_to_db($ret1['luokkaryhma'], 2);
+    }
+    $ret2 = _read_list(3);
+    if ((array_diff($ret1['kieliryhma'], $ret2) == array_diff($ret2, $ret1['kieliryhma'])) !== TRUE) {
+      _write_list_to_db($ret1['kieliryhma'], 3);
+    }
+    $ret2 = _read_list(4);
+    if ((array_diff($ret1['materiaaliryhma'], $ret2) == array_diff($ret2, $ret1['materiaaliryhma'])) !== TRUE) {
+      _write_list_to_db($ret1['materiaaliryhma'], 4);
+    }
+    $ret2 = _read_list(5);
+    if ((array_diff($ret1['osastoryhma'], $ret2) == array_diff($ret2, $ret1['osastoryhma'])) !== TRUE) {
+      _write_list_to_db($ret1['osastoryhma'], 5);
+    }
+  }
+}
+
+// Private functions
+//~~~~~~~~~~~~~~~~~~~~~
+
+/**
+ * Get the searchwords from GET. Used in direct references
+ * to work, eg. introduction etc.
+ *
+ * @return array searchwords from GET
+ */
+function _read_searchwords_from_get() {
+  $hakuehdot = '?';
+  foreach ($_GET as $key => $val) {
+    if ($key == 'q')
+      continue;
+    if ($hakuehdot != '?') {
+      $hakuehdot .= '&';
+    }
+    $hakuehdot .= $key . '=' . $val;
+  }
+  if ($hakuehdot == '?') {
+    $hakuehdot = NULL;
+  }
+  return $hakuehdot;
+}
+
+/**
+ * Get one of the lists in database to use in dropdown select.
+ *
+ * @param integer $sel type of list
+ * @return array chosen list array
+ */
+function _read_list($sel) {
+  $ret = FALSE;
+  $sql = 'SELECT arvo, teksti FROM {libdbdsearch_lists} WHERE tyyppi = %d ORDER BY nro';
+  $result = db_query($sql, $sel);
+  if ($result === FALSE) {
+    return FALSE;
+  }
+  while ($data = db_fetch_object($result)) {
+    $ret[$data->arvo] = $data->teksti;
+  }
+  if ($ret === FALSE) {
+    $ret = array('' => '-');
+  }
+  return $ret;
+}
+
+/**
+ * Add's chosen value from one array to another array.
+ *
+ * @param array $sana array where to get value
+ * @param string $tunniste key to the value to add
+ * @param array $taulu array to add
+ * @return array new value added to given array
+ */
+function _add_word($sana, $tunniste, $taulu) {
+  if (isset($sana[$tunniste]) && !empty($sana[$tunniste]) && $sana[$tunniste] != '-') {
+    return array_merge($taulu, array($tunniste => $sana[$tunniste]));
+  }
+  else {
+    return $taulu;
+  }
+}
+
+/**
+ * Get from given array the valid searchwords and add them to the result.
+ *
+ * @param array $keys searchword array
+ * @return array valid searchwords
+ */
+function _create_swords($keys) {
+  if (is_array($keys)) {
+    $hakusanat = array();
+    $hakusanat = _add_word($keys, 'vapaasana', $hakusanat);
+    $hakusanat = _add_word($keys, 'piste', $hakusanat);
+    $hakusanat = _add_word($keys, 'uutuudet', $hakusanat);
+    //osakohteet
+    $hakusanat = _add_word($keys, 'aineistoittain', $hakusanat);
+    $hakusanat = _add_word($keys, 'hakujoukko', $hakusanat);
+    $hakusanat = _add_word($keys, 'tekija', $hakusanat);
+    $hakusanat = _add_word($keys, 'nimeke', $hakusanat);
+    $hakusanat = _add_word($keys, 'asiasana', $hakusanat);
+    //tunnus
+    $hakusanat = _add_word($keys, 'sarja', $hakusanat);
+    $hakusanat = _add_word($keys, 'kustantaja', $hakusanat);
+    $hakusanat = _add_word($keys, 'luokkaryhma', $hakusanat);
+    $hakusanat = _add_word($keys, 'julkaisuaika', $hakusanat);
+    $hakusanat = _add_word($keys, 'kieliryhma', $hakusanat);
+    $hakusanat = _add_word($keys, 'materiaaliryhma', $hakusanat);
+    $hakusanat = _add_word($keys, 'osastoryhma', $hakusanat);
+    //arvostelut
+    //arvostelunteksti
+    $hakusanat = _add_word($keys, 'teosid', $hakusanat);
+    return $hakusanat;
+  }
+  return FALSE;
+}
+
+/**
+ * Determine if searchword array one includes all array two's items.
+ *
+ * @param array $eka
+ * @param array $toka
+ * @return mixed TRUE if same, else return the part that differs.
+ */
+function _is_same($eka, $toka) {
+  $eka_ehdot = _create_swords($eka);
+  $toka_ehdot = _create_swords($toka);
+  $ero = array_diff_assoc($eka_ehdot, $toka_ehdot);
+
+  return empty($ero) ? TRUE : $ero;
+}
+
+/**
+ * Write searchwords to database record. If already exists, write only
+ * differing parts.
+ *
+ * @param array $keys searchwords
+ * @param string $sid id of record
+ * @return boolean success of database write
+ */
+function _write_keys($keys, $sid) {
+  if (strlen($sid) != 40) {
+    return FALSE;
+  }
+  $ehdot = _create_swords($keys);
+  foreach ($ehdot as $key => $val) {
+    $ehdot[$key] = addslashes($val);
+  }
+  $ret = db_query("SELECT * FROM {libdbdsearch_keys} WHERE sid = '%s'", $sid);
+  $ret = db_fetch_array($ret);
+  if ($ret === FALSE) {
+    // Insert
+    $col = "(sid, last_modified";
+    $val = "('" . $sid . "', " . time();
+    foreach ($ehdot as $k => $v) {
+      $col .= ', ';
+      $col .= $k;
+      $val .= ', ';
+      $val .= "'" . $v . "'";
+    }
+    $col .= ')';
+    $val .= ')';
+    $sql = "INSERT INTO {libdbdsearch_keys} " . $col . " VALUES " . $val;
+    return db_query($sql); // Fail -> FALSE
+  }
+  else {
+    // Update
+    $dif1 = _is_same($ehdot, $ret);
+    $dif2 = _is_same($ret, $ehdot);
+    if ($dif1 === TRUE && $dif2 === TRUE) {
+      $sql = "UPDATE {libdbdsearch_keys} SET last_modified = %d WHERE sid = '%s'";
+      db_query($sql, time(), $sid); // Fail -> FALSE
+      return TRUE; // No changes
+    }
+    // Order must be, first delete colums from database and then
+    // colums are added to database. This way changed colums
+    // will be not cleared.
+    $row = "";
+    if ($dif2 !== TRUE) {
+      // Tietokantasta poistettava
+      foreach ($dif2 as $k => $v) {
+        if ($row != '') {
+          $row .= ", ";
+        }
+        $row .= $k . " = NULL";
+      }
+    }
+    if ($dif1 !== TRUE) {
+      // Tietokantaan lisättävä
+      foreach ($dif1 as $k => $v) {
+        if ($row != '') {
+          $row .= ",";
+        }
+        $row .= $k . " = '" . $v . "'";
+      }
+    }
+    $row .= ", last_modified = %d";
+    $sql = "UPDATE {libdbdsearch_keys} SET " . $row . " WHERE sid = '%s'";
+    return db_query($sql, time(), $sid); // Fail -> FALSE
+  }
+}
+
+/**
+ * Update the search sesssion cookie to database.
+ *
+ * @param string $sid id of record
+ * @param string $cookie search session cookie
+ * @return boolean success of database update
+ */
+function _write_cookie($sid, $cookie) {
+  if (!isset($cookie)) {
+    return FALSE;
+  }
+  $sql = "UPDATE {libdbdsearch_keys} SET qid = '%s', last_modified = %d WHERE sid = '%s'";
+  return db_query($sql, $cookie, time(), $sid); // Fail -> FALSE
+}
+
+/**
+ * Read one record from searchword database.
+ *
+ * @param string $sid id of record
+ * @return mixed read record or FALSE if fails
+ */
+function _read_keys($sid) {
+  $ret = db_query("SELECT * FROM {libdbdsearch_keys} WHERE sid = '%s'", $sid);
+  if ($ret !== FALSE) {
+    $ret = db_fetch_array($ret);
+  }
+  else {
+    $ret = NULL;
+  }
+  return $ret;
+}
+
+/**
+ * Check if all advanced search fields are empty.
+ *
+ * @param array $swords searchwords
+ * @return boolean FALSE if advnced search else TRUE
+ */
+function _not_advanced_search($swords) {
+  return!(isset($swords['aineistoittain']) ||
+      isset($swords['uutuudet']) ||
+      isset($swords['tekija']) ||
+      isset($swords['nimeke']) ||
+      isset($swords['asiasana']) ||
+      isset($swords['sarja']) ||
+      isset($swords['kustantaja']) ||
+      isset($swords['luokkaryhma']) ||
+      isset($swords['julkaisuaika']) ||
+      (isset($swords['kieliryhma']) && ($swords['kieliryhma'] != '-')) ||
+      (isset($swords['materiaaliryhma']) && ($swords['materiaaliryhma'] != '-')) ||
+      (isset($swords['osastoryhma']) && ($swords['osastoryhma'] != '-'))/* ||
+        isset($swords['teosid']) */);
+//tunnus
+}
+
+/**
+ * Make's from asearchwords a string representation
+ * of search words.
+ *
+ * @param array $words searchwords
+ * @return string search word string
+ */
+function _make_searchword_string($words) {
+  if (!isset($words) || empty($words)) {
+    return '';
+  }
+  $ret = '?';
+  foreach ($words as $k => $v) {
+    if ($ret != '?') {
+      $ret .= '&';
+    }
+    $v = str_replace("&", "%26", $v);
+    $ret .= $k . '=' . str_replace(" ", "+", $v);
+  }
+  return $ret;
+}
+
+/**
+ * Write list content to the list database.
+ *
+ * @param <type> $db list
+ * @param <type> $ind type of list
+ */
+function _write_list_to_db($db, $ind) {
+  $sql = 'DELETE FROM {libdbdsearch_lists} WHERE tyyppi = %d';
+  db_query($sql, $ind);
+  $i = 0;
+  foreach ($db as $k => $v) {
+    $i++;
+    db_query("INSERT INTO {libdbdsearch_lists} (nro, tyyppi, arvo, teksti)
+                  VALUES (%d, %d, '%s', '%s')", $i, $ind, $k, $v);
+  }
+}
+
+/**
+ * Check that some searchwords have set and
+ * have a minimum length of 3 characters.
+ *
+ * @param array $words searchwords
+ * @return boolean TRUE if some searchwords have been set
+ */
+function _is_sword_set($words) {
+  return _is_set($words['vapaasana']) ||
+      (isset($words['piste']) && ($words['piste'] != '-')) ||
+      (isset($words['uutuudet']) && ($words['uutuudet'] != 0)) ||
+      ////osakohteet
+      //aineistoittain
+      //hakujoukko
+      _is_set($words['tekija']) ||
+      _is_set($words['nimeke']) ||
+      _is_set($words['asiasana']) ||
+      ////tunnus
+      _is_set($words['sarja']) ||
+      _is_set($words['kustantaja']) ||
+      //luokkaryhma
+      _is_set($words['julkaisuaika']) ||
+      (isset($words['kieliryhma']) && ($words['kieliryhma'] != '-')) ||
+      (isset($words['materiaaliryhma']) && ($words['materiaaliryhma'] != '-')) ||
+      (isset($words['osastoryhma']) && ($words['osastoryhma'] != '-')) ||
+      _is_set($words['teosid']);
+}
+
+/**
+ * Method to check that word is set and
+ * has the given minimum length.
+ *
+ * @param string $word word to check
+ * @param integer $pit minimum length of word
+ * @return boolean true useable else false
+ */
+function _is_set($word, $pit = 3) {
+  if (isset($word) && (strlen($word) >= $pit)) {
+    return TRUE;
+  }
+  return FALSE;
+}
+
+/**
+ * Changes address parameter searchwords to array
+ * and stores to database.
+ *
+ * @param string $hakuehdot searchword param string
+ * @param string $sid id of record
+ * @return array new sercahwords to display
+ */
+function _write_get_words($hakuehdot, $sid) {
+  if (empty($sid)) {
+    return FALSE;
+  }
+  $apu = explode('?', $hakuehdot);
+  $param = explode('&', $apu[1]);
+  $apu = array();
+  foreach ($param as $val) {
+    $purettu = explode('=', $val);
+    $apu[$purettu[0]] = $purettu[1];
+  }
+  _write_keys($apu, $sid);
+  return $apu;
+}
+
+/**
+ * Set cookie if not already set.
+ *
+ * @param string $sid id of record
+ * @param string $cookie session cookie
+ * @return boolean TRUE success, FALSE fail
+ */
+function _write_update_cookie($sid, $cookie) {
+  if (!isset($cookie)) {
+    return FALSE;
+  }
+  $ret = db_query("SELECT * FROM {libdbdsearch_keys} WHERE sid = '%s'", $sid);
+  $ret = db_fetch_array($ret);
+  if ($ret === FALSE) {
+    return FALSE;
+  }
+  if (empty($ret['qid'])) {
+    $sql = "UPDATE {libdbdsearch_keys} SET last_modified = %d, qid='%s' WHERE sid = '%s'";
+    return db_query($sql, time(), $cookie, $sid);
+  }
+  return FALSE;
+}
+
+/**
+ * Get session counter value from databse, is used
+ * disable cache, if address row else doesn't change.
+ *
+ * @param string $sid id of record
+ * @return integer
+ */
+function _read_ext_key($sid) {
+  $ret = db_query("SELECT sid_index FROM {libdbdsearch_keys} WHERE sid = '%s'", $sid);
+  $ret = db_fetch_array($ret);
+  $ret = $ret['sid_index'] + 1;
+  $sql = "UPDATE {libdbdsearch_keys} SET sid_index = '%d', last_modified = %d WHERE sid = '%s'";
+  db_query($sql, $ret, time(), $sid);
+  return $ret;
+}
+
+/**
+ * Find if written tip at current work.
+ *
+ * @param type $searchfor
+ * @return type 
+ */
+function is_vinkki($searchfor) {
+  if (empty($searchfor)) {
+    return FALSE;
+  }
+  $tyypit = node_get_types('names');
+  if (!isset($tyypit['suosittelut'])) {
+    return FALSE;
+  }
+    $ret = '';
+  $sql = 'SELECT * FROM {content_field_teoksen_nimi} WHERE field_teoksen_nimi_value = "%s"';
+  $result = db_query($sql, $searchfor);
+  if ($result === FALSE) {
+    return FALSE;
+  }
+  if (count($result) == 0) {
+    return FALSE;
+  }
+  while ($data = db_fetch_object($result)) {
+    $ret .= l(t('Link to tip'), 'node/' . $data->nid) . '<br />';
+  }
+  return $ret;
+}
+
+/**
+ * Convert the XML data to object form, that more convinient
+ * to use when creating result page in Drupal.
+ *
+ * @param <type> $xml_str XML data
+ * @return object data in SimpleXMLl object
+ */
+function _parse_XML2($xml_str) {
+  if (empty($xml_str)) {
+    return FALSE;
+  }
+  $xml_str = str_replace("&nbsp;", ' ', $xml_str);
+  $xml_str = str_replace("&auml;", 'ä', $xml_str);
+  $xml_str = str_replace(" & ", ' &amp; ', $xml_str);
+  $xml_str = str_replace("& ", '&amp; ', $xml_str);
+  $xml_str = str_replace(" &", ' &amp;', $xml_str);
+  try {
+    $ret = new SimpleXMLElement($xml_str);
+  } catch (Exception $e) {
+    $ret = FALSE;
+  }
+  return $ret;
+}
+
+/**
+ * Splits parameter string to array.
+ *
+ * @param string $pars parameter string
+ * @return array parameters in array
+ */
+function _params_to_array($pars) {
+  $my_par = _split_param($part[0]);
+  if ($pars === NULL || $pars == '') {
+    return NULL;
+  }
+  $part = explode('&', $pars);
+  foreach ($part as $val) {
+    $my_par = _split_param($val);
+    if ($my_par === NULL) {
+      continue;
+    }
+    $ret[$my_par[0]] = $my_par[1];
+  }
+  return $ret;
+}
+
+/**
+ * Helper fauntion to split key and value.
+ *
+ * @param string $par one parameter as string
+ * @return array key and velue part in array
+ */
+function _split_param($par) {
+  $ret = explode('=', $par);
+  if ($ret[0] == '') {
+    $ret = NULL;
+  }
+  return $ret;
+}
+
+/**
+ * Changes incoming error message to meaningful form and makes the translation.
+ *
+ * @param string $str internal error message
+ * @return string tranlated error message
+ */
+function _liddbsearch_get_text($str) {
+  $results = t('An internal error has happened in our server. Please try again or contact library attendand.');
+  if ($str == 'No results') {
+    $results = t('Your search did not get any results');
+  }
+  return $results;
+}
+
+/**
+ * Implementation of hook_block().
+ */
+function libdbsearch_block($op='list', $delta=0) {
+  if ($op == "list") {
+    // Generate listing of blocks from this module, for the admin/block page
+    $block = array();
+    $block[0]["info"] = t('Library Search Block');
+    return $block;
+  }
+  elseif ($op == 'view') {
+    $block['subject'] = t('Catalogue Search');
+    $block['content'] = drupal_get_form('libdbsearch_searchblock_form');
+    return $block;
+  }
+}
+
+/**
+ * Create the block form
+ *
+ * @param array $form_state received form data
+ * @return string from definition
+ */
+function libdbsearch_searchblock_form($form_state) {
+  $form['haku']['inline'] = array(
+    '#prefix' => '<div class="container-inline">',
+    '#suffix' => '</div>'
+  );
+  $form['haku']['inline']['vapaasana'] = array(
+    '#type' => 'textfield',
+    '#size' => 15,
+    '#default_value' => '',
+    '#attributes' => array('title' => t('Enter the search word(s).')),
+  );
+  $form['haku']['inline']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Search')
+  );
+//  $form['haku']['sitesearch'] = array(
+//    '#type' => 'markup',
+//    '#value' => l(t('Search Site'), 'search'),
+//  );
+  $form['#submit'][] = 'libdbsearch_form_submit';
+  return $form;
+}

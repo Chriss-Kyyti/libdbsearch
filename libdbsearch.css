@@ -1,0 +1,59 @@
+/* 
+    Document   : libdbsearch
+    Created on : 17.2.2010, 11:10:21
+    Author     : Mika.Hatakka
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+root { 
+    display: block;
+}
+
+#edit-luokkaryhma{
+    width: 80%;
+}
+
+.otsikko {
+    background-color: #F4F4F4;/*#F0F8FF;*/
+}
+
+.tietosarake {
+    background-color: #F0F8FF;
+}
+
+.work_pic {
+    margin-top: 1em;
+}
+
+#libdbsearch-form {
+    margin-bottom: 1em !important;
+}
+
+#libdbsearch-form .form-item {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+#libdbsearch-form .form-submit {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+#libdbsearch-form .form-select {
+    margin-left: 0;
+}
+
+.keskita {
+    text-align: center;
+}
+
+.eaineisto img {
+    padding-left: 2em;
+    vertical-align: middle;
+}

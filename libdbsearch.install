@@ -1,0 +1,227 @@
+<?php
+/**
+ * @file
+ *
+ * Last motified: 02.11.2012 Mika Hatakka
+ */
+
+/**
+ * Implementation of hook_install().
+ */
+function libdbsearch_install() {
+// Create tables.
+    drupal_install_schema('libdbsearch');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function libdbsearch_uninstall() {
+// Remove tables.
+    drupal_uninstall_schema('libdbsearch');
+}
+
+/**
+ * Two database schemas needed in libdbsearch.
+ * First gathers the data from ongoing search sessions,
+ * and the second is dropdown list options.
+ */
+function libdbsearch_schema() {
+    $schema['libdbdsearch_keys'] = array(
+        'description' => 'Stores items that will be searched.',
+        'fields' => array(
+            'sid' => array(
+                'type' => 'varchar',
+                'length' => 40,
+                'not null' => TRUE,
+                'description' => 'Index of search keyword record.',
+            ),
+            'last_modified' => array(
+                'type' => 'int',
+                'length' => 10,
+                'unsigned' => TRUE,
+                'not null' => TRUE,
+                'default' => 0,
+                'description' => 'Time when last motified.',
+            ),
+            'vapaasana' => array(
+                'type' => 'varchar',
+                'length' => 255,
+                'description' => 'Free search word.',
+            ),
+            'piste' => array(
+                'type' => 'varchar',
+                'length' => 5,
+                'description' => 'Code of selected library.',
+            ),
+            'uutuudet' => array(
+                'type' => 'varchar',
+                'length' => 1,
+                'description' => 'Mark to search only from new works.',
+            ),
+            'osakohteet' => array(
+                'type' => 'varchar',
+                'length' => 1,
+                'description' => 'Osakohteet.',
+            ),
+            'aineistoittain' => array(
+                'type' => 'varchar',
+                'length' => 1,
+                'not null' => TRUE,
+                'default' => '0',
+                'description' => 'Grouped by material.',
+            ),
+            'hakujoukko' => array(
+                'type' => 'int',
+                'length' => 5,
+                'not null' => TRUE,
+                'default' => 20,
+                'description' => 'How many results are shown.',
+            ),
+            'tekija' => array(
+                'type' => 'varchar',
+                'length' => 255,
+                'description' => 'Author.',
+            ),
+            'nimeke' => array(
+                'type' => 'varchar',
+                'length' => 255,
+                'description' => 'Work.',
+            ),
+            'asiasana' => array(
+                'type' => 'varchar',
+                'length' => 255,
+                'description' => 'Asiasana.',
+            ),
+            'tunnus' => array(
+                'type' => 'varchar',
+                'length' => 50,
+                'description' => 'ISBN code of the work.',
+            ),
+            'sarja' => array(
+                'type' => 'varchar',
+                'length' => 100,
+                'description' => 'Series of the work.',
+            ),
+            'kustantaja' => array(
+                'type' => 'varchar',
+                'length' => 255,
+                'description' => 'Publisher.',
+            ),
+            'luokkaryhma' => array(
+                'type' => 'varchar',
+                'length' => 10,
+                'description' => 'Class.',
+            ),
+            'julkaisuaika' => array(
+                'type' => 'varchar',
+                'length' => 12,
+                'description' => 'Publicing year.',
+            ),
+            'kieliryhma' => array(
+                'type' => 'varchar',
+                'length' => 10,
+                'description' => 'Language.',
+            ),
+            'materiaaliryhma' => array(
+                'type' => 'varchar',
+                'length' => 10,
+                'description' => 'Material.',
+            ),
+            'osastoryhma' => array(
+                'type' => 'varchar',
+                'length' => 10,
+                'description' => 'Category.',
+            ),
+            'arvostelut' => array(
+                'type' => 'varchar',
+                'length' => 1,
+                'description' => 'Are there any reviews.',
+            ),
+            'arvostelunteksti' => array(
+                'type' => 'varchar',
+                'length' => 255,
+                'description' => 'Review text, first 255 chars.',
+            ),
+            'qid' => array(
+                'type' => 'varchar',
+                'length' => 255,
+                'description' => 'Cookie from Origo.',
+            ),
+        'sid_index' => array(
+        'type' => 'int',
+        'length' => 10,
+        'unsigned' => TRUE,
+        'description' => 'Origo parameters in address.',
+        ),
+        'teosid' => array(
+                'type' => 'varchar',
+                'length' => 255,
+        'description' => "Field for 'teosid' data.",
+            ),
+        ),
+        'primary key' => array('sid'),
+    );
+    $schema['libdbdsearch_lists'] = array(
+        'description' => 'Library list.',
+        'fields' => array(
+            'id' => array(
+                'type' => 'serial',
+                'not null' => TRUE,
+                'description' => 'Primary key.',
+            ),
+            'nro' => array(
+                'type' => 'int',
+                'length' => 10,
+                'unsigned' => TRUE,
+                'not null' => TRUE,
+                'description' => 'Place in list.',
+            ),
+            'tyyppi' => array(
+                'type' => 'int',
+                'length' => 10,
+                'unsigned' => TRUE,
+                'not null' => TRUE,
+                'description' => 'Which list belongs.',
+            ),
+            'arvo' => array(
+                'type' => 'varchar',
+                'length' => 10,
+                'description' => 'Value for text.',
+            ),
+            'teksti' => array(
+                'type' => 'varchar',
+                'length' => 255,
+                'description' => 'Shown text.',
+            ),
+        ),
+        'primary key' => array('id'),
+    );
+    return $schema;
+}
+
+// Two dummy updates
+function libdbsearch_update_6000() {
+  // Do nothing, this update was a mistake
+  return array();
+}
+function libdbsearch_update_6001() {
+  // Do nothing, this update was a mistake
+  return array();
+}
+
+// Add new column and update one.
+function libdbsearch_update_6002() {
+    $ret = array();
+    db_add_field($ret, 'libdbdsearch_keys', 'teosid',
+        array(
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => "Field for 'teosid' data.",
+    ));
+    if (db_column_exists('libdbdsearch_keys', 'origoparam')) {
+        db_change_field($ret, 'libdbdsearch_keys', 'origoparam', 'sid_index',
+            array('type' => 'int', 'length' => 10, 'unsigned' => TRUE));
+    }
+    return $ret;
+}

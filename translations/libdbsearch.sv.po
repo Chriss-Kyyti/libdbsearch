@@ -1,0 +1,414 @@
+# $Id$
+#
+# Swedish translation of Drupal (general)
+# Copyright Christer Skog <christer.skog@kouvola.fi>
+# Generated from files:
+#  libdbsearch-materials.tpl.php: n/a
+#  libdbsearch.module: n/a
+#  libdbsearch-works.tpl.php: n/a
+#  libdbsearch.pages.inc: n/a
+#  libdbsearch.info: n/a
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 6.x-0.5\n"
+"POT-Creation-Date: 2010-03-09 10:04+0200\n"
+"PO-Revision-Date: 2011-01-11 11:00+0200\n"
+"Last-Translator: Plural-Forms: nplurals=2; plural=(n != 1);\n>\n"
+"Language-Team: Swedish <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: libdbsearch-materials.tpl.php:9 libdbsearch.module:300
+msgid "Material"
+msgstr "Materialtyp"
+
+#: libdbsearch-materials.tpl.php:10
+msgid "Found"
+msgstr "Sökresultat"
+
+#: libdbsearch-works.tpl.php:32
+msgid "Location"
+msgstr "Placering"
+
+#: libdbsearch-works.tpl.php:33
+msgid "Shelf"
+msgstr "Hylla"
+
+#: libdbsearch-works.tpl.php:34 libdbsearch.module:286
+msgid "Class"
+msgstr "Klass"
+
+#: libdbsearch-works.tpl.php:35;50
+msgid "Work items"
+msgstr "Band"
+
+#: libdbsearch-works.tpl.php:36;51
+msgid "Borrowing possible"
+msgstr "Kan lånas"
+
+#: libdbsearch-works.tpl.php:37;52
+msgid "Ordered"
+msgstr "Beställd"
+
+#: libdbsearch-works.tpl.php:38;53
+msgid "Due date"
+msgstr "Förfallodag"
+
+#: libdbsearch-works.tpl.php:49
+msgid "Collection"
+msgstr "Samling"
+
+#: libdbsearch.pages.inc:142
+msgid "Copy link"
+msgstr "Kopiera hyperlink"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Author / performer"
+msgstr "Författare / artist"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Other authors"
+msgstr "Övriga medarbetare"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Edition"
+msgstr "Förlag"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Publication information"
+msgstr "Publikationsinformation"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Series"
+msgstr "Serie"
+
+#: libdbsearch.pages.inc:150;152
+msgid "ISBN"
+msgstr "ISBN"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Language"
+msgstr "Språk"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Index terms / Subject"
+msgstr "Ämnesord / Ämne"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Appearance"
+msgstr "Fysisk beskrivning"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Original title"
+msgstr "Originalverk"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Original language"
+msgstr "Originalspråk"
+
+#: libdbsearch.pages.inc:150;152
+msgid "UDK class"
+msgstr "UDK-klass"
+
+#: libdbsearch.pages.inc:150;152
+msgid "YKL class"
+msgstr "KAB-klass"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Other titles"
+msgstr "Andra titlar"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Remark"
+msgstr "Anmärkning"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Contents"
+msgstr "Innehåll"
+
+# Sijaintitiedot
+#: libdbsearch.pages.inc:150;152
+msgid "Location information"
+msgstr "Platsinformation"
+
+#: libdbsearch.pages.inc:150;152
+msgid "EAN code"
+msgstr "EAN-kod"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Material's generic attribute"
+msgstr "Materialets allmänna definition"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Age limit"
+msgstr "Åldersgräns"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Scale"
+msgstr "Skala"
+
+#: libdbsearch.pages.inc:150;152
+msgid "ISMN"
+msgstr "ISMN"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Numbering"
+msgstr "Numrering"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Location of the material"
+msgstr "Materialets placering"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Uniform title"
+msgstr "Uniformtitel"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Frequency of publication"
+msgstr "Utgivningstäthet"
+
+#: libdbsearch.pages.inc:150;152
+msgid "ISSN"
+msgstr "ISSN"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Other languages"
+msgstr "Övriga språk"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Dissertation notification"
+msgstr "Anmärkning ang. doktorsavhandling"
+
+#: libdbsearch.pages.inc:150;152
+msgid "NBN"
+msgstr "NBN"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Section information"
+msgstr "Delens uppgifter"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Remark"
+msgstr "Anmärkning"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Part"
+msgstr "Del"
+
+#: libdbsearch.module:48
+msgid "Address of Origo database"
+msgstr "Origo database adress"
+
+#: libdbsearch.module:50
+msgid "Address where all database querys must send."
+msgstr "Adressen vart databasutfrågningar sändes."
+
+#: libdbsearch.module:55
+msgid "Sub site folder"
+msgstr "Subsite folder"
+
+#: libdbsearch.module:57
+msgid "If site is subfolder, the folder name. If in root level leave blank."
+msgstr "If site is located in subfolder, the folder name. If in root level leave blank."
+
+#: libdbsearch.module:63
+msgid "Update lists database table"
+msgstr "Update lists database table"
+
+#: libdbsearch.module:64
+msgid "Dropdown lists in search form are based information in Web-Origo result page. After installation list must be updated manually. In normal use lists are checked by cron every Sunday morning at 3:00 am. If cron is not in use checking must be done also manually."
+msgstr "Dropdown lists in search form are based information in Web-Origo result page. After installation list must be updated manually. In normal use lists are checked by cron every Sunday morning at 3:00 am. If cron is not in use checking must be done also manually."
+
+#: libdbsearch.module:69
+msgid "Update"
+msgstr "Updatera"
+
+#: libdbsearch.module:83
+msgid "Select lists are updated."
+msgstr "Select lists are updated."
+
+#: libdbsearch.module:182
+msgid "Your search did not get any results"
+msgstr "Din sökning har inte fått några resultat."
+
+#: libdbsearch.module:229
+msgid "Search words"
+msgstr "Skriv in sökordet(s)"
+
+#: libdbsearch.module:241
+msgid "Libraries"
+msgstr "Bibliotek"
+
+#: libdbsearch.module:252
+msgid "Group by category"
+msgstr "Fördela enligt material"
+
+#: libdbsearch.module:256
+msgid "Advanced search"
+msgstr "Avancerad sökning"
+
+#: libdbsearch.module:262
+msgid "Author"
+msgstr "Författare"
+
+#: libdbsearch.module:267
+msgid "Work title"
+msgstr "Verkets title/namn"
+
+#: libdbsearch.module:272
+msgid "ISBN / Number"
+msgstr "ISBN / kännetecken"
+
+#: libdbsearch.module:277
+msgid "Year"
+msgstr "Utgivningsår"
+
+#: libdbsearch.module:293
+msgid "Main language"
+msgstr "Språk"
+
+#: libdbsearch.module:307
+msgid "Departments"
+msgstr "Avdelningar"
+
+#: libdbsearch.module:329
+msgid "Search"
+msgstr "Sök"
+
+#: libdbsearch.module:333
+msgid "Clear"
+msgstr "Töm"
+
+#: libdbsearch.module:377
+msgid "Please enter some keywords."
+msgstr "Ange några sökord."
+
+#: libdbsearch.module:23
+msgid "Library database search settings"
+msgstr "Library database search settings"
+
+#: libdbsearch.module:24
+msgid "Description"
+msgstr "Beskrivning"
+
+#: libdbsearch.module:31 libdbsearch.info:0
+msgid "Library database search"
+msgstr "Sök i bibliotekets samlingar"
+
+#: libdbsearch.info:0
+msgid "A module for creating searches to library database."
+msgstr "A module for creating searches to library database."
+
+#: libdbsearch.pages.inc:0
+msgid "Search result"
+msgstr "Resultatet av sökningen"
+
+#: libdbsearch.pages.inc:0
+msgid "There were !hits hits."
+msgstr "Resultatet av sökningen !hits stycken."
+
+#: libdbsearch.pages.inc:0
+msgid "Works !hit1 - !hit2"
+msgstr "Verk !hit1 - !hit2"
+
+#: libdbsearch.pages.inc:0
+msgid "Page: "
+msgstr "Sida: "
+
+#: libdbsearch.pages.inc:0
+msgid "Previous"
+msgstr "Föregående"
+
+#: libdbsearch.pages.inc:0
+msgid "Next"
+msgstr "Följande"
+
+#: libdbsearch.pages.inc:0
+msgid "Work information"
+msgstr "Uppgifter om verket"
+
+#: libdbsearch.pages.inc:0
+msgid "Introduction"
+msgstr "Recension"
+
+#: libdbsearch.pages.inc:0
+msgid "Previous work"
+msgstr "Föregående verk"
+
+#: libdbsearch.pages.inc:0
+msgid "To search list"
+msgstr "Tillbak till resultatlistan"
+
+#: libdbsearch.pages.inc:0
+msgid "Next work"
+msgstr "Följande verk"
+
+#: libdbsearch.pages.inc:0
+msgid "Detailed information"
+msgstr "Exakta uppgifter"
+
+#: libdbsearch.pages.inc:0
+msgid "Availability information"
+msgstr "Var finns verket?"
+
+#: libdbsearch.pages.inc:0
+msgid "Availability in other libraries"
+msgstr "Tillgänglighet på andra bibliotek"
+
+#: libdbsearch.pages.inc:0
+msgid "Place a hold"
+msgstr "Reservera"
+
+#: libdbsearch.pages.inc:0
+msgid "Section information"
+msgstr "Delens uppgifter"
+
+
+#: libdbsearch.pages.inc:0
+msgid "See contents / songs"
+msgstr "Visa innehåll / låtar"
+
+#: libdbsearch.pages.inc:27
+msgid "No works found"
+msgstr "Sökningen gav inget resultat."
+
+#: libdbsearch.module:299
+msgid "Novelties"
+msgstr "Nyhter"
+
+#: libdbsearch.module:200
+msgid "An internal error has happened in our server. Please try again or contact library attendand."
+msgstr "An internal error has happened in our server. Please try again or contact library attendand."
+
+#: libdbsearch.module:299
+msgid "Link to tip"
+msgstr "Hyperlänk till tipset"
+
+#: libdbsearch.pages.inc:0
+msgid "Recording/filming"
+msgstr "Inspelad/bandad"
+
+#: libdbsearch.pages.inc:0
+msgid "Instruments"
+msgstr "Instrument"
+
+#: libdbsearch.pages.inc:0
+msgid "Show all"
+msgstr "Visa alla"
+
+#: libdbsearch.pages.inc:81
+msgid " The first !hits are shown."
+msgstr " De !hits första visas."
+
+#: libdbsearch.module:64
+msgid "Result list sort order"
+msgstr "Resultat listan ordningsföljden"
+
+
+#: libdbsearch.module:451
+msgid "Search conditions are cleared."
+msgstr ""
