@@ -120,7 +120,7 @@ function libdbsearch_block_box() {
     '#default_value' => isset($swords['sarja']) ? $swords['sarja'] : '',
   );
   $form['advanced']['kustantaja'] = array(
-    '#title' => t('Publisher'),
+    '#title' => t('Publisher', array(), array('context' => 'libdb')),
     '#type' => 'textfield',
     '#default_value' => isset($swords['kustantaja']) ? $swords['kustantaja'] : '',
   );

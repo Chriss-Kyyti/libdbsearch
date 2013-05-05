@@ -1,0 +1,386 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Libdbsearch 7.x-1.x-dev\n"
+"POT-Creation-Date: 2013-04-14 18:39+0200\n"
+"PO-Revision-Date: 2013-04-14 19:17+0200\n"
+"Last-Translator: Mika Hatakka <Mika.Hatakka@kouvola.fi>\n"
+"Language-Team: Mika Hatakka <mikahatakka@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.5\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"Language: Finnish\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Administer library database search"
+msgstr "Ylläpidä ainiestohakua"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "There were !nume1 hits."
+msgstr "Teoksia löytyi yhteensä !nume1 kappaletta."
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Works !nume1 - !nume2"
+msgstr "Teokset !nume1 - !nume2"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Page: "
+msgstr "Sivu: "
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Previous"
+msgstr "Seuraava"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Next"
+msgstr "Edellinen"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Author"
+msgstr "Tekijä"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Work"
+msgstr "Teos"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Material"
+msgstr "Aineistolaji"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Year"
+msgstr "Vuosi"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Class"
+msgstr "Luokka"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Grouping by category"
+msgstr "Aineistolajeittain ryhmittely"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Location of the material"
+msgstr "Aineiston sijainti"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Material's generic attribute"
+msgstr "Aineiston yleismääre"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Original language"
+msgstr "Alkuperäinen kieli"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Original publication"
+msgstr "Alkuperäisjulkaisu"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Original title"
+msgstr "Alkuteos"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Index terms / Subject"
+msgstr "Asiasanat / Aihe"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "EAN code"
+msgstr "EAN-luokka"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Previous work"
+msgstr "Edellinen teos"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Due date"
+msgstr "Erapäivä"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Artist notification"
+msgstr "Esittajähuomautus"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Introduction"
+msgstr "Esittelyteksti"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Remark"
+msgstr "Huomautus"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Shelf"
+msgstr "Hylly"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Age limit"
+msgstr "Ikäraja"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Frequency of publication"
+msgstr "Ilmestymistiheys"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Publication information"
+msgstr "Julkaisutiedot"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Collection"
+msgstr "Kokoelma"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Borrowing possible"
+msgstr "Lainattavissa"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Count"
+msgstr "Määrä"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Scale"
+msgstr "Mittakaava"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Other languages"
+msgstr "Muut kielet"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Other titles"
+msgstr "Muut nimekkeet"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Other authors"
+msgstr "Muut tekijat"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Name"
+msgstr "Nimi"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Work items"
+msgstr "Niteitä"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Numbering"
+msgstr "Numerointi"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Show all"
+msgstr "Näytä kaikki"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "See contents / songs"
+msgstr "Näytä sisalto / kappaleet"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Part"
+msgstr "Osa"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Edition"
+msgstr "Painos"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Main language"
+msgstr "Pääkielet"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Availability information"
+msgstr "Saatavuustiedot"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Availability in other libraries"
+msgstr "Saatavuustiedot muissa kirjastoissa"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Series"
+msgstr "Sarja"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "To search list"
+msgstr "Selauslistalle"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Next work"
+msgstr "Seuraava teos"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Location information"
+msgstr "Sijaintitiedot"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Contents"
+msgstr "Sisalto"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Instruments"
+msgstr "Soittimet"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Detailed information"
+msgstr "Tarkat tiedot"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Author / performer"
+msgstr "Tekijä / esittajä"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Work title"
+msgstr "Teoksen nimi"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Work information"
+msgstr "Teoksen tiedot"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Ordered"
+msgstr "Tilattu"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Product code"
+msgstr "Tuotetunnus"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "UDK class"
+msgstr "UDK-luokka"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Appearance"
+msgstr "Ulkoasu"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Dissertation notification"
+msgstr "Väitöskirjahuomautus"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Year of production"
+msgstr "Valmistumisvuosi"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Place a hold"
+msgstr "Varaa teos"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Uniform title"
+msgstr "Yhtenäistetty nimeke"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "YKL class"
+msgstr "YKL-luokka"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Recording/filming"
+msgstr "Äänitys/kuvaus"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Publisher"
+msgstr "Julkaisija"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Kotka libraries"
+msgstr "Kotkan kirjastot"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Kouvola libraries"
+msgstr "Kouvolan kirjastot"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Hamina libraries"
+msgstr "Haminan kirjastot"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Iitti library"
+msgstr "Iitin kirjasto"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Virolahti library"
+msgstr "Virolahden kirjasto"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Pyhtää library"
+msgstr "Pyhtään kirjasto"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Miehikkälä library"
+msgstr "Miehikkälän kirjasto"
+
+#: libdbsearch
+msgctxt "libdb"
+msgid "Read tip"
+msgstr "Lue vinkki"

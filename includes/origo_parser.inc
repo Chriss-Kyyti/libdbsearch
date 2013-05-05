@@ -1,11 +1,12 @@
 <?php
+
 /**
  * @file
  * Class for sending a search to Origo library database and
  * extracting information from erceived web pages.
  * Result is in XML form.
  *
- * Last modified: 14.03.2013 Mika Hatakka
+ * Last modified: 31.03.2013 Mika Hatakka
  */
 
 /**
@@ -106,8 +107,7 @@ class OrigoParser {
             $apustr = $this->pura_linkit($tsarakkeet[0][$key + $i]);
             if ($apustr === FALSE) {
               $level4xml .= $this->luo_tagi('Laji', $tsarakkeet[1][$key + $i]);
-            }
-            else {
+            } else {
               $level5xml = $this->luo_linkki($apustr[1][0], $apustr[2][0]);
               $level4xml .= $this->luo_tagi('Laji', $level5xml);
             }
@@ -125,8 +125,7 @@ class OrigoParser {
         $level1xml .= $this->luo_tagi('Lohko', $level2xml);
       }
       $level0xml = $this->luo_tagi('Aineistolajittain_tulos', $level1xml);
-    }
-    else {
+    } else {
       $level1xml = $this->tulosta_virhe_ilmoitus('Virhe suoritettaessa hakua');
       $level0xml = $this->luo_tagi('Aineistolajittain_tulos', $level1xml);
     }
@@ -157,18 +156,15 @@ class OrigoParser {
                 // Several pages, lets count current page
                 $curPage = ($allNum[0][1] + $teostasivulla - 1) / $teostasivulla;
                 $maxPage = (int) (($allNum[0][0] - 1) / $teostasivulla) + 1;
-              }
-              elseif ((count($allNum[0]) == 4) && ($teostasivulla > 0)) {
+              } elseif ((count($allNum[0]) == 4) && ($teostasivulla > 0)) {
                 // Add to handle case where more than 1000 results.
                 $curPage = ($allNum[0][2] + $teostasivulla - 1) / $teostasivulla;
                 $maxPage = (int) (($allNum[0][0] - 1) / $teostasivulla) + 1;
               }
-            }
-            else {
+            } else {
               $curPage = -1;
             }
-          }
-          else {
+          } else {
             $curPage = -1;
           }
           if (strlen(strip_tags($colums[1][0])) > 0) {
@@ -226,20 +222,16 @@ class OrigoParser {
                 $level1xml .= $this->luo_tagi('Navigointi', $level2xml);
               }
             }
-          }
-          else {
+          } else {
             $level1xml = $this->tulosta_virhe_ilmoitus('Otsikkotiedot eivät täsmää!');
           }
-        }
-        else {
+        } else {
           $level1xml = $this->tulosta_virhe_ilmoitus('Ei kolmea taulukkoa!');
         }
-      }
-      else {
+      } else {
         $level1xml = $this->tulosta_virhe_ilmoitus();
       }
-    }
-    else {
+    } else {
       $level1xml = $this->tulosta_virhe_ilmoitus(' Ei vastausta!');
     }
     $level0xml = $this->luo_tagi('Selauslista_tulos', $level1xml);
@@ -262,7 +254,7 @@ class OrigoParser {
       // that's why so complicated process
       $tp = $this->maarita_rajat($homepage);
       if ($tp === FALSE) {
-; /* Broken */
+        ; /* Broken */
       }
       if ($tp[1]['alku'] < $tp[0]['loppu']) { // Inner table
 //                $xmlmem = '';
@@ -288,8 +280,7 @@ class OrigoParser {
       $osa_sivu = explode('>Saatavuustiedot<', $osa_page[0]);
       if (!empty($osa_sivu[1])) {
         $level1xml .= $this->extract_availability($osa_sivu[1], 'Saatavuustiedot');
-      }
-      else {
+      } else {
         $osa_sivu = explode('>Saatavuustiedot muissa kirjastoissa<', $osa_page[0]);
         if (!empty($osa_sivu[1])) {
           $level1xml .= $this->extract_availability($osa_sivu[1], 'Saatavuustiedot muissa kirjastoissa');
@@ -308,6 +299,10 @@ class OrigoParser {
       if (!empty($level2xml)) {
         $level1xml .= $this->luo_tagi('Lohko', $level2xml);
       }
+      $level2xml = $this->luo_linkki_listalta($linkit, 'Lainaa sähköinen kirja', 2, TRUE);
+      if (!empty($level2xml)) {
+        $level1xml .= $this->luo_tagi('Lohko', $level2xml);
+      }
       $level2xml = $this->luo_linkki_listalta($linkit, 'Näytä sisältö / kappaleet', 2, FALSE);
       if (!empty($level2xml)) {
         $level1xml .= $this->luo_tagi('Lohko', $level2xml);
@@ -320,8 +315,7 @@ class OrigoParser {
       if (!empty($level2xml)) {
         $level1xml .= $this->luo_tagi('Lohko', $level2xml);
       }
-    }
-    else {
+    } else {
       $level1xml = $this->tulosta_virhe_ilmoitus();
     }
     $level1xml .= $this->luo_selailu_navigointi($linkit);
@@ -352,12 +346,10 @@ class OrigoParser {
         if (($allNum = $this->pura_kohde($kplmaara[0][0], "/[0-9]+/")) !== FALSE) {
           $full_amount = $allNum[0][0];
           $level1xml .= $this->luo_tagi('Teksti', 'Sisältö (' . $full_amount . ' kappaletta)');
-        }
-        else {
+        } else {
           $is_navi = FALSE;
         }
-      }
-      else {
+      } else {
         $is_navi = FALSE;
       }
       $tables = $this->pura_taulukko($homepage);
@@ -388,8 +380,7 @@ class OrigoParser {
         $apu = explode(',', $tekstit[1]);
         if (isset($apu[1])) {
           $navit = explode('&nbsp;', $apu[1]);
-        }
-        else {
+        } else {
           $navit = explode('&nbsp;', $apu[0]);
         }
         $level2xml = '';
@@ -400,7 +391,7 @@ class OrigoParser {
           $tulos = $this->add_link_or_text($val);
           if (strpos($tulos, '<Teksti>') !== FALSE) {
             if ((strpos($tulos, 'Seuraava') !== FALSE) ||
-                (strpos($tulos, 'Edellinen') !== FALSE)) {
+                    (strpos($tulos, 'Edellinen') !== FALSE)) {
               $level2xml .= str_replace('Teksti', 'Valinta', $tulos);
               continue;
             }
@@ -481,8 +472,7 @@ class OrigoParser {
     }
     if ($tieto == '') {
       $paluu = '<' . $taki[0] . $lisa . ' />';
-    }
-    else {
+    } else {
       $paluu = '<' . $taki[0] . $lisa . '>';
       $paluu .= trim($tieto);
       $paluu .= '</' . $taki[0] . '>';
@@ -503,8 +493,7 @@ class OrigoParser {
     $osoite = str_replace('"', '', $osoite);
     if ($teksti == NULL) {
       $teksti = $osoite;
-    }
-    else {
+    } else {
       $teksti = $this->tarkista_haettu($teksti);
     }
     $taso2xml = $this->luo_tagi('Losoite', $osoite);
@@ -534,8 +523,7 @@ class OrigoParser {
     $riveja = preg_match_all($etsitaan, $kohde, $tulos);
     if ($riveja == 0) {
       return FALSE;
-    }
-    else {
+    } else {
       return $tulos;
     }
   }
@@ -607,8 +595,7 @@ class OrigoParser {
     if ($riveja == 1) {
       // Number of found works
       return $tulos[0][0];
-    }
-    else {
+    } else {
       $etsitaan = "/Teoksia ei löytynyt yhtään kappaletta/";
       $riveja = preg_match_all($etsitaan, $homepage, $tulos);
       if ($riveja == 1) {
@@ -693,8 +680,7 @@ class OrigoParser {
     $alinks = $this->pura_linkit($str);
     if (strpos($str, '...') != 0) {
       $poikki = TRUE;
-    }
-    else {
+    } else {
       $poikki = FALSE;
     }
     if ($curPage == 1) {
@@ -711,9 +697,8 @@ class OrigoParser {
         $taso3xml = $this->luo_tagi('Haettu', $curPage);
         $taso2xml .= $this->luo_tagi('Valinta', $taso3xml, array('separator' => "no"));
         $haettu_asetettu = TRUE;
-      }
-      elseif (($poikki == TRUE) && (($edSivu + 1) != $sivu) &&
-          ($alinks[2][$i] != 'Edellinen') && ($alinks[2][$i] != 'Seuraava')) {
+      } elseif (($poikki == TRUE) && (($edSivu + 1) != $sivu) &&
+              ($alinks[2][$i] != 'Edellinen') && ($alinks[2][$i] != 'Seuraava')) {
         $taso2xml .= $this->luo_tagi('Valinta', '...&nbsp;', array('separator' => "no"));
       }
       $taso3xml = $this->luo_linkki($alinks[1][$i], $alinks[2][$i]);
@@ -751,16 +736,14 @@ class OrigoParser {
     $taso3xml = $this->luo_linkki_listalta($linkit, 'Edellinen teos', 2, FALSE);
     if (empty($taso3xml)) {
       $taso2xml = $this->luo_tagi('Valinta', 'Edellinen teos', array("separator" => "no"));
-    }
-    else {
+    } else {
       $taso2xml = $this->luo_tagi('Valinta', $taso3xml, array("separator" => "no"));
     }
     $taso2xml .= $this->luo_tagi('Valinta', $this->luo_linkki_listalta($linkit, 'Selauslistalle', 2, FALSE));
     $taso3xml = $this->luo_linkki_listalta($linkit, 'Seuraava teos', 2, FALSE);
     if (empty($taso3xml)) {
       $taso2xml .= $this->luo_tagi('Valinta', 'Seuraava teos');
-    }
-    else {
+    } else {
       $taso2xml .= $this->luo_tagi('Valinta', $taso3xml);
     }
     $taso1xml = $this->luo_tagi('Navigointi', $taso2xml);
@@ -793,16 +776,13 @@ class OrigoParser {
             }
           }
           return $this->laske_taulu_rajat($tp, $loppu);
-        }
-        else {
+        } else {
           return FALSE;
         }
-      }
-      else {
+      } else {
         return FALSE;
       }
-    }
-    else {
+    } else {
       return FALSE;
     }
   }
@@ -822,8 +802,7 @@ class OrigoParser {
         if ($btulos[$i] < $tables[$ii]['alku']) {
           if (!isset($tables[$ii - 1]['loppu'])) {
             $tables[$ii - 1]['loppu'] = $btulos[$i];  // Muutettu += -> =  6.3.2013 MHa
-          }
-          else {
+          } else {
             for ($iii = $ii - 2; $iii >= 0; $iii--) {
               if (!isset($tables[$iii]['loppu'])) {
                 $tables[$iii]['loppu'] = $btulos[$i];  // Muutettu += -> =  6.3.2013 MHa
@@ -848,8 +827,7 @@ class OrigoParser {
   private function tarkista_rivitys($rivi) {
     if (stripos($rivi, '<br') === FALSE) {
       return $this->luo_tagi("Teksti", $rivi);
-    }
-    else {
+    } else {
       $tekstit = preg_split("/(<br \/>)|(<br>)|(<br\/>)/", $rivi);
       $apu = '';
       foreach ($tekstit as $t) {
@@ -880,8 +858,7 @@ class OrigoParser {
       if ($links === FALSE) {
         $taso2xml = $this->luo_tagi('Teksti', strip_tags($val));
         $taso2xml .= $this->luo_tagi('Paikka', (string) $key);
-      }
-      else {
+      } else {
         $taso2xml = $this->luo_linkki($links[1][0], $links[2][0]);
         $taso2xml .= $this->luo_tagi('Paikka', $key);
       }
@@ -960,8 +937,7 @@ class OrigoParser {
         }
         $i++;
       }
-    }
-    else {
+    } else {
       $pudotus_valikot = NULL;
     }
     return $pudotus_valikot;
@@ -986,7 +962,7 @@ class OrigoParser {
           if (($pos = strpos($a, 'src')) !== FALSE) {
             $apub = trim(str_replace('src=', ' ', $a));
             $apu = str_replace(
-                array('&', "'", '"'), array('&amp;', '', ''), $apub);
+                    array('&', "'", '"'), array('&amp;', '', ''), $apub);
             $ret[] = $apu;
           }
         }
@@ -1008,10 +984,10 @@ class OrigoParser {
     if ($titles !== FALSE) {
       // Availability / Availability in other libraries
       if (strip_tags($titles[0][0]) == 'Kokoelma' &&
-          strip_tags($titles[0][1]) == 'Niteitä' &&
-          strip_tags($titles[0][2]) == 'Lainattavissa' &&
-          strip_tags($titles[0][3]) == 'Tilattu' &&
-          strip_tags($titles[0][4]) == 'Eräpäivä') {
+              strip_tags($titles[0][1]) == 'Niteitä' &&
+              strip_tags($titles[0][2]) == 'Lainattavissa' &&
+              strip_tags($titles[0][3]) == 'Tilattu' &&
+              strip_tags($titles[0][4]) == 'Eräpäivä') {
         $lkm = count($titles[0]);
         if (($colums = $this->pura_sarakkeet($taulukko)) !== FALSE) {
           $taso2xml = '';
@@ -1051,12 +1027,12 @@ class OrigoParser {
     if (($titles = $this->pura_taulukon_otsikot($taulukko)) !== FALSE) {
       // Availebility in chosen library
       if (strip_tags($titles[0][0]) == 'Sijainti' &&
-          strip_tags($titles[0][1]) == 'Hylly' &&
-          strip_tags($titles[0][2]) == 'Luokka' &&
-          strip_tags($titles[0][3]) == 'Niteitä' &&
-          strip_tags($titles[0][4]) == 'Lainattavissa' &&
-          strip_tags($titles[0][5]) == 'Tilattu' &&
-          strip_tags($titles[0][6]) == 'Eräpäivä') {
+              strip_tags($titles[0][1]) == 'Hylly' &&
+              strip_tags($titles[0][2]) == 'Luokka' &&
+              strip_tags($titles[0][3]) == 'Niteitä' &&
+              strip_tags($titles[0][4]) == 'Lainattavissa' &&
+              strip_tags($titles[0][5]) == 'Tilattu' &&
+              strip_tags($titles[0][6]) == 'Eräpäivä') {
         $lkm = count($titles[0]) + 1;
         if (($colums = $this->pura_sarakkeet($taulukko)) !== FALSE) {
           $taso2xml = '';
@@ -1107,8 +1083,7 @@ class OrigoParser {
         $taso2xml .= $this->muodosta_teos_tiedot($colums);
       }
       $taso1xml = $this->luo_tagi('Osantiedot', $taso2xml);
-    }
-    elseif ($otsikko == 'Sisältyy teokseen') {
+    } elseif ($otsikko == 'Sisältyy teokseen') {
       $tulos = substr($homepage, $tp[2]['alku'], $tp[2]['loppu'] - $tp[2]['alku'] + 8);
       if (($colums = $this->pura_sarakkeet($tulos)) !== FALSE) {
         $taso2xml .= $this->muodosta_teos_tiedot($colums);
@@ -1156,8 +1131,7 @@ class OrigoParser {
         $taso2xml = $this->luo_tagi('Selite', $colums[1][$i]);
         $taso2xml .= $this->luo_tagi('Tieto', $apu);
         $taso1xml .= $this->luo_tagi('Rivi', $taso2xml);
-      }
-      else { // Link
+      } else { // Link
         $taso2xml = $this->luo_tagi('Selite', $colums[1][$i]);
         $apu = NULL;
         $rivit = preg_split("/(<br \/>)|(<br>)|(<br\/>)|(, )/", $colums[1][$i + 1]);
@@ -1186,8 +1160,7 @@ class OrigoParser {
     if (($linkki = ($this->pura_linkit($value))) === FALSE) {
       $apu = $this->tarkista_rivitys($value);
       return $this->tarkista_haettu($apu);
-    }
-    else { // Link
+    } else { // Link
       $rivit = preg_split("/(<br \/>)|(<br>)|(<br\/>)/", $value);
       for ($ii = 0; $ii < count($linkki[0]); $ii++) {
         $apu = $this->find_addional_text($rivit[$ii]);

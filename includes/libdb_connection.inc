@@ -4,7 +4,7 @@
  * @file
  * Get connection and retrieve data from remote server.
  *
- * Last modified: 14.03.2013 Mika Hatakka
+ * Last modified: 22.04.2013 Mika Hatakka
  */
 
 /**
@@ -18,7 +18,7 @@ class LibdbConnection {
   private $keys;
   private $error;
 
-  public function init($type = 'haku', $keys = '') {
+  public function init($type = 'haku', $raw_keys = '') {
 
     $this->server = variable_get('libdb_server', '');
 
@@ -34,14 +34,19 @@ class LibdbConnection {
 
     $this->type = $type . '.asp';
     
-    if(empty($keys)) {
-      $keys = $this->linkFromOld();
+    if(empty($raw_keys)) {
+      $raw_keys = $this->linkFromOld();
     }
 
+    $keys = str_replace('%3D', '=', $raw_keys);
+    
     if($type == 'haku' && strpos($keys, '=') === FALSE) {
       $keys = 'vapaasana=' . $keys;
     }
     $this->keys = str_replace(array(' ', '#'), array('+', "%23"), $keys);
+    
+//    dpm($this->keys);
+    
     $this->error = NULL;
   }
 

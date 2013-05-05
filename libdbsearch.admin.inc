@@ -6,7 +6,7 @@
  * @file
  * Libdbsearch settings form.
  *
- * Last modified: 07.03.2013 Mika Hatakka
+ * Last modified: 31.03.2013 Mika Hatakka
  */
 
 /**
@@ -24,6 +24,13 @@ function libdbsearch_admin() {
     '#required' => TRUE,
   );
 
+  $form['libdb_ebook_pic'] = array(
+    '#type' => 'textfield',
+    '#title' => t('EBook link picture'),
+    '#default_value' => variable_get('libdb_ebook_pic', ''),
+    '#description' => t("Picture for EBook picture link."),
+  );
+  
   $form['setup_select_list'] = array(
     '#type' => 'fieldset',
     '#title' => t('Update lists database table'),

@@ -1,1 +1,30 @@
+# Patch/diff artifacts.
+*.patch
+*.diff
+*.orig
+*.rej
+interdiff*.txt
+
+# emacs artifacts.
+*~
+\#*\#
+
+# VI swap file
+*.swp
+
+# Hidden files.
+.DS*
+.project
+
+# Windows links.
+*.lnk
+
+# Temporary files.
+tmp*
+
+# Excludes for installed Drupal site
+sites/default/files/
+sites/default/settings.php
+
+# Exclude Netbeans project directory
 nbproject*

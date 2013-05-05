@@ -1,0 +1,421 @@
+# $Id$
+#
+# Finnish translation of Drupal (general)
+# Copyright Mika Hatakka <mika.hatakka@kouvola.fi>
+# Generated from files:
+#  libdbsearch-materials.tpl.php: n/a
+#  libdbsearch.module: n/a
+#  libdbsearch-works.tpl.php: n/a
+#  libdbsearch.pages.inc: n/a
+#  libdbsearch.info: n/a
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 6.x-0.5\n"
+"POT-Creation-Date: 2010-03-09 10:04+0200\n"
+"PO-Revision-Date: 2011-01-11 11:00+0200\n"
+"Last-Translator: Plural-Forms: nplurals=2; plural=(n != 1);\n>\n"
+"Language-Team: Finnish <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: libdbsearch-materials.tpl.php:9 libdbsearch.module:300
+msgid "Material"
+msgstr "Aineistolaji"
+
+#: libdbsearch-materials.tpl.php:10
+msgid "Found"
+msgstr "Löytyneitä"
+
+#: libdbsearch-works.tpl.php:32
+msgid "Location"
+msgstr "Sijainti"
+
+#: libdbsearch-works.tpl.php:33
+msgid "Shelf"
+msgstr "Hylly"
+
+#: libdbsearch-works.tpl.php:34 libdbsearch.module:286
+msgid "Class"
+msgstr "Luokka"
+
+#: libdbsearch-works.tpl.php:35;50
+msgid "Work items"
+msgstr "Niteitä"
+
+#: libdbsearch-works.tpl.php:36;51
+msgid "Borrowing possible"
+msgstr "Lainattavissa"
+
+#: libdbsearch-works.tpl.php:37;52
+msgid "Ordered"
+msgstr "Tilattu"
+
+#: libdbsearch-works.tpl.php:38;53
+msgid "Due date"
+msgstr "Eräpäivä"
+
+#: libdbsearch-works.tpl.php:49
+msgid "Collection"
+msgstr "Kokoelma"
+
+#: libdbsearch.pages.inc:142
+msgid "Copy link"
+msgstr "Suora linkki kopioitavaksi"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Author / performer"
+msgstr "Tekijä / esittäjä"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Other authors"
+msgstr "Muut tekijät"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Edition"
+msgstr "Painos"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Publication information"
+msgstr "Julkaisutiedot"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Series"
+msgstr "Sarja"
+
+#: libdbsearch.pages.inc:150;152
+msgid "ISBN"
+msgstr "ISBN"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Language"
+msgstr "Pääkieli"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Index terms / Subject"
+msgstr "Asiasanat / Aihe"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Appearance"
+msgstr "Ulkoasu"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Original title"
+msgstr "Alkuteos"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Original language"
+msgstr "Alkuperäinen kieli"
+
+#: libdbsearch.pages.inc:150;152
+msgid "UDK class"
+msgstr "UDK-luokka"
+
+#: libdbsearch.pages.inc:150;152
+msgid "YKL class"
+msgstr "YKL-luokka"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Other titles"
+msgstr "Muut nimekkeet"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Remark"
+msgstr "Huomautus"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Contents"
+msgstr "Sisältö"
+
+# Sijaintitiedot
+#: libdbsearch.pages.inc:150;152
+msgid "Location information"
+msgstr "Sijaintitiedot"
+
+#: libdbsearch.pages.inc:150;152
+msgid "EAN code"
+msgstr "EAN-koodi"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Material's generic attribute"
+msgstr "Aineiston yleismääre"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Age limit"
+msgstr "Ikäraja"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Scale"
+msgstr "Mittakaava"
+
+#: libdbsearch.pages.inc:150;152
+msgid "ISMN"
+msgstr "ISMN"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Numbering"
+msgstr "Numerointi"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Location of the material"
+msgstr "Aineiston sijainti"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Uniform title"
+msgstr "Yhtenäistetty nimeke"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Frequency of publication"
+msgstr "Ilmestymistiheys"
+
+#: libdbsearch.pages.inc:150;152
+msgid "ISSN"
+msgstr "ISSN"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Other languages"
+msgstr "Muut kielet"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Dissertation notification"
+msgstr "Väitöskirjahuomautus"
+
+#: libdbsearch.pages.inc:150;152
+msgid "NBN"
+msgstr "NBN"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Section information"
+msgstr "Osan tiedot"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Remark"
+msgstr "Huomatus"
+
+#: libdbsearch.pages.inc:150;152
+msgid "Part"
+msgstr "Osa"
+
+#: libdbsearch.module:48
+msgid "Address of Origo database"
+msgstr "Origo kirjastojärjestelmän palvelinosoite"
+
+#: libdbsearch.module:50
+msgid "Address where all database querys must send."
+msgstr "Osoite johon haut lähetetään."
+
+#: libdbsearch.module:55
+msgid "Sub site folder"
+msgstr "Alihakemisto"
+
+#: libdbsearch.module:57
+msgid "If site is subfolder, the folder name. If in root level leave blank."
+msgstr "Sivuston ollessa alihakemistossa, alihakemiston nimi. Jos sijaitsee päätasolla, jätä tyhjäksi."
+
+#: libdbsearch.module:63
+msgid "Update lists database table"
+msgstr "Pudotusvalikkojen vaihtoehtojen päivitys"
+
+#: libdbsearch.module:64
+msgid "Dropdown lists in search form are based information in Web-Origo result page. After installation list must be updated manually. In normal use lists are checked by cron every Sunday morning at 3:00 am. If cron is not in use checking must be done also manually."
+msgstr "Käytettävät pudotusvalikot perustavat Web-Origon pudostus valikoihin. Asennuksen tulee listat päivittää käsin. Normaalit tarkistukset tehdään cron ajojen yhteydessä, sunnuntaiaamuisin 3:00. Jos cron ajot eivät ole käytössä tulee tarkastuksetkin tehdä käsin."
+
+#: libdbsearch.module:69
+msgid "Update"
+msgstr "Päivitä"
+
+#: libdbsearch.module:83
+msgid "Select lists are updated."
+msgstr "Pudotusvalikoiden listat on päivitetty"
+
+#: libdbsearch.module:182
+msgid "Your search did not get any results"
+msgstr "Hakusi ei tuottanut tuloksia."
+
+#: libdbsearch.module:229
+msgid "Search words"
+msgstr "Hakusanat"
+
+#: libdbsearch.module:241
+msgid "Libraries"
+msgstr "Kirjastot"
+
+#: libdbsearch.module:252
+msgid "Group by category"
+msgstr "Aineistoittain"
+
+#: libdbsearch.module:256
+msgid "Advanced search"
+msgstr "Laajennettu haku"
+
+#: libdbsearch.module:262
+msgid "Author"
+msgstr "Tekijä"
+
+#: libdbsearch.module:267
+msgid "Work title"
+msgstr "Teoksen nimi"
+
+#: libdbsearch.module:272
+msgid "ISBN / Number"
+msgstr "ISBN / tunnus"
+
+#: libdbsearch.module:277
+msgid "Year"
+msgstr "Vuosi"
+
+#: libdbsearch.module:293
+msgid "Main language"
+msgstr "Pääkieli"
+
+#: libdbsearch.module:307
+msgid "Departments"
+msgstr "Osastot"
+
+#: libdbsearch.module:329
+msgid "Search"
+msgstr "Etsi"
+
+#: libdbsearch.module:333
+msgid "Clear"
+msgstr "Tyhjennä"
+
+#: libdbsearch.module:377
+msgid "Please enter some keywords."
+msgstr "Anna hakusana"
+
+#: libdbsearch.module:23
+msgid "Library database search settings"
+msgstr "Kirjastojärjestelmästä haun asetukset"
+
+#: libdbsearch.module:24
+msgid "Description"
+msgstr "Kuvaus"
+
+#: libdbsearch.module:31 libdbsearch.info:0
+msgid "Library database search"
+msgstr "Haku kirjastojärjestelmästä"
+
+#: libdbsearch.info:0
+msgid "A module for creating searches to library database."
+msgstr "Moduuli hakuihin kirjastojärjestelmistä."
+
+#: libdbsearch.pages.inc:0
+msgid "Search result"
+msgstr "Haun tulos"
+
+#: libdbsearch.pages.inc:0
+msgid "There were !hits hits."
+msgstr "Teoksia löytyi yhteensä !hits kappaletta"
+
+#: libdbsearch.pages.inc:0
+msgid "Works !hit1 - !hit2"
+msgstr "Teokset !hit1 - !hit2"
+
+#: libdbsearch.pages.inc:0
+msgid "Page: "
+msgstr "Sivu: "
+
+#: libdbsearch.pages.inc:0
+msgid "Previous"
+msgstr "Edellinen"
+
+#: libdbsearch.pages.inc:0
+msgid "Next"
+msgstr "Seuraava"
+
+#: libdbsearch.pages.inc:0
+msgid "Work information"
+msgstr "Teoksen tiedot"
+
+#: libdbsearch.pages.inc:0
+msgid "Introduction"
+msgstr "Esittelyteksti"
+
+#: libdbsearch.pages.inc:0
+msgid "Previous work"
+msgstr "Edellinen teos"
+
+#: libdbsearch.pages.inc:0
+msgid "To search list"
+msgstr "Paluu hakutuloksiin"
+
+#: libdbsearch.pages.inc:0
+msgid "Next work"
+msgstr "Seuraava teos"
+
+#: libdbsearch.pages.inc:0
+msgid "Detailed information"
+msgstr "Tarkat tiedot"
+
+#: libdbsearch.pages.inc:0
+msgid "Availability information"
+msgstr "Saatavuustiedot"
+
+#: libdbsearch.pages.inc:0
+msgid "Availability in other libraries"
+msgstr "Saatavuustiedot muissa kirjastoissa"
+
+#: libdbsearch.pages.inc:0
+msgid "Place a hold"
+msgstr "Varaa teos"
+
+#: libdbsearch.pages.inc:0
+msgid "Section information"
+msgstr "Osan tiedot"
+
+
+#: libdbsearch.pages.inc:0
+msgid "See contents / songs"
+msgstr "Näytä sisältö / kappaleet"
+
+#: libdbsearch.pages.inc:27
+msgid "No works found"
+msgstr "Teoksia ei löytynyt yhtään kappaletta."
+
+#: libdbsearch.module:299
+msgid "Novelties"
+msgstr "Uutuudet"
+
+#: libdbsearch.module:200
+msgid "An internal error has happened in our server. Please try again or contact library attendand."
+msgstr "Tapahtui sisäinen virhe. Yritä uudestaan tai ota yhteyttä kirjastovirkailijaan."
+
+#: libdbsearch.module:299
+msgid "Link to tip"
+msgstr "Linkki vinkkiin"
+
+#: libdbsearch.pages.inc:0
+msgid "Recording/filming"
+msgstr "Äänitys/kuvaus"
+
+#: libdbsearch.pages.inc:0
+msgid "Instruments"
+msgstr "Soittimet"
+
+#: libdbsearch.pages.inc:0
+msgid "Show all"
+msgstr "Näytä kaikki"
+
+#: libdbsearch.pages.inc:81
+msgid " The first !hits are shown."
+msgstr " Näytetään !hits ensimmäistä."
+
+#: libdbsearch.module:64
+msgid "Result list sort order"
+msgstr "Tuloslistan järjestys"
+
+#: libdbsearch.module:71
+msgid "Save search words to log."
+msgstr "Tallenna hakusanat lokiin."
+
+#: libdbsearch.module:72
+msgid "Select if search words are wanted to be saved in the log."
+msgstr "Valitse jos haluat tallentaa käytetyt hakusanat lokiin."
+
+#: libdbsearch.module:451
+msgid "Search conditions are cleared."
+msgstr "Hakuehdot tyhjennetty."
