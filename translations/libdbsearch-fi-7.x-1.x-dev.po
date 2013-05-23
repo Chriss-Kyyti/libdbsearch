@@ -38,12 +38,12 @@ msgstr "Sivu: "
 #: libdbsearch
 msgctxt "libdb"
 msgid "Previous"
-msgstr "Seuraava"
+msgstr "Edellinen"
 
 #: libdbsearch
 msgctxt "libdb"
 msgid "Next"
-msgstr "Edellinen"
+msgstr "Seuraava"
 
 #: libdbsearch
 msgctxt "libdb"

@@ -178,7 +178,7 @@ function libdbsearch_set_haku_data($data) {
   $navigation = _libdbsearch_add_navi($data);
 //  dpm($navigation);
   if (count($navigation) > 0) {
-    $output .= $navigation[0];
+//    $output .= $navigation[0];
   }
 
   $header = array();
@@ -232,7 +232,9 @@ function libdbsearch_set_haku_data($data) {
   }
 
   if (count($navigation) > 1) {
+    $output .= '<div class="item-list">';
     $output .= $navigation[1];
+    $output .= '</div>';
   }
 
   return $output;
@@ -443,13 +445,37 @@ function _libdbsearch_add_navi($data) {
       $out_navi = '';
       if (isset($val['Teksti'])) {
 //        dpm($val['Teksti']);
-        $out_navi .= _libdbsearch_t($val['Teksti']);
+//        $out_navi .= _libdbsearch_t($val['Teksti']);
       }
       if (isset($val['Valinta'])) {
+        $out_navi .= '<ul class="pager clearfix">';
+        $item_cnt = 1;
+        $num_items = count($val['Valinta']);
+        $ex_luokka = ' first';
+        $cnt = 1;
         foreach ($val['Valinta'] as $value) {
-//          dpm($value);
-          $out_navi .= _libdbsearch_extract_navi_text($value);
+          if (is_array($value) || $item_cnt > 1) {
+            if ($value == '... ') {
+              $luokka = 'pager-ellipsis';
+            } elseif (isset($value['Haettu'])) {
+              $luokka = 'pager-current';
+            } else {
+              $luokka = 'pager-item';
+            }
+            $item_cnt++;
+            if ($num_items == $cnt) {
+              $luokka = 'pager-last';
+              $ex_luokka = ' last';
+            }
+            $luokka .= $item_cnt % 2 ? ' even' : ' odd';
+            $out_navi .= '<li class="' . $luokka . $ex_luokka . '">';
+            $out_navi .= _libdbsearch_extract_navi_text($value);
+            $out_navi .= '</li>';
+            $ex_luokka = '';
+          }
+          $cnt++;
         }
+        $out_navi .= '</ul>';
       }
       if (isset($val['Haettu'])) {
 //        dpm($val['Haettu']);
@@ -884,21 +910,19 @@ function libdbsearch_parse_teos_id() {
 function libdbsearch_tid_for_value($str) {
   $term = '';
   $tid = '';
-  if ((strpos($str, 'DVD') !== FALSE) || 
-      (strpos($str, 'Blu') !== FALSE) || 
-      (strpos($str, 'Videokasetti') !== FALSE)) {
+  if ((strpos($str, 'DVD') !== FALSE) ||
+          (strpos($str, 'Blu') !== FALSE) ||
+          (strpos($str, 'Videokasetti') !== FALSE)) {
     $term = 'elokuva';
-  }
-  elseif ((strpos($str, 'Äänilevy') !== FALSE) || 
+  } elseif ((strpos($str, 'Äänilevy') !== FALSE) ||
           (strpos($str, 'Kasetti') !== FALSE) ||
-          (strpos($str, 'CD-levy') !== FALSE) ) {
+          (strpos($str, 'CD-levy') !== FALSE)) {
     $term = 'äänite';
-  }
-  elseif (strpos($str, 'Konsolipelit') !== FALSE) {
+  } elseif (strpos($str, 'Konsolipelit') !== FALSE) {
     $term = 'peli';
   }
   $ret = taxonomy_get_term_by_name($term, 'vinkin_aineistolaji');
-  if(!empty($ret)) {
+  if (!empty($ret)) {
     $tid = $ret[key($ret)]->tid;
   }
   return $tid;
