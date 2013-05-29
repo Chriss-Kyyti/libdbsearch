@@ -2,5 +2,5 @@
 name = Library database search
 description = A module for creating searches to library database.
 core = 6.x
-version = "6.x-1.16"
+version = "6.x-1.17"
 package = "Libdb"

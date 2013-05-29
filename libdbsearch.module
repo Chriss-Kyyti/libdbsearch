@@ -4,7 +4,7 @@
  * Module to make search to Origo library database
  * and showing the result in Drupal page.
  *
- * Last modified: 18.04.2013 Mika Hatakka
+ * Last modified: 29.05.2013 Mika Hatakka
  */
 // Origo librarysytem specific extractor class.
 require_once('includes/search_from_origo.php');
@@ -1032,7 +1032,10 @@ function is_vinkki($searchfor) {
     return FALSE;
   }
   $ret = '';
-  $sql = 'SELECT * FROM {content_field_teoksen_nimi} WHERE field_teoksen_nimi_value = "%s"';
+  $sql = 'SELECT * FROM {content_field_teoksen_nimi} cftn, {content_type_suosittelut} cts
+    WHERE cftn.field_teoksen_nimi_value = "%s"
+    AND cts.field_uutuudet_value = "ei"
+    AND cftn.nid = cts.nid';
   $result = db_query($sql, $searchfor);
   if ($result === FALSE) {
     return FALSE;
