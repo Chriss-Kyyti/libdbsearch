@@ -4,7 +4,7 @@
  * @file
  * Get connection and retrieve data from remote server.
  *
- * Last modified: 22.04.2013 Mika Hatakka
+ * Last modified: 29.05.2013 Mika Hatakka
  */
 
 /**
@@ -93,7 +93,7 @@ class LibdbConnection {
     }
     $homepage = '';
     if (isset($http_response_header)) {
-      $findme = "HTTP/1.1";
+      $findme = "HTTP/1.";
       foreach ($http_response_header as $resp) {
         $pos = strpos($resp, $findme);
         if ($pos !== FALSE) {

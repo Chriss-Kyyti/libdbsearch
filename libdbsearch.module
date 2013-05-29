@@ -8,7 +8,7 @@
  * Drupal Search Interface can be enabled by including file 
  * includes/libdbsearch_dsii.inc to project.
  *
- * Last modified: 23.04.2013 Mika Hatakka
+ * Last modified: 29.05.2013 Mika Hatakka
  */
 
 /**
@@ -186,8 +186,29 @@ function libdbsearch_set_haku_data($data) {
   $hdr = FALSE;
   if (isset($data['Hakutulos'])) {
     if (isset($data['Hakutulos']['Selausotsikot']['Totsikko'])) {
+      $nimio_cnt = 0;
       foreach ($data['Hakutulos']['Selausotsikot']['Totsikko'] as $value) {
-        $header[] = _libdbsearch_extract_text($value);
+        switch ($nimio_cnt) {
+          case 0:
+            $h_value = array(
+                'data' => _libdbsearch_extract_text($value),
+                'data-class' => array('expanded')
+            );
+            break;
+          case 1 :
+            $h_value = array(
+                'data' => _libdbsearch_extract_text($value),
+            );
+            break;
+          default :
+            $h_value = array(
+                'data' => _libdbsearch_extract_text($value),
+                'hide-data' => array('phone')
+            );
+            break;
+        }
+        $nimio_cnt++;
+        $header[] = $h_value;
       }
     }
     if (isset($data['Hakutulos']['Selauslista']['Teos'])) {
@@ -215,7 +236,7 @@ function libdbsearch_set_haku_data($data) {
         $row = array();
         foreach ($value as $key => $val) {
           if ($hdr == FALSE) {
-            $header[] = _libdbsearch_t($key);
+            $header = _libdbsearch_t($key);
           }
           $row[] = _libdbsearch_extract_value($val);
         }
@@ -225,7 +246,7 @@ function libdbsearch_set_haku_data($data) {
     }
   }
 
-  $output .= theme('table', array('header' => $header, 'rows' => $rows));
+  $output .= theme('table', array('header' => $header, 'rows' => $rows, 'attributes' => array('class' => array('foobar'))));
 
   if (count($info) > 1) {
     $output .= $info[1];
