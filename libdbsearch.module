@@ -8,7 +8,7 @@
  * Drupal Search Interface can be enabled by including file 
  * includes/libdbsearch_dsii.inc to project.
  *
- * Last modified: 29.05.2013 Mika Hatakka
+ * Last modified: 05.06.2013 Mika Hatakka
  */
 
 /**
@@ -192,7 +192,7 @@ function libdbsearch_set_haku_data($data) {
           case 0:
             $h_value = array(
                 'data' => _libdbsearch_extract_text($value),
-                'data-class' => array('expanded')
+                'data-class' => array('expand')
             );
             break;
           case 1 :
@@ -203,7 +203,7 @@ function libdbsearch_set_haku_data($data) {
           default :
             $h_value = array(
                 'data' => _libdbsearch_extract_text($value),
-                'hide-data' => array('phone')
+                'data-hide' => array('phone')
             );
             break;
         }
@@ -246,7 +246,11 @@ function libdbsearch_set_haku_data($data) {
     }
   }
 
-  $output .= theme('table', array('header' => $header, 'rows' => $rows, 'attributes' => array('class' => array('foobar'))));
+  $output .= theme('table', array(
+      'header' => $header, 
+      'rows' => $rows, 
+      'attributes' => array('class' => array('footable')),
+      ));
 
   if (count($info) > 1) {
     $output .= $info[1];
@@ -583,7 +587,11 @@ function _libdbsearch_create_work_table($data) {
     $rows[] = _libdbsearch_work_table_row($data);
   }
 
-  return theme('table', array('header' => $header, 'rows' => $rows));
+  return theme('table', array(
+      'header' => $header, 
+      'rows' => $rows,
+      'attributes' => array('class' => array('footable')),
+      ));
 }
 
 function _libdbsearch_availability_table($data) {
@@ -608,9 +616,31 @@ function _libdbsearch_availability_table($data) {
     }
     foreach ($data['Teos'] as $val) {
       $row = array();
+      $nimio_cnt = 0;
       foreach ($val as $key => $value) {
         if ($hdr == FALSE) {
-          $header[] = _libdbsearch_t($key);
+          switch ($nimio_cnt) {
+            case 0:
+              $h_value = array(
+                  'data' => _libdbsearch_t($key),
+                  'data-class' => array('expand')
+              );
+              break;
+            case 1 :
+            case 2 :
+              $h_value = array(
+                  'data' => _libdbsearch_t($key),
+              );
+              break;
+            default :
+              $h_value = array(
+                  'data' => _libdbsearch_t($key),
+                  'data-hide' => array('phone')
+              );
+              break;
+          }
+          $nimio_cnt++;
+          $header[] = $h_value;
         }
         if (is_array($value)) {
           $row[] = _libdbsearch_extract_text($value);
@@ -621,7 +651,11 @@ function _libdbsearch_availability_table($data) {
       $hdr = TRUE;
       $rows[] = $row;
     }
-    $output .= theme('table', array('header' => $header, 'rows' => $rows));
+    $output .= theme('table', array(
+        'header' => $header, 
+        'rows' => $rows, 
+        'attributes' => array('class' => array('footable')),
+        ));
   }
 
 
@@ -634,8 +668,14 @@ function _libdbsearch_availability_table($data) {
     } else {
       _libdbsearch_make_avail_tablerows($data['Kirjasto'], $header, $rows, $hdr);
     }
-    $header[0] = t('Location', array(), array('context' => 'libdb'));
-    $output .= theme('table', array('header' => $header, 'rows' => $rows));
+    $header[0] = array(
+                  'data' => t('Location', array(), array('context' => 'libdb')),
+                  'data-class' => array('expand'));
+    $output .= theme('table', array(
+        'header' => $header, 
+        'rows' => $rows, 
+        'attributes' => array('class' => array('footable')),
+        ));
   }
 
   return $output;
@@ -647,9 +687,35 @@ function _libdbsearch_make_avail_tablerows($lib, &$header, &$rows, $hdr) {
   }
   if (isset($lib['Sijainti'])) {
     $row = array();
+        $nimio_cnt = 0;
     foreach ($lib['Sijainti'] as $key => $value) {
       if ($hdr == FALSE) {
-        $header[] = _libdbsearch_t($key);
+//        $header[] = _libdbsearch_t($key);
+   
+        if ($hdr == FALSE) {
+          switch ($nimio_cnt) {
+//            case 0:
+//              $h_value = array(
+//                  'data' => _libdbsearch_t($key),
+//                  'data-class' => array('expand')
+//              );
+//              break;
+            case 3 :
+            case 4 :
+              $h_value = array(
+                  'data' => _libdbsearch_t($key),
+              );
+              break;
+            default :
+              $h_value = array(
+                  'data' => _libdbsearch_t($key),
+                  'data-hide' => array('phone')
+              );
+              break;
+          }
+          $nimio_cnt++;
+          $header[] = $h_value;
+        }
       }
       if (is_array($value)) {
         $row[] = _libdbsearch_extract_text($value);
