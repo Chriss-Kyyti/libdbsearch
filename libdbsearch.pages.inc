@@ -74,7 +74,8 @@ function template_preprocess_libdbsearch_result(&$variables) {
     foreach ($variables['Selausotsikot']['Totsikko'] as $key => $value) {
       $variables['theader_' . ($key)] = _libdbsearch_extract_text($value);
     }
-    foreach ($variables['Selauslista']['Teos'] as $key => $value) {
+    $my_teos = _libdbsearch_make_array($variables['Selauslista']['Teos']);
+    foreach ($my_teos as $key => $value) {
       $variables['result_rows'] .= theme('libdbsearch_result_row', array('libdb_data' => $value));
     }
   } elseif (isset($variables['Aineistolajittain']['Aineistolaji'])) {
@@ -215,6 +216,9 @@ function template_preprocess_libdbsearch_work(&$variables) {
     if (isset($links['Lainaa sähköinen kirja'])) {
       $variables['work_elink'] = _libdbsearch_set_elink($links['Lainaa sähköinen kirja']);
     }
+    if (isset($links['Esittelyteksti'])) {
+      $variables['work_introduction'] = $links['Esittelyteksti'];
+    }
   }
 
   $work_arr = _libdbsearch_make_array($variables['Teostiedot']['Rivi']);
@@ -244,12 +248,12 @@ function template_preprocess_libdbsearch_work(&$variables) {
     $variables['work_image'] = theme('image', $image);
   }
 
-  if (isset($variables['Esittelyteksti'])) {
-    $variables['work_introduction'] = $variables['Esittelyteksti'];
-  }
+//  if (isset($variables['Esittelyteksti'])) {
+//    $variables['work_introduction'] = $variables['Esittelyteksti'];
+//  }
 
-  if (isset($variables['Esittelyteksti']['Rivi'])) {
-    $variables['work_tip_link'] .= _libdbsearch_tip_link($variables['Esittelyteksti']['Rivi']);
+  if (isset($variables['Teostiedot']['Rivi'])) {
+    $variables['work_tip_link'] = _libdbsearch_tip_link($variables['Teostiedot']['Rivi']);
   }
 
 
