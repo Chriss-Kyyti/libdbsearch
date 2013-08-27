@@ -988,7 +988,8 @@ function _libdbsearch_write_tip_link($tip_data) {
         _libdbsearch_to_tip($params, '[field_sarja][und][0][value]', $rdata);
         break;
       case 'ISBN' :
-        _libdbsearch_to_tip($params, '[field_isbn][und][0][value]', $rdata);
+        $my_isbn = explode(' ', $rdata);
+        _libdbsearch_to_tip($params, '[field_isbn][und][0][value]', $my_isbn[0]);
         break;
       default: break;
     }
@@ -1030,6 +1031,9 @@ function _libdbsearch_text_from_tieto($tieto) {
 }
 
 function _libdbsearch_to_tip(&$params, $label, $data) {
+  if(empty($data)) {
+    return '';
+  }
   if (!empty($params)) {
     $params .= '&';
   }
