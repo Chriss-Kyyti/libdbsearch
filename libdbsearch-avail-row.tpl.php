@@ -21,13 +21,15 @@
    <td colspan="7"><?php print $kirjastonimi; ?></td>
   </tr>
   
+  <?php for ($i = 0; $i < count($osasto); $i++ ) { ?>
   <tr class="<?php print $zebra; ?>">
-   <td><?php print $osasto; ?></td>
-   <td><?php print $hylly; ?></td>
-   <td><?php print $luokka; ?></td>
-   <td><?php print $niteita; ?></td>
-   <td><?php print $lainattavissa; ?></td>
-   <td><?php print $tilattu; ?></td>
-   <td><?php print $erapaiva; ?></td>
+   <td><?php print $osasto[$i]; ?></td>
+   <td><?php print $hylly[$i]; ?></td>
+   <td><?php print $luokka[$i]; ?></td>
+   <td><?php print $niteita[$i]; ?></td>
+   <td><?php print $lainattavissa[$i]; ?></td>
+   <td><?php print $tilattu[$i]; ?></td>
+   <td><?php print $erapaiva[$i]; ?></td>
   </tr>
+  <?php } ?>
   

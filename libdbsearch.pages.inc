@@ -121,11 +121,15 @@ function template_preprocess_libdbsearch_avail(&$variables) {
   $variables['subheader'] = _libdbsearch_t($result['Valiotsikko']);
   $my_arr = _libdbsearch_make_array($result['Kirjasto']);
   foreach ($my_arr as $key => $value) {
+    $value['Sijainti'] = _libdbsearch_make_array($value['Sijainti']);
     if ($hdr == TRUE) {
-      $headers = array_keys($value['Sijainti']);
+      $headers = array_keys($value['Sijainti'][0]);
       $variables['theader_0'] = t('Location', array(), array('context' => 'libdb'));
       foreach ($headers as $key => $val) {
-        $variables['theader_' . ($key + 1)] = _libdbsearch_t($val);
+        if($key == 0) {
+          continue;
+        }
+        $variables['theader_' . ($key)] = _libdbsearch_t($val);
       }
     }
     $variables['avail_rows'] .= theme('libdbsearch_avail_row', $value);
@@ -140,11 +144,13 @@ function template_preprocess_libdbsearch_avail(&$variables) {
  */
 function template_preprocess_libdbsearch_avail_row(&$variables) {
   $variables['kirjastonimi'] = $variables['Kirjastonimi'];
-  foreach ($variables['Sijainti'] as $key => $value) {
-    if (is_array($value)) {
-      $value = current($value);
+  foreach ($variables['Sijainti'] as $row=>$loc) {
+    foreach ($loc as $key => $value) {
+      if (is_array($value)) {
+        $value = current($value);
+      }
+      $variables[strtolower($key)][$row] = $value;
     }
-    $variables[strtolower($key)] = $value;
   }
 }
 
@@ -182,7 +188,7 @@ function template_preprocess_libdbsearch_avail_libs(&$variables) {
  * @see libdbsearch-avail-libs-row.tpl.php
  */
 function template_preprocess_libdbsearch_avail_libs_row(&$variables) {
-  foreach ($variables['work'] as $key=>$value) {
+  foreach ($variables['work'] as $key => $value) {
     if (is_array($value)) {
       $variables[strtolower($key)] = _libdbsearch_extract_text($value);
     } else {
