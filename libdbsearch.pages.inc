@@ -4,7 +4,7 @@
  * @file
  * Page creation function for library database search.
  *
- * Last modified: 30.06.2013 Mika Hatakka
+ * Last modified: 10.10.2013 Mika Hatakka
  */
 
 /**
@@ -20,10 +20,13 @@ function template_preprocess_libdbsearch_results(&$variables) {
   $variables['libdb_bottom_pager'] = '';
   $result = $variables['SResult'];
   $action = $variables['SAction'];
-
+//dpm($variables);
   switch ($action) {
     case 'teos' :
       $variables['libdb_result'] = theme('libdbsearch_work', $result);
+      break;
+    case 'osakohteet' :
+      $variables['libdb_result'] = theme('libdbsearch_work_parts', $result);
       break;
     default :
       $variables['libdb_result'] = theme('libdbsearch_result', $result['Hakutulos']);
@@ -39,6 +42,9 @@ function template_preprocess_libdbsearch_results(&$variables) {
     } else {
       $variables['libdb_top_info'] .= _libdbsearch_t($result['Hakuinfo']['Teksti']);
     }
+  }
+  elseif (isset($result['Osakohteet']) && isset($result['Teksti'][0])) {
+    $variables['libdb_top_info'] .= _libdbsearch_t($result['Teksti'][0]);
   }
 
   // Navigation to top of the result area.
@@ -60,6 +66,13 @@ function template_preprocess_libdbsearch_results(&$variables) {
       $variables['libdb_bottom_pager'] .= $navigation[1];
       $variables['libdb_bottom_pager'] .= '</div>';
     }
+  }
+  if (isset($result['Osakohteet']) && 
+          isset($result['Lohko']['Linkki']) && 
+          empty($variables['libdb_bottom_pager'])) {
+      $variables['libdb_bottom_pager'] .= '<div class="item-list">';
+      $variables['libdb_bottom_pager'] .= _libdbsearch_extract_value($result['Lohko']);
+      $variables['libdb_bottom_pager'] .= '</div>';
   }
 }
 
@@ -126,7 +139,7 @@ function template_preprocess_libdbsearch_avail(&$variables) {
       $headers = array_keys($value['Sijainti'][0]);
       $variables['theader_0'] = t('Location', array(), array('context' => 'libdb'));
       foreach ($headers as $key => $val) {
-        if($key == 0) {
+        if ($key == 0) {
           continue;
         }
         $variables['theader_' . ($key)] = _libdbsearch_t($val);
@@ -144,7 +157,7 @@ function template_preprocess_libdbsearch_avail(&$variables) {
  */
 function template_preprocess_libdbsearch_avail_row(&$variables) {
   $variables['kirjastonimi'] = $variables['Kirjastonimi'];
-  foreach ($variables['Sijainti'] as $row=>$loc) {
+  foreach ($variables['Sijainti'] as $row => $loc) {
     foreach ($loc as $key => $value) {
       if (is_array($value)) {
         $value = current($value);
@@ -288,4 +301,25 @@ function template_preprocess_libdbsearch_work_row(&$variables) {
     $str = isset($variables['Tieto']) ? _libdbsearch_extract_value($variables['Tieto']) : '';
   }
   $variables['tdata'] = $str;
+}
+
+/**
+ * Process variables for libdbsearch-work-parts.tpl.php.
+ *
+ * @see libdbsearch-work-parts.tpl.php
+ */
+function template_preprocess_libdbsearch_work_parts(&$variables) {
+  $variables['result_rows'] = '';
+
+  if (isset($variables['Osakohteet'])) {
+    if (isset($variables['Osakohteet']['Totsikot']['Totsikko'])) {
+      foreach ($variables['Osakohteet']['Totsikot']['Totsikko'] as $key => $value) {
+        $variables['theader_' . ($key)] = _libdbsearch_extract_text($value);
+      }
+    }
+    $my_teos = _libdbsearch_make_array($variables['Osakohteet']['Rivi']);
+    foreach ($my_teos as $key => $value) {
+      $variables['result_rows'] .= theme('libdbsearch_result_row', array('libdb_data' => $value));
+    }
+  }
 }

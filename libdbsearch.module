@@ -8,7 +8,7 @@
  * Drupal Search Interface can be enabled by including file 
  * includes/libdbsearch_dsii.inc to project.
  *
- * Last modified: 27.08.2013 Mika Hatakka
+ * Last modified: 10.10.2013 Mika Hatakka
  */
 
 /**
@@ -107,6 +107,11 @@ function libdbsearch_theme() {
           'arguments' => array('result' => NULL),
           'file' => 'libdbsearch.pages.inc',
           'template' => 'libdbsearch-avail-libs-row',
+      ),
+      'libdbsearch_work_parts' => array(
+          'arguments' => array('result' => NULL),
+          'file' => 'libdbsearch.pages.inc',
+          'template' => 'libdbsearch-work-parts',
       ),
   );
   return $themes;
