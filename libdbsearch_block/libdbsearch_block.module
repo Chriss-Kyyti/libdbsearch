@@ -58,6 +58,15 @@ function libdbsearch_block_box() {
   drupal_add_css(drupal_get_path('module', 'libdbsearch_block') . '/libdbsearch_block.css', 'module', 'all', FALSE);
   $swords = _libdbsearch_block_extract_pars();
 
+  $col_keys = 0;
+  if(array_key_exists('vapaasana', $swords)) {
+    $col_keys++;
+  }
+  if(array_key_exists('piste', $swords)) {
+    $col_keys++;
+  }
+  $coll_adv = count($swords) > $col_keys ? FALSE : TRUE;
+
   $form['vapaasana'] = array(
     '#title' => t('Search words'),
     '#type' => 'textfield',
@@ -79,7 +88,7 @@ function libdbsearch_block_box() {
     '#title' => t('Advanced search'),
     '#type' => 'fieldset',
     '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
+    '#collapsed' => $coll_adv,
   );
 
   $form['advanced']['aineistoittain'] = array(
