@@ -128,7 +128,7 @@ function libdbsearch_view($action = 'empty', $keys = '') {
   if (!isset($_POST['form_id'])) {
 
     if ($action == 'empty') {
-      return 'Ohjeita haun tekemiseen.';
+      return l('Ohjeita haun tekemiseen.', "palvelut/hakuohje");
     }
 //    dpm($keys, 'keys');
 //    dpm($action, 'action');
