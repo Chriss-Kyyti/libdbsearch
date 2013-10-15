@@ -4,7 +4,7 @@
  * @file
  * User interface block for Libdbsearch.
  *
- * Last modified: 13.03.2013 Mika Hatakka
+ * Last modified: 15.10.2013 Mika Hatakka
  */
 
 /**
@@ -56,16 +56,7 @@ function libdbsearch_block_block_view($block_name = '') {
  */
 function libdbsearch_block_box() {
   drupal_add_css(drupal_get_path('module', 'libdbsearch_block') . '/libdbsearch_block.css', 'module', 'all', FALSE);
-  $swords = _libdbsearch_block_extract_pars();
-
-  $col_keys = 0;
-  if(array_key_exists('vapaasana', $swords)) {
-    $col_keys++;
-  }
-  if(array_key_exists('piste', $swords)) {
-    $col_keys++;
-  }
-  $coll_adv = count($swords) > $col_keys ? FALSE : TRUE;
+  $swords = _libdbsearch_block_extract_pars($coll_adv);
 
   $form['vapaasana'] = array(
     '#title' => t('Search words'),
@@ -197,7 +188,6 @@ function libdbsearch_block_box_submit($form, &$form_state) {
   if ($form_state['values']['op'] == $form_state['values']['submit']) {
     $type = empty($form_state['values']['module']) ? 'haku' : $form_state['values']['module'];
     $params = _libdbsearch_block_parse_keys($form_state['values']);
-//    dpm($params);
     $form_state['redirect'] = 'libdbsearch/' . $type . '/' . $params;
   }
   else { // Clear
@@ -210,14 +200,23 @@ function libdbsearch_block_box_submit($form, &$form_state) {
  * 
  * @return type
  */
-function _libdbsearch_block_extract_pars() {
+function _libdbsearch_block_extract_pars(&$not_collapsed) {
   $swords = array();
+  $not_collapsed = TRUE;
+  $tags = array(
+      'aineistoittain', 'uutuudet', 'tekija', 'nimeke', 'asiasana', 'tunnus', 
+      'sarja', 'kustantaja', 'luokkaryhma', 'julkaisuaika', 'kieliryhma', 
+      'materiaaliryhma', 'osastoryhma',
+  );
   $args = arg();
   if (isset($args[2])) {
     $params = explode('&', $args[2]);
     foreach ($params as $val) {
       $param = explode('=', $val);
       if (count($param) == 2) {
+        if(in_array($param[0], $tags)) {
+          $not_collapsed = FALSE;
+        }
         $swords[$param[0]] = $param[1];
       }
       elseif (count($params) == 1 && count($param) == 1) {

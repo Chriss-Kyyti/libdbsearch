@@ -8,7 +8,7 @@
  * Drupal Search Interface can be enabled by including file 
  * includes/libdbsearch_dsii.inc to project.
  *
- * Last modified: 10.10.2013 Mika Hatakka
+ * Last modified: 15.10.2013 Mika Hatakka
  */
 
 /**
@@ -530,7 +530,8 @@ function _libdbsearch_add_navi($data) {
   $output = array();
 
   if (isset($data['Navigointi'])) {
-    foreach ($data['Navigointi'] as $val) {
+    $my_arr = _libdbsearch_make_array($data['Navigointi']);
+    foreach ($my_arr as $val) {
       $out_navi = '';
       if (isset($val['Teksti'])) {
 //        dpm($val['Teksti']);
@@ -665,7 +666,7 @@ function _libdbsearch_availability_table($data) {
   $header = array();
   $rows = array();
   $hdr = FALSE;
-  dpm($data);
+//  dpm($data);
 //  if (isset($data['Valiotsikko'])) {
 //    $output .= '<h3>' . _libdbsearch_t($data['Valiotsikko']) . '</h3>';
 //  }

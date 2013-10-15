@@ -4,7 +4,7 @@
  * @file
  * Page creation function for library database search.
  *
- * Last modified: 10.10.2013 Mika Hatakka
+ * Last modified: 15.10.2013 Mika Hatakka
  */
 
 /**
@@ -42,8 +42,7 @@ function template_preprocess_libdbsearch_results(&$variables) {
     } else {
       $variables['libdb_top_info'] .= _libdbsearch_t($result['Hakuinfo']['Teksti']);
     }
-  }
-  elseif (isset($result['Osakohteet']) && isset($result['Teksti'][0])) {
+  } elseif (isset($result['Osakohteet']) && isset($result['Teksti'][0])) {
     $variables['libdb_top_info'] .= _libdbsearch_t($result['Teksti'][0]);
   }
 
@@ -67,12 +66,15 @@ function template_preprocess_libdbsearch_results(&$variables) {
       $variables['libdb_bottom_pager'] .= '</div>';
     }
   }
-  if (isset($result['Osakohteet']) && 
-          isset($result['Lohko']['Linkki']) && 
+  if (isset($result['Osakohteet']) &&
+          isset($result['Lohko']['Linkki']) &&
           empty($variables['libdb_bottom_pager'])) {
+    $variables['libdb_bottom_info'] .= _libdbsearch_extract_value($result['Lohko']);
+    if (count($navigation) > 0) {
       $variables['libdb_bottom_pager'] .= '<div class="item-list">';
-      $variables['libdb_bottom_pager'] .= _libdbsearch_extract_value($result['Lohko']);
+      $variables['libdb_bottom_pager'] .= $navigation[0];
       $variables['libdb_bottom_pager'] .= '</div>';
+    }
   }
 }
 
