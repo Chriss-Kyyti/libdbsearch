@@ -1,12 +1,10 @@
 <?php
 
-// $Id$
-
 /**
  * @file
  * Libdbsearch settings form.
  *
- * Last modified: 31.03.2013 Mika Hatakka
+ * Last modified: 16.10.2013 Mika Hatakka
  */
 
 /**
@@ -43,6 +41,14 @@ function libdbsearch_admin() {
     '#submit' => array('libdbsearch_list_setup_submit'),
   );
 
+  $form['libdbsearch_search_info'] = array(
+    '#title' => t('Search help information'),
+    '#type' => 'textarea',
+    '#description' => t('Write here your text to show in the libdbsearch page when no keywords are given.'),
+    '#rows' => 3,
+    '#default_value' => variable_get('libdbsearch_search_info', 'Give something to search!'),
+  );
+  
   $form['libdbsearch_extra_info'] = array(
     '#title' => t('Extra information'),
     '#type' => 'textarea',

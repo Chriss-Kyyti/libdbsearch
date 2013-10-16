@@ -4,7 +4,7 @@
  * @file
  * Page creation function for library database search.
  *
- * Last modified: 15.10.2013 Mika Hatakka
+ * Last modified: 16.10.2013 Mika Hatakka
  */
 
 /**
@@ -20,7 +20,7 @@ function template_preprocess_libdbsearch_results(&$variables) {
   $variables['libdb_bottom_pager'] = '';
   $result = $variables['SResult'];
   $action = $variables['SAction'];
-//dpm($variables);
+
   switch ($action) {
     case 'teos' :
       $variables['libdb_result'] = theme('libdbsearch_work', $result);

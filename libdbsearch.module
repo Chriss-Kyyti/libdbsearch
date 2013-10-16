@@ -8,7 +8,7 @@
  * Drupal Search Interface can be enabled by including file 
  * includes/libdbsearch_dsii.inc to project.
  *
- * Last modified: 15.10.2013 Mika Hatakka
+ * Last modified: 16.10.2013 Mika Hatakka
  */
 
 /**
@@ -128,12 +128,9 @@ function libdbsearch_view($action = 'empty', $keys = '') {
   if (!isset($_POST['form_id'])) {
 
     if ($action == 'empty') {
-      return l('Ohjeita haun tekemiseen.', "palvelut/hakuohje");
+      $lsi = variable_get('libdbsearch_search_info', 'Give something to search!');
+      return t(check_markup($lsi, 'filtered_html'));
     }
-//    dpm($keys, 'keys');
-//    dpm($action, 'action');
-//    dpm($_GET, 'GET');
-//    watchdog(7, 'Form send');
 
     $ret = libdbsearch_data($keys, $action);
 
@@ -156,24 +153,14 @@ function libdbsearch_view($action = 'empty', $keys = '') {
             $output .= t('Error performing the search.', array(), array('context' => 'libdb'));
           }
         } else {
-
           $output .= theme('libdbsearch_results', array('SResult' => $ret, 'SAction' => $action));
-
-//          $f = 'libdbsearch_set_' . $action . '_data';
-//          if (function_exists($f)) {
-//            $output .= $f($ret);
-//          } else {
-//            $output .= 'Unknown function ' . $f . '<br />';
-//          }
         }
       }
     }
 
     return $output;
   }
-//  dpm($_GET, 'GET');
-//  dpm($_POST, 'POST');
-//  watchdog(7, 'The other');
+  
   return '';
 }
 
@@ -188,278 +175,22 @@ function libdbsearch_data($keys = '', $action = 'haku') {
   $origo = new LibdbConnection();
   $origo->init($action, $keys);
   $result = $origo->askPage();
-//  dpm($result, 'result');
 
   if (empty($result)) {
     $ret = NULL;
   } else {
     $parser = new OrigoParser($result, $action);
     $something = $parser->constructXML();
-//    dpm($something);
 
     $xml = str_replace(
             array('&nbsp;', '&auml;', '&amp;#228;'), array(' ', 'ä', 'ä'), $something);
 
     $ret = json_decode(json_encode((array) simplexml_load_string($xml)), 1);
   }
-//  dpm($ret, 'result array');
 
   return $ret;
 }
 
-//-----------------------------------------------
-// Libdbsearch Origo page wrappers.
-
-/**
- * Page for search result list.
- * 
- * @param type $data
- * @return type
- */
-function libdbsearch_set_haku_data($data) {
-  $output = '';
-//dpm($data, 'data');
-//  if (isset($data['Hakuinfo']['Teksti'])) {
-////    dpm($data['Hakuinfo']['Teksti']);
-//    if (is_array($data['Hakuinfo']['Teksti'])) {
-//      foreach ($data['Hakuinfo']['Teksti'] as $val) {
-//        $output .= _libdbsearch_t($val) . '<br />';
-//      }
-//    } else {
-////      dpm($data['Hakuinfo']['Teksti'], 'check_plain');
-//      $output .= _libdbsearch_t($data['Hakuinfo']['Teksti']) . '<br />';
-//    }
-//  }
-//
-//  $info = _libdbsearch_add_info($data);
-////  dpm($info);
-//  if (count($info) > 0) {
-//    $output .= $info[key($info)];
-//  }
-//
-//  $navigation = _libdbsearch_add_navi($data);
-////  dpm($navigation);
-//  if (count($navigation) > 0) {
-////    $output .= $navigation[0];
-//  }
-//
-//  $header = array();
-//  $rows = array();
-//  $hdr = FALSE;
-//  if (isset($data['Hakutulos'])) {
-//    if (isset($data['Hakutulos']['Selausotsikot']['Totsikko'])) {
-//      $nimio_cnt = 0;
-//      foreach ($data['Hakutulos']['Selausotsikot']['Totsikko'] as $value) {
-//        switch ($nimio_cnt) {
-//          case 0:
-//            $h_value = array(
-//                'data' => _libdbsearch_extract_text($value),
-//                'data-class' => array('expand')
-//            );
-//            break;
-//          case 1 :
-//            $h_value = array(
-//                'data' => _libdbsearch_extract_text($value),
-//            );
-//            break;
-//          default :
-//            $h_value = array(
-//                'data' => _libdbsearch_extract_text($value),
-//                'data-hide' => array('phone')
-//            );
-//            break;
-//        }
-//        $nimio_cnt++;
-//        $header[] = $h_value;
-//      }
-//    }
-//    if (isset($data['Hakutulos']['Selauslista']['Teos'])) {
-//      if (isset($data['Hakutulos']['Selauslista']['Teos'][0])) {
-//        foreach ($data['Hakutulos']['Selauslista']['Teos'] as $value) {
-////        $row = array();
-////        foreach ($value as $val) {
-////          $row[] = _libdbsearch_extract_value($val);
-////        }
-////        $rows[] = $row;
-//          $rows[] = _libdbsearch_work_row($value);
-//        }
-//      } else {
-//        $rows[] = _libdbsearch_work_row($data['Hakutulos']['Selauslista']['Teos']);
-//      }
-//    }
-//    if (isset($data['Hakutulos']['Aineistolajittain']['Aineistolaji'])) {
-//
-//      if (!isset($data['Hakutulos']['Aineistolajittain']['Aineistolaji'][0])) {
-//        $st_arr = $data['Hakutulos']['Aineistolajittain']['Aineistolaji'];
-//        unset($data['Hakutulos']['Aineistolajittain']['Aineistolaji']);
-//        $data['Hakutulos']['Aineistolajittain']['Aineistolaji'][0] = $st_arr;
-//      }
-//      foreach ($data['Hakutulos']['Aineistolajittain']['Aineistolaji'] as $key => $value) {
-//        $row = array();
-//        foreach ($value as $key => $val) {
-//          if ($hdr == FALSE) {
-//            $header = _libdbsearch_t($key);
-//          }
-//          $row[] = _libdbsearch_extract_value($val);
-//        }
-//        $rows[] = $row;
-//        $hdr = TRUE;
-//      }
-//    }
-//  }
-//
-//  $output .= theme('table', array(
-//      'header' => $header, 
-//      'rows' => $rows, 
-//      'attributes' => array('class' => array('footable')),
-//      ));
-//
-//  if (count($info) > 1) {
-//    $output .= $info[1];
-//  }
-//
-//  if (count($navigation) > 1) {
-//    $output .= '<div class="item-list">';
-//    $output .= $navigation[1];
-//    $output .= '</div>';
-//  }
-
-  $output .= theme('libdbsearch_results', array('SResult' => $data));
-
-  return $output;
-}
-
-function libdbsearch_set_selauslista_data($data) {
-  return libdbsearch_set_haku_data($data);
-}
-
-function libdbsearch_set_teos_data($data) {
-  $output = '';
-  $tip_data = '';
-
-  $info = _libdbsearch_add_info($data);
-
-  $navigation = _libdbsearch_add_navi($data);
-  if (count($navigation) > 0) {
-    if (strpos($navigation[0], '<a ') !== FALSE) {
-      $output .= $navigation[0];
-    }
-  }
-
-  if (isset($data['Teostiedot']['Rivi'])) {
-    $output .= _libdbsearch_create_work_table($data['Teostiedot']['Rivi']);
-    $tip_data = $data['Teostiedot']['Rivi'];
-  }
-
-  if (isset($data['Sisaltyy_teokseen']['Rivi'])) {
-    $output .= '<h3>' . t('Part of', array(), array('context' => 'libdb')) . '</h3>';
-    $output .= _libdbsearch_create_work_table($data['Sisaltyy_teokseen']['Rivi']);
-  }
-
-  if (isset($data['Kuva'])) {
-    $image = array(
-        'path' => $data['Kuva'],
-        'width' => 100,
-//      'height' => 50,
-        'alt' => 'Teoksen kansikuva',
-//      'title' => '',
-        'attributes' => array('class' => 'work_pic'),
-    );
-    $output .= theme('image', $image);
-  }
-
-  if (isset($info['Esittelyteksti'])) {
-    $output .= $info['Esittelyteksti'];
-    unset($info['Esittelyteksti']);
-  }
-
-  $output .= _libdbsearch_tip_link($tip_data);
-
-  if (isset($info['Tarkat tiedot'])) {
-    $output .= $info['Tarkat tiedot'];
-    unset($info['Tarkat tiedot']);
-  }
-
-  if (isset($info['Näytä sisältö / kappaleet'])) {
-    $output .= $info['Näytä sisältö / kappaleet'];
-    unset($info['Näytä sisältö / kappaleet']);
-  }
-
-  if (isset($data['Valitun_saatavuus'])) {
-    $output .= _libdbsearch_availability_table($data['Valitun_saatavuus']);
-  }
-
-  if (isset($data['Saatavuus'])) {
-    $output .= _libdbsearch_availability_table($data['Saatavuus']);
-  }
-
-  if (isset($info['Lainaa sähköinen kirja'])) {
-    $output .= _libdbsearch_set_elink($info['Lainaa sähköinen kirja']);
-    unset($info['Lainaa sähköinen kirja']);
-  }
-
-  foreach ($info as $value) {
-    if (empty($value)) {
-      continue;
-    }
-    $output .= $value;
-  }
-
-  return $output;
-}
-
-function libdbsearch_set_osakohteet_data($data) {
-  $output = '';
-  $header = array();
-  $rows = array();
-
-  if (isset($data['Teksti'])) {
-    if (isset($data['Teksti'][0])) {
-      foreach ($data['Teksti'] as $value) {
-        if (empty($value)) {
-          continue;
-        }
-//        dpm($value, 'check_plain');
-        $output .= check_plain($value) . '<br />';
-      }
-    } else {
-//      dpm($data['Teksti'], 'check_plain');
-      $output .= check_plain($data['Teksti']) . '<br />';
-    }
-  }
-
-  if (isset($data['Osakohteet'])) {
-    if (isset($data['Osakohteet']['Totsikot']['Totsikko'])) {
-      foreach ($data['Osakohteet']['Totsikot']['Totsikko'] as $value) {
-        $header[] = _libdbsearch_extract_text($value);
-      }
-    }
-    if (isset($data['Osakohteet']['Rivi'])) {
-      foreach ($data['Osakohteet']['Rivi'] as $value) {
-        $row = array();
-        foreach ($value as $val) {
-          $row[] = _libdbsearch_extract_value($val);
-        }
-        $rows[] = $row;
-      }
-    }
-  }
-
-  $output .= theme('table', array('header' => $header, 'rows' => $rows));
-
-  $info = _libdbsearch_add_info($data);
-
-  $navigation = _libdbsearch_add_navi($data);
-
-  if (isset($navigation[0])) {
-    $output .= $navigation[0];
-  }
-  if (isset($info[0])) {
-    $output .= $info[0];
-  }
-
-  return $output;
-}
 
 //-----------------------------------------------
 // Libdbsearch common helper functions.
@@ -488,6 +219,9 @@ function _libdbsearch_extract_text($value) {
   return $output;
 }
 
+/**
+ * Make link, and check if needed to open in a new window.
+ */
 function _libdbsearch_extract_link($link) {
   if (isset($link['Lnewwnd']) && strtoupper($link['Lnewwnd']) == 'TRUE') {
     if (strpos($link['Losoite'], 'http://') === FALSE) {
@@ -534,7 +268,6 @@ function _libdbsearch_add_navi($data) {
     foreach ($my_arr as $val) {
       $out_navi = '';
       if (isset($val['Teksti'])) {
-//        dpm($val['Teksti']);
 //        $out_navi .= _libdbsearch_t($val['Teksti']);
       }
       if (isset($val['Valinta'])) {
@@ -568,7 +301,6 @@ function _libdbsearch_add_navi($data) {
         $out_navi .= '</ul>';
       }
       if (isset($val['Haettu'])) {
-//        dpm($val['Haettu']);
         $out_navi .= _libdbsearch_extract_navi_text($val['Haettu']);
       }
       $output[] = $out_navi;
@@ -597,7 +329,6 @@ function _libdbsearch_extract_navi_text($data) {
       $output .= '</strong>';
     }
     if (isset($data['Linkki'])) {
-//      dpm($data['Linkki']);
       $output .= _libdbsearch_extract_text($data) . ' ';
     }
   } else {
@@ -642,152 +373,9 @@ function _libdbsearch_add_info($data) {
   return $output;
 }
 
-function _libdbsearch_create_work_table($data) {
-  $header = array();
-  $rows = array();
-
-  if (isset($data[0])) {
-    foreach ($data as $value) {
-      $rows[] = _libdbsearch_work_table_row($value);
-    }
-  } else {
-    $rows[] = _libdbsearch_work_table_row($data);
-  }
-
-  return theme('table', array(
-              'header' => $header,
-              'rows' => $rows,
-              'attributes' => array('class' => array('footable')),
-          ));
-}
-
-function _libdbsearch_availability_table($data) {
-  $output = '';
-  $header = array();
-  $rows = array();
-  $hdr = FALSE;
-//  dpm($data);
-//  if (isset($data['Valiotsikko'])) {
-//    $output .= '<h3>' . _libdbsearch_t($data['Valiotsikko']) . '</h3>';
-//  }
-
-  if (isset($data['Teksti'])) {
-    $output .= $data['Teksti'];
-  }
-
-  if (isset($data['Teos'])) {
-
-    if (isset($data['Teos']['Kokoelma'])) {
-      $data['Teos'] = array($data['Teos']);
-    }
-    $output .= theme('libdbsearch_avail_rest', array('SResult' => $data));
-
-
-    if (!isset($data['Teos'][0])) {
-      $st_arr = $data['Teos'];
-      unset($data['Teos']);
-      $data['Teos'][0] = $st_arr;
-    }
-    foreach ($data['Teos'] as $val) {
-      $row = array();
-      $nimio_cnt = 0;
-      foreach ($val as $key => $value) {
-        if ($hdr == FALSE) {
-          switch ($nimio_cnt) {
-            case 0:
-              $h_value = array(
-                  'data' => _libdbsearch_t($key),
-                  'data-class' => array('expand')
-              );
-              break;
-            case 1 :
-            case 2 :
-              $h_value = array(
-                  'data' => _libdbsearch_t($key),
-              );
-              break;
-            default :
-              $h_value = array(
-                  'data' => _libdbsearch_t($key),
-                  'data-hide' => array('phone')
-              );
-              break;
-          }
-          $nimio_cnt++;
-          $header[] = $h_value;
-        }
-        if (is_array($value)) {
-          $row[] = _libdbsearch_extract_text($value);
-        } else {
-          $row[] = $value;
-        }
-      }
-      $hdr = TRUE;
-      $rows[] = $row;
-    }
-    $output .= theme('table', array(
-        'header' => $header,
-        'rows' => $rows,
-        'attributes' => array('class' => array('footable')),
-            ));
-  }
-
-  if (isset($data['Kirjasto'])) {
-    if (isset($data['Kirjasto']['Kirjastonimi'])) {
-      $data['Kirjasto'] = array($data['Kirjasto']);
-    }
-    $output .= theme('libdbsearch_avail', array('SResult' => $data));
-  }
-
-  return $output;
-}
-
-function _libdbsearch_make_avail_tablerows($lib, &$header, &$rows, $hdr) {
-  if (isset($lib['Kirjastonimi'])) {
-    $rows[] = array(array('data' => $lib['Kirjastonimi'], 'colspan' => 7));
-  }
-  if (isset($lib['Sijainti'])) {
-    $row = array();
-    $nimio_cnt = 0;
-    foreach ($lib['Sijainti'] as $key => $value) {
-      if ($hdr == FALSE) {
-//        $header[] = _libdbsearch_t($key);
-
-        if ($hdr == FALSE) {
-          switch ($nimio_cnt) {
-//            case 0:
-//              $h_value = array(
-//                  'data' => _libdbsearch_t($key),
-//                  'data-class' => array('expand')
-//              );
-//              break;
-            case 3 :
-            case 4 :
-              $h_value = array(
-                  'data' => _libdbsearch_t($key),
-              );
-              break;
-            default :
-              $h_value = array(
-                  'data' => _libdbsearch_t($key),
-                  'data-hide' => array('phone')
-              );
-              break;
-          }
-          $nimio_cnt++;
-          $header[] = $h_value;
-        }
-      }
-      if (is_array($value)) {
-        $row[] = _libdbsearch_extract_text($value);
-      } else {
-        $row[] = $value;
-      }
-    }
-    $rows[] = $row;
-  }
-}
-
+/**
+ * Make one row work info.
+ */
 function _libdbsearch_work_row($value) {
   $row = array();
   foreach ($value as $val) {
@@ -796,22 +384,9 @@ function _libdbsearch_work_row($value) {
   return $row;
 }
 
-function _libdbsearch_work_table_row($value) {
-  $row = array();
-  $row[] = isset($value['Selite']) ? _libdbsearch_t($value['Selite']) : '';
-
-  if (isset($value['Tieto'][0])) {
-    $str = '';
-    foreach ($value['Tieto'] as $val) {
-      $str .= _libdbsearch_extract_value($val) . '<br />';
-    }
-  } else {
-    $str = isset($value['Tieto']) ? _libdbsearch_extract_value($value['Tieto']) : '';
-  }
-  $row[] = $str;
-  return $row;
-}
-
+/**
+ * Create link to ebooks.
+ */
 function _libdbsearch_set_elink($elink) {
   $kuva = variable_get('libdb_ebook_pic', '');
   if (empty($kuva)) {
@@ -823,6 +398,9 @@ function _libdbsearch_set_elink($elink) {
   return str_replace('<br />', '&nbsp;&nbsp;&nbsp;', $elink) . $output;
 }
 
+/**
+ * Transales Origo words.
+ */
 function _libdbsearch_t($word) {
   $lista = array();
   $my_ret = NULL;
@@ -852,30 +430,7 @@ function _libdbsearch_t($word) {
   if (isset($lista[$my_word])) {
     return t($lista[$my_word], $pars, array('context' => 'libdb'));
   }
-//  dpm($word);
   return $word;
-}
-
-function _libdbsearch_material_row($data) {
-  $table_struct = array('header' => array(), 'rows' => array());
-  $hdr = FALSE;
-
-  foreach ($data as $key => $value) {
-
-//    dpm($value, $key);
-
-    $row = array();
-    foreach ($value as $key => $val) {
-      if ($hdr == FALSE) {
-//            dpm($key, 'check_plain');
-        $table_struct['header'][] = _libdbsearch_t($key);
-      }
-      $row[] = _libdbsearch_extract_value($val);
-    }
-    $table_struct['rows'][] = $row;
-    $hdr = TRUE;
-  }
-  return $table_struct;
 }
 
 /**
@@ -911,6 +466,9 @@ function libdbsearch_cron() {
   }
 }
 
+/**
+ * Check if work has tip already written.
+ */
 function libdbsearch_has_vinkki($teos_id) {
   $ret = '';
   $result = db_query("SELECT entity_id
@@ -927,17 +485,10 @@ function libdbsearch_has_vinkki($teos_id) {
   return $ret;
 }
 
+/**
+ * Create "Add tip" link.
+ */
 function _libdbsearch_tip_link($tip_data) {
-//  $ret = '';
-//  $teos_id = '';
-//  $apu = explode('teosid=', $_GET['q']);
-//  dpm($apu, 'apu');
-//  if (count($apu) > 1) {
-//    $apu2 = explode('&', $apu[1]);
-//    $teos_id = str_replace('%2D', '-', $apu2[0]);
-//    $ret = libdbsearch_has_vinkki($teos_id);
-//  }
-
   $ret = libdbsearch_has_vinkki(libdbsearch_parse_teos_id());
 
   if (empty($ret)) {
@@ -951,6 +502,9 @@ function _libdbsearch_tip_link($tip_data) {
   return $ret;
 }
 
+/**
+ * Create tip predefined data to prepopulate tip.
+ */
 function _libdbsearch_write_tip_link($tip_data) {
   $ret = '';
   if (module_exists('prepopulate') === FALSE) {
@@ -1009,19 +563,15 @@ function _libdbsearch_write_tip_link($tip_data) {
   _libdbsearch_to_tip($params, '[field_saatavuus][und][0][url]', $arvo);
 
 
-//  dpm($tip_data);
-//  dpm(array($params));
-//  if(!empty($params)) {
-//    $params = '?' . $params;
-//  }
-//  $ret_link = l('Write a new tip', 'node/add/vinkki' . $params);
-
   $show = t('Write a new tip');
   $ret_link = '<a href="' . url('node/add/vinkki') . '?' . $params . '">' . $show . '</a>';
 
   return $ret_link;
 }
 
+/**
+ * Finds data from given entity.
+ */
 function _libdbsearch_text_from_tieto($tieto) {
   if (isset($tieto['Linkki'])) {
     return $tieto['Linkki']['Lteksti'];
@@ -1036,6 +586,9 @@ function _libdbsearch_text_from_tieto($tieto) {
   return '';
 }
 
+/**
+ * Create parameter when prepopulating tip.
+ */
 function _libdbsearch_to_tip(&$params, $label, $data) {
   if(empty($data)) {
     return '';
@@ -1046,6 +599,9 @@ function _libdbsearch_to_tip(&$params, $label, $data) {
   $params .= 'edit' . $label . '=' . $data;
 }
 
+/**
+ * Get work id from URL or cache.
+ */
 function libdbsearch_parse_teos_id() {
   $teos_id = &drupal_static(__FUNCTION__);
   if (!isset($teos_id)) {
@@ -1059,6 +615,9 @@ function libdbsearch_parse_teos_id() {
   return $teos_id;
 }
 
+/**
+ * Get tid for term.
+ */
 function libdbsearch_tid_for_value($str) {
   $term = '';
   $tid = '';
@@ -1080,6 +639,12 @@ function libdbsearch_tid_for_value($str) {
   return $tid;
 }
 
+/**
+ * Check if parameter is not array, makes an array of it.
+ * 
+ * @param mixed $arr string / array to check
+ * @return array result array
+ */
 function _libdbsearch_make_array($arr) {
   if (!isset($arr[0])) {  
     $arr = array($arr);
