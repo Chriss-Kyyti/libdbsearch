@@ -8,7 +8,7 @@
  * Drupal Search Interface can be enabled by including file 
  * includes/libdbsearch_dsii.inc to project.
  *
- * Last modified: 16.10.2013 Mika Hatakka
+ * Last modified: 17.10.2013 Mika Hatakka
  */
 
 /**
@@ -179,7 +179,7 @@ function libdbsearch_data($keys = '', $action = 'haku') {
   if (empty($result)) {
     $ret = NULL;
   } else {
-    $parser = new OrigoParser($result, $action);
+    $parser = new OrigoParser($result, $action, $origo->getServer());
     $something = $parser->constructXML();
 
     $xml = str_replace(

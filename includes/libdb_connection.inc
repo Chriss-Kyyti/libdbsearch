@@ -4,7 +4,7 @@
  * @file
  * Get connection and retrieve data from remote server.
  *
- * Last modified: 29.05.2013 Mika Hatakka
+ * Last modified: 17.10.2013 Mika Hatakka
  */
 
 /**
@@ -45,12 +45,10 @@ class LibdbConnection {
     }
     $this->keys = str_replace(array(' ', '#'), array('+', "%23"), $keys);
     
-//    dpm($this->keys);
-    
     $this->error = NULL;
   }
 
-  function askPage() {
+  public function askPage() {
     if (empty($this->server)) {
       return 'No Server';
     }
@@ -61,11 +59,18 @@ class LibdbConnection {
       $_SESSION['atpconn'] = array(time(), $this->cookie);
     }
 
-
-
     return $data['page'];
   }
 
+  /**
+   * Return server address where asked
+   * 
+   * @return string server address
+   */
+  public function getServer() {
+    return $this->server;
+  }
+  
   /**
    * Send request to origo database, handle redirection and
    * receives the wanted result page and connectio cookie.
@@ -78,10 +83,7 @@ class LibdbConnection {
    */
   private function getMovedPage($server, $page, $criteria, $cookie = NULL) {
     $webpage = $server . $page . '?' . $criteria;
-//dpm($webpage);
-    // Search word break up character (#) change to code %23.
-//    $webpage = str_replace("#", "%23", $webpage);
-//    $webpage = str_replace(" ", "+", $webpage);
+
     if (isset($cookie)) {
       $fp = $this->createHeaderAndGet($cookie, $webpage);
       if ($fp != '' && $fp !== FALSE) { // No moved page

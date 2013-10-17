@@ -6,7 +6,7 @@
  * extracting information from erceived web pages.
  * Result is in XML form.
  *
- * Last modified: 31.03.2013 Mika Hatakka
+ * Last modified: 17.10.2013 Mika Hatakka
  */
 
 /**
@@ -14,10 +14,8 @@
  */
 class OrigoParser {
 
-//    private $palvelin;
+  private $palvelin;
   private $type;
-//    private $hakuehdot;
-//    private $cookie = NULL;
   private $page;
 
   const HAKU = 'haku';
@@ -32,9 +30,10 @@ class OrigoParser {
    * @param string $type search type
    * @param string $hakuehdot search keywords
    */
-  public function __construct($page, $type) {
+  public function __construct($page, $type, $server = '') {
     $this->page = $page;
     $this->type = $type;
+    $this->palvelin = $server;
   }
 
   /**
@@ -639,6 +638,9 @@ class OrigoParser {
       foreach ($linkit[$etsitaan] as $key => $val) {
         if (stripos($val, $ehto) !== FALSE) {
           $uusi = $this->tarkasta_amp($linkit[1][$key]);
+          if($ehto == 'Varaa teos' && !empty($this->palvelin)) {
+            $uusi = $this->palvelin . 'index.asp?url=' . $uusi;
+          }
           $xml = $this->luo_linkki($uusi, $linkit[2][$key], NULL, $newwnd);
           break;
         }
