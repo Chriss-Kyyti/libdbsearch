@@ -33,6 +33,14 @@
     </tbody>
   </table>
 <?php } ?>
+<?php if (isset($part_info)) { ?>
+  <h3><?php print $part_info_title; ?></h3>
+  <table>
+    <tbody>
+      <?php print $part_info; ?>
+    </tbody>
+  </table>
+<?php } ?>
     
 <?php if (isset($work_image)) { print $work_image; } ?>
 <?php if (isset($work_all_info)) { print $work_all_info; } ?>

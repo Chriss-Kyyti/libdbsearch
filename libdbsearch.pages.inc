@@ -4,7 +4,7 @@
  * @file
  * Page creation function for library database search.
  *
- * Last modified: 16.10.2013 Mika Hatakka
+ * Last modified: 30.10.2013 Mika Hatakka
  */
 
 /**
@@ -284,6 +284,14 @@ function template_preprocess_libdbsearch_work(&$variables) {
 
   if (isset($variables['Valitun_saatavuus'])) {
     $variables['lib_avail'] = theme('libdbsearch_avail', array('SResult' => $variables['Valitun_saatavuus']));
+  }
+  if (isset($variables['Osantiedot'])) {
+    $work_arr = _libdbsearch_make_array($variables['Osantiedot']['Rivi']);
+    $variables['part_info_title'] = t('Section information');
+    $variables['part_info'] = '';
+    foreach ($work_arr as $value) {
+      $variables['part_info'] .= theme('libdbsearch_work_row', $value);
+    }
   }
 }
 
