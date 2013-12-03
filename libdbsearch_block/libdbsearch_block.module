@@ -4,7 +4,7 @@
  * @file
  * User interface block for Libdbsearch.
  *
- * Last modified: 16.10.2013 Mika Hatakka
+ * Last modified: 03.12.2013 Mika Hatakka
  */
 
 /**
@@ -158,6 +158,15 @@ function libdbsearch_block_box() {
 
   // Add extra information to the end of block.
   $ext_par = variable_get('libdbsearch_extra_info', '');
+  if(is_array($ext_par)) {
+    if(isset($ext_par['value'])) {
+      $ext_par = $ext_par['value'];
+    }
+    else {
+      $ext_par = '';
+    }
+  }
+
   if (!empty($ext_par)) {
     $form['extra_info'] = array(
         '#markup' => check_markup($ext_par, 'filtered_html'),

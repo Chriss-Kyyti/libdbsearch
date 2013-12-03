@@ -4,7 +4,7 @@
  * @file
  * Libdbsearch settings form.
  *
- * Last modified: 28.10.2013 Mika Hatakka
+ * Last modified: 03.12.2013 Mika Hatakka
  */
 
 /**
@@ -41,21 +41,39 @@ function libdbsearch_admin() {
       '#submit' => array('libdbsearch_list_setup_submit'),
   );
 
+  $var_value = variable_get('libdbsearch_search_info', 'Give something to search!');
+  if(is_array($var_value)) {
+    if(isset($var_value['value'])) {
+      $var_value = $var_value['value'];
+    }
+    else {
+      $var_value = '';
+    }
+  }
   $form['libdbsearch_search_info'] = array(
       '#title' => t('Search help information'),
       '#type' => 'text_format',
       '#description' => t('Write here your text to show in the libdbsearch page when no keywords are given. Do not change the text format from "Filtered_html". Filtered html is the formatter that is used when rendering text to display.'),
       '#rows' => 3,
-      '#default_value' => variable_get('libdbsearch_search_info', 'Give something to search!'),
+      '#default_value' => $var_value,
       '#format' => 'filtered_html',
   );
 
+  $var_value = variable_get('libdbsearch_extra_info', '');
+  if(is_array($var_value)) {
+    if(isset($var_value['value'])) {
+      $var_value = $var_value['value'];
+    }
+    else {
+      $var_value = '';
+    }
+  }
   $form['libdbsearch_extra_info'] = array(
       '#title' => t('Extra information'),
       '#type' => 'text_format',
       '#description' => t('Write here your text to show in at the bottom of block. Use only "filtered_html" format.'),
       '#rows' => 3,
-      '#default_value' => variable_get('libdbsearch_extra_info', ''),
+      '#default_value' => $var_value,
       '#format' => 'filtered_html',
   );
 
