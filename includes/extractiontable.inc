@@ -4,7 +4,7 @@
  * @file
  * Language extraction table for finnish to english base translation.
  *
- * Last modified: 22.04.2013 Mika Hatakka
+ * Last modified: 01.01.2014 Mika Hatakka
  */
 $lista = array(
     "Aineistolaji" => "Material",
@@ -22,6 +22,7 @@ $lista = array(
     'Erapaiva' => 'Due date',
     "Esittajahuomautus" => "Artist notification",
     "Esittelyteksti" => "Introduction",
+    "Haun_tulos" => "Search result",
     "Huomautus" => "Remark",
     'Hylly' => 'Shelf',
     "Ikaraja" => "Age limit",
@@ -74,6 +75,8 @@ $lista = array(
     "Yhtenaistetty_nimeke" => "Uniform title",
     "YKL-luokka" => "YKL class",
     "Aanitys/kuvaus" => "Recording/filming",
+    "Tarkat_tiedot" => "Detailed information",
+    "Teoksen_tiedot" => "Work information",
     'Teoksia_loytyi_yhteensa_!nume1_kappaletta.' => 'There were !nume1 hits.',
     'Teoksia_loytyi_yhteensa_!nume1_kappaletta' => 'There were !nume1 hits.',
     'Teokset_!nume1_-_!nume2' => 'Works !nume1 - !nume2',
