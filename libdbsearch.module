@@ -604,7 +604,8 @@ function _libdbsearch_to_tip(&$params, $label, $data) {
   if (!empty($params)) {
     $params .= '&';
   }
-  $params .= 'edit' . $label . '=' . $data;
+  $new_data = str_replace('&', '%26', $data);
+  $params .= 'edit' . $label . '=' . $new_data;
 }
 
 /**
