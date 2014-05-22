@@ -241,7 +241,8 @@ function _libdbsearch_extract_link($link) {
     $linkki = str_replace('.asp?', '/', $link['Losoite']);
     $linkki = 'libdbsearch/' . $linkki;
   }
-  $output = l(_libdbsearch_t($link['Lteksti']), $linkki);
+  $text = html_entity_decode($link['Lteksti']);
+  $output = l(_libdbsearch_t($text), $linkki);
   if (isset($link['Lextrateksti'])) {
     $output .= $link['Lextrateksti'];
   }
