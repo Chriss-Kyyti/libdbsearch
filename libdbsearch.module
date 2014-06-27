@@ -480,7 +480,7 @@ function libdbsearch_cron() {
  */
 function libdbsearch_has_vinkki($teos_id) {
   $ret = '';
-  if (!in_array('vinkki', node_type_get_names())) {
+  if (!in_array('Vinkki', node_type_get_names())) {
     return $ret;
   }
   $result = db_query("SELECT entity_id
