@@ -6,7 +6,7 @@
  * extracting information from erceived web pages.
  * Result is in XML form.
  *
- * Last modified: 17.10.2013 Mika Hatakka
+ * Last modified: 27.06.2014 Mika Hatakka
  */
 
 /**
@@ -495,6 +495,11 @@ class OrigoParser {
     } else {
       $teksti = $this->tarkista_haettu($teksti);
     }
+
+    if (preg_match_all('/&amp;/siU', $osoite) != preg_match_all('/&/siU', $osoite)) {
+      $osoite = $this->tarkasta_amp($osoite);
+    }
+
     $taso2xml = $this->luo_tagi('Losoite', $osoite);
     $taso2xml .= $this->luo_tagi('Lteksti', $teksti);
     if ($uuteen == TRUE) {
