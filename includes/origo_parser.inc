@@ -496,7 +496,9 @@ class OrigoParser {
       $teksti = $this->tarkista_haettu($teksti);
     }
 
-    if (preg_match_all('/&amp;/siU', $osoite, $m1) != preg_match_all('/&/siU', $osoite, $m2)) {
+    $taken_notice = preg_match_all("/&amp;/", $osoite, $m1);
+    $to_be_notice = preg_match_all("/&/", $osoite, $m2);
+    if ($to_be_notice !== FALSE && ($to_be_notice != $taken_notice)) {
       $osoite = $this->tarkasta_amp($osoite);
     }
 
