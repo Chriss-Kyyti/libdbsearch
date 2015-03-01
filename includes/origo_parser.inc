@@ -36,6 +36,20 @@ class OrigoParser {
     $this->palvelin = $server;
   }
 
+   public static function check_action($action) {
+    switch ($action) {
+      case self::HAKU :
+      case self::OSAKOHDE :
+      case self::SELAUS :
+      case self::TEOS :
+        $ret = TRUE;
+        break;
+      default :
+        $ret = FALSE;
+    }
+    return $ret;
+  }
+
   /**
    * Create XML formed data from the received search result.
    *

@@ -180,6 +180,9 @@ function libdbsearch_view($action = 'empty', $keys = '') {
  * @return array search results
  */
 function libdbsearch_data($keys = '', $action = 'haku') {
+  if (OrigoParser::check_action($action) == false) {
+    $ret = NULL; // Unknown command
+  }
   $origo = new LibdbConnection();
   $origo->init($action, $keys);
   $result = $origo->askPage();
@@ -664,4 +667,3 @@ function _libdbsearch_make_array($arr) {
   }
   return $arr;
 }
-
