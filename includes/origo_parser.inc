@@ -324,6 +324,10 @@ class OrigoParser {
       if (!empty($level2xml)) {
         $level1xml .= $this->luo_tagi('Lohko', $level2xml);
       }
+      $level2xml = $this->luo_linkki_listalta($linkit, 'Linkki e-kirjaan', 2, TRUE);
+      if (!empty($level2xml)) {
+        $level1xml .= $this->luo_tagi('Lohko', $level2xml);
+      }
       $level2xml = $this->luo_linkki_listalta($linkit, 'Saatavuustiedot', 2, FALSE);
       if (!empty($level2xml)) {
         $level1xml .= $this->luo_tagi('Lohko', $level2xml);

@@ -408,7 +408,18 @@ msgstr " De !hits första visas."
 msgid "Result list sort order"
 msgstr "Resultat listan ordningsföljden"
 
-
 #: libdbsearch.module:451
 msgid "Search conditions are cleared."
 msgstr ""
+
+#: libdbsearch.pages.inc:244
+msgid "Additional materials"
+msgstr "Tilläggsmaterial"
+
+#: libdbsearch.pages.inc:245
+msgid "Links"
+msgstr "Länkar"
+
+#: libdbsearch.pages.inc:246
+msgid "Link to E-book"
+msgstr "Länk till e-bok"

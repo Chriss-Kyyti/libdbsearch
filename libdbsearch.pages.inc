@@ -240,6 +240,11 @@ function template_preprocess_libdbsearch_work(&$variables) {
     if (isset($links['Esittelyteksti'])) {
       $variables['work_introduction'] = $links['Esittelyteksti'];
     }
+    if (isset($links['Linkki e-kirjaan'])) {
+      $variables['supp_header'] = t('Additional materials');
+      $variables['row_header'] = t('Links');
+      $variables['link_2_ebook'] = $links['Linkki e-kirjaan'];
+    }
   }
 
   $work_arr = _libdbsearch_make_array($variables['Teostiedot']['Rivi']);

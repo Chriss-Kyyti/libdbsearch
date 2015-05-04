@@ -36,6 +36,7 @@ $lista = array(
     'Lainattavissa' => 'Availabe',
     'Laji' => 'Material',
     "Luokka" => "Classification",
+    "Linkki_e-kirjaan" => "Link to E-book",
     'Maara' => 'Count',
     "Mittakaava" => "Scale",
     "Muut_kielet" => "Other languages",

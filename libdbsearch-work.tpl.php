@@ -2,7 +2,7 @@
 /*
  * @file
  * Libdbsearch result page work template.
- * 
+ *
  * $rows_data           Work information data rows
  * $part_header         Part work headers
  * $part_data           Part work data
@@ -41,7 +41,7 @@
     </tbody>
   </table>
 <?php } ?>
-    
+
 <?php if (isset($work_image)) { print $work_image; } ?>
 <?php if (isset($work_all_info)) { print $work_all_info; } ?>
 <?php if (isset($work_content)) { print $work_content; } ?>
@@ -53,4 +53,17 @@
 
 <?php if (isset($work_reserve)) { print $work_reserve; } ?>
 <?php if (isset($work_elink)) { print $work_elink; } ?>
+
+<?php if (isset($link_2_ebook)) { ?>
+  <h3><?php print $supp_header; ?></h3>
+  <table>
+    <tbody>
+      <tr>
+        <td><?php print $row_header; ?></td>
+        <td><?php print $link_2_ebook?></td>
+      </tr>
+    </tbody>
+  </table>
+<?php } ?>
+
 <?php if (isset($work_tip_link)) { print $work_tip_link; } ?>
