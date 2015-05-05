@@ -1027,6 +1027,8 @@ class OrigoParser {
    * @return string resutl XML data
    */
   private function extract_availability($taulukko, $otsake = '') {
+    $viittaus = explode('Viittaukset tästä teoksesta', $taulukko);
+    $taulukko = $viittaus[0];
     $taso1xml = '';
     $valiteksti = $this->pura_kohde($taulukko, "/h3>(.+)<table/siU");
     $titles = $this->pura_taulukon_otsikot($taulukko);
@@ -1059,6 +1061,30 @@ class OrigoParser {
           $taso1xml = $this->luo_tagi('Saatavuus', $taso2xml);
         }
       }
+    }
+    if (isset($viittaus[1])) {
+      $taso1xml .= $this->extract_viittaus($viittaus[1]);
+    }
+
+    return $taso1xml;
+  }
+
+  /**
+   * "Viittaukset tästäteoksesta"
+   *
+   * @param type $taulukko
+   * @return type
+   */
+  private function extract_viittaus($taulukko){
+    $taso1xml = '';
+    $colums = $this->pura_sarakkeet($taulukko);
+    $taso2xml = '';
+    for ($i = 0; $i < count($colums[1]); $i += 1) {
+            $linkki = $this->pura_linkit($colums[1][$i]);
+            $taso2xml .= $this->luo_linkki($linkki[1][0], $linkki[2][0]);
+    }
+    if (!empty($taso2xml)) {
+      $taso1xml = $this->luo_tagi('Viittaus', $taso2xml);
     }
     return $taso1xml;
   }

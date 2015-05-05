@@ -431,3 +431,7 @@ msgstr "Linkit"
 #: libdbsearch.pages.inc:246
 msgid "Link to E-book"
 msgstr "Linkki e-kirjaan"
+
+#:
+msgid "Links to other works"
+msgstr "Viittaukset tästä teoksesta"

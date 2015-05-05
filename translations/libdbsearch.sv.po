@@ -423,3 +423,7 @@ msgstr "Länkar"
 #: libdbsearch.pages.inc:246
 msgid "Link to E-book"
 msgstr "Länk till e-bok"
+
+#:
+msgid "Links to other works"
+msgstr "Hänvisningar till övriga verk"

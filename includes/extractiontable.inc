@@ -72,6 +72,7 @@ $lista = array(
     "Vaitoskirjahuomautus" => "Dissertation notification",
     "Valmistumisvuosi" => "Year of production",
     "Varaa_teos" => "Place a hold",
+    "Viittaukset_tasta_teoksesta" => "Links to other works",
     "Vuosi" => "Year",
     "Yhtenaistetty_nimeke" => "Uniform title",
     "YKL-luokka" => "YKL class",

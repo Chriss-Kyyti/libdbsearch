@@ -298,6 +298,11 @@ function template_preprocess_libdbsearch_work(&$variables) {
       $variables['part_info'] .= theme('libdbsearch_work_row', $value);
     }
   }
+    if (isset($variables['Viittaus'])) {
+      $variables['title_other_works'] = t('Links to other works');
+      $variables['link_other_works'] =
+          _libdbsearch_extract_link($variables['Viittaus']['Linkki']);
+    }
 }
 
 /**

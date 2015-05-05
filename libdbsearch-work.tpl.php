@@ -67,3 +67,15 @@
 <?php } ?>
 
 <?php if (isset($work_tip_link)) { print $work_tip_link; } ?>
+
+<?php if (isset($title_other_works)) { ?>
+  <h3><?php print $title_other_works; ?></h3>
+  <table>
+    <tbody>
+      <tr>
+        <td>&nbsp;</td>
+        <td><?php print $link_other_works?></td>
+      </tr>
+    </tbody>
+  </table>
+<?php } ?>
