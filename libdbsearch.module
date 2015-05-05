@@ -234,18 +234,22 @@ function _libdbsearch_extract_text($value) {
  * Make link, and check if needed to open in a new window.
  */
 function _libdbsearch_extract_link($link) {
+  $options = [];
   if (isset($link['Lnewwnd']) && strtoupper($link['Lnewwnd']) == 'TRUE') {
-    if (strpos($link['Losoite'], 'http://') === FALSE) {
+    if (strpos($link['Losoite'], 'http://') === FALSE &&
+        strpos($link['Losoite'], 'https://') === FALSE)
+    {
       $linkki = variable_get('libdb_server', '') . $link['Losoite'];
     } else {
       $linkki = $link['Losoite'];
     }
+    $options = ['attributes' => ['target' => '__blank']];
   } else {
     $linkki = str_replace('.asp?', '/', $link['Losoite']);
     $linkki = 'libdbsearch/' . $linkki;
   }
   $text = html_entity_decode($link['Lteksti']);
-  $output = l(_libdbsearch_t($text), $linkki);
+  $output = l(_libdbsearch_t($text), $linkki, $options);
   if (isset($link['Lextrateksti'])) {
     $output .= $link['Lextrateksti'];
   }

@@ -324,7 +324,7 @@ class OrigoParser {
       if (!empty($level2xml)) {
         $level1xml .= $this->luo_tagi('Lohko', $level2xml);
       }
-      $level2xml = $this->luo_linkki_listalta($linkit, 'Linkki e-kirjaan', 2, TRUE);
+      $level2xml = $this->luo_linkki_listalta($linkit, 'Linkki e-kirjaan', 2, TRUE, TRUE);
       if (!empty($level2xml)) {
         $level1xml .= $this->luo_tagi('Lohko', $level2xml);
       }
@@ -505,7 +505,9 @@ class OrigoParser {
    * @param boolean $uuteen open to a new window
    * @return string result XML data
    */
-  private function luo_linkki($osoite, $teksti = NULL, $extratext = NULL, $uuteen = FALSE) {
+  private function luo_linkki($osoite, $teksti = NULL, $extratext = NULL,
+      $uuteen = FALSE, $abs = FALSE)
+  {
     $osoite = str_replace("'", '', $osoite);
     $osoite = str_replace('"', '', $osoite);
     if ($teksti == NULL) {
@@ -527,6 +529,9 @@ class OrigoParser {
     }
     if ($extratext != NULL) {
       $taso2xml .= $this->luo_tagi('Lextrateksti', $extratext);
+    }
+    if ($abs == TRUE) {
+      $taso2xml .= $this->luo_tagi('Labsolute', 'TRUE');
     }
     $taso1xml = $this->luo_tagi('Linkki', $taso2xml);
     return $taso1xml;
@@ -657,7 +662,9 @@ class OrigoParser {
    * @param string $newwnd open in new window
    * @return string result XML string
    */
-  private function luo_linkki_listalta($linkit, $ehto, $etsitaan = 1, $newwnd = FALSE) {
+  private function luo_linkki_listalta($linkit, $ehto, $etsitaan = 1,
+      $newwnd = FALSE, $absolute = FALSE)
+  {
     $xml = '';
     if (!empty($linkit)) {
       foreach ($linkit[$etsitaan] as $key => $val) {
@@ -666,7 +673,22 @@ class OrigoParser {
           if($ehto == 'Varaa teos' && !empty($this->palvelin)) {
             $uusi = $this->palvelin . 'index.asp?url=' . $uusi;
           }
-          $xml = $this->luo_linkki($uusi, $linkit[2][$key], NULL, $newwnd);
+          if ($absolute == true) {
+            //$xml = $this->luo_absolute_linkki($uusi, $linkit[2][$key], NULL);
+            $abs_parts = explode(' ', $uusi);
+            foreach ($abs_parts as $part) {
+              if (!is_string($part)) {
+                continue;
+              }
+              if (strpos($part, 'http') !== FALSE) {
+                $uusi = $part;
+              }
+              elseif (strpos($part, '_blank') !== FALSE) {
+                $newwnd = TRUE;
+              }
+            }
+          }
+          $xml = $this->luo_linkki($uusi, $linkit[2][$key], NULL, $newwnd, $absolute);
           break;
         }
       }
