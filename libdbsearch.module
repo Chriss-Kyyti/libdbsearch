@@ -235,18 +235,29 @@ function _libdbsearch_extract_text($value) {
  */
 function _libdbsearch_extract_link($link) {
   $options = [];
-  if (isset($link['Lnewwnd']) && strtoupper($link['Lnewwnd']) == 'TRUE') {
-    if (strpos($link['Losoite'], 'http://') === FALSE &&
-        strpos($link['Losoite'], 'https://') === FALSE)
-    {
-      $linkki = variable_get('libdb_server', '') . $link['Losoite'];
-    } else {
-      $linkki = $link['Losoite'];
+  // Check if there are attributes in address and handle if there are.
+  $link_parts = explode(' ', $link['Losoite']);
+  if (count($link_parts) > 1) {
+    $link['Losoite'] = $link_parts[0];
+    foreach ($link_parts as $value) {
+      $newVal = strtolower($value);
+      if (strpos($newVal, 'target') !== FALSE &&
+          strpos($newVal, '_blank') !== FALSE)
+      {
+        $link['Lnewwnd'] = 'TRUE';
+      }
     }
-    $options = ['attributes' => ['target' => '__blank']];
-  } else {
-    $linkki = str_replace('.asp?', '/', $link['Losoite']);
-    $linkki = 'libdbsearch/' . $linkki;
+  }
+  // Change origo address to libdbsearch module compatible.
+  $linkki = str_replace('.asp?', '/', $link['Losoite']);
+  $linkki = 'libdbsearch/' . $linkki;
+  if (strpos($link['Losoite'], 'http://') !== FALSE ||
+      strpos($link['Losoite'], 'https://') !== FALSE)
+  {
+    $linkki = $link['Losoite'];
+  }
+  if (isset($link['Lnewwnd']) && strtoupper($link['Lnewwnd']) == 'TRUE') {
+    $options = ['attributes' => ['target' => '_blank']];
   }
   $text = html_entity_decode($link['Lteksti']);
   $output = l(_libdbsearch_t($text), $linkki, $options);
