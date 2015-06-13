@@ -670,7 +670,9 @@ class OrigoParser {
       foreach ($linkit[$etsitaan] as $key => $val) {
         if (stripos($val, $ehto) !== FALSE) {
           $uusi = $this->tarkasta_amp($linkit[1][$key]);
-          if($ehto == 'Varaa teos' && !empty($this->palvelin)) {
+          if(($ehto == 'Varaa teos' || $ehto == 'Lainaa sähköinen kirja')&&
+              !empty($this->palvelin))
+          {
             $uusi = $this->palvelin . 'index.asp?url=' . $uusi;
           }
           if ($absolute == true) {
