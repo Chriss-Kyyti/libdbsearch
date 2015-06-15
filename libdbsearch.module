@@ -569,8 +569,10 @@ function _libdbsearch_write_tip_link($tip_data) {
         if (count($julk) == 2) {
           $matches = NULL;
           preg_match_all("/[0-9]{4}/i", $julk[1], $matches);
-          $vuosi = $matches[0][0];
-          _libdbsearch_to_tip($params, '[field_vuosi][und][0][value]', $vuosi);
+          if (isset($matches[0]) && isset($matches[0][0])) {
+            $vuosi = $matches[0][0];
+            _libdbsearch_to_tip($params, '[field_vuosi][und][0][value]', $vuosi);
+          }
         }
         _libdbsearch_to_tip($params, '[field_julkaisija][und][0][value]', $kustantaja);
         break;

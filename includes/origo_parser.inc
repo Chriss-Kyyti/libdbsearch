@@ -269,7 +269,7 @@ class OrigoParser {
       if ($tp === FALSE) {
         ; /* Broken */
       }
-      if ($tp[1]['alku'] < $tp[0]['loppu']) { // Inner table
+      if (isset($tp[1]) && ($tp[1]['alku'] < $tp[0]['loppu'])) { // Inner table
 //                $xmlmem = '';
         $tulos = substr($homepage, $tp[1]['alku'], $tp[1]['loppu'] - $tp[1]['alku'] + 8);
         if (($colums = $this->pura_sarakkeet($tulos)) !== FALSE) {
