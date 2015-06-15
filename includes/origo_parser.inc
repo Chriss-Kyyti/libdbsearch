@@ -670,10 +670,11 @@ class OrigoParser {
       foreach ($linkit[$etsitaan] as $key => $val) {
         if (stripos($val, $ehto) !== FALSE) {
           $uusi = $this->tarkasta_amp($linkit[1][$key]);
-          if(($ehto == 'Varaa teos' || $ehto == 'Lainaa sähköinen kirja')&&
-              !empty($this->palvelin))
-          {
+          if($ehto == 'Varaa teos' && !empty($this->palvelin)) {
             $uusi = $this->palvelin . 'index.asp?url=' . $uusi;
+          }
+          if($ehto == 'Lainaa sähköinen kirja' && !empty($this->palvelin)) {
+            $uusi = $this->palvelin . $uusi;
           }
           if ($absolute == true) {
             //$xml = $this->luo_absolute_linkki($uusi, $linkit[2][$key], NULL);
@@ -772,6 +773,16 @@ class OrigoParser {
    */
   private function tarkista_haettu($str) {
     $tulos = str_replace('<b>', '', $str);
+    if (strpos($tulos, '<img') !== FALSE) {
+      $alt = explode('alt="', $tulos);
+      if (count($alt) == 2) {
+        $alt_text = explode('"', $alt[1]);
+        $tulos = $alt_text[0];
+      }
+      else {
+        $tulos = '-';
+      }
+    }
     return $this->tarkasta_amp(str_replace('</b>', '', $tulos));
   }
 
@@ -1200,6 +1211,9 @@ class OrigoParser {
       // Filter possible links from the end of table.
       // In that case colums are combined.
       if (strpos($colums[0][$i], 'colspan=') !== FALSE) {
+        continue;
+      }
+      if (strpos($colums[0][$i], 'class') === FALSE) {
         continue;
       }
       if (($linkki = ($this->pura_linkit($colums[1][$i + 1]))) === FALSE) {
